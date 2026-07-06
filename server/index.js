@@ -1,9 +1,15 @@
 const express = require('express');
 const app = express();
+
+app.use(express.json());
+
 const port = 4000;
 
 require('dotenv').config();
 const connectDB = require('./db');
+const challengesRoutes = require('./routes/challenges');
+
+app.use('/api/challenges', challengesRoutes);
 
 app.get('/health', (req, res) => {
   res.json({ status: 'ok' });
