@@ -25,14 +25,26 @@ Run the following command to execute the aggregation example:
 node scripts/aggregation.js
 ```
 This script counts the number of challenges with `targetSteps` greater than or equal to `100000`.
+
+# API Endpoints
+GET /api/challenges
+- Returns all challenges.
+GET /api/challenges/:id
+- Returns one challenge by ID.
+POST /api/challenges
+- Creates a new challenge.
+PUT /api/challenges/:id
+- Updates an existing challenge.
+DELETE /api/challenges/:id
+- Deletes a challenge by ID.
  
 ## Sprint 1 Checklist 
  
 - [x] Day 1 
 - [x] Day 2 
 - [x] Day 3 
-- [ ] Day 4 
-- [ ] Day 5 
+- [x] Day 4 
+- [x] Day 5 
 - [ ] Day 6 
 - [ ] Day 7 
 - [ ] Day 8 
