@@ -37,8 +37,30 @@ const createChallenge = async (req, res) => {
   res.status(201).json(challenge);
 };
 const updateChallenge = async (req, res) => {
+  const { title, targetSteps } = req.body;
+
+  if (!req.params.id) {
+    return res.status(400).json({
+      message: 'Challenge id is required.',
+    });
+  }
+
+  if (
+    !title ||
+    typeof title !== 'string' ||
+    title.trim() === '' ||
+    !targetSteps ||
+    typeof targetSteps !== 'number' ||
+    targetSteps <= 0
+  ) {
+    return res.status(400).json({
+      message: 'Title and targetSteps are required and must be valid.',
+    });
+  }
+
   const challenge = await Challenge.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
+    runValidators: true,
   });
 
   if (!challenge) {
