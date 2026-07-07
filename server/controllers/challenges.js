@@ -16,7 +16,76 @@ const getChallengeById = async (req, res) => {
 
   res.status(200).json(challenge);
 };
+const createChallenge = async (req, res) => {
+  const { title, targetSteps } = req.body;
+
+  if (
+    !title ||
+    typeof title !== 'string' ||
+    title.trim() === '' ||
+    !targetSteps ||
+    typeof targetSteps !== 'number' ||
+    targetSteps <= 0
+  ) {
+    return res.status(400).json({
+      message: 'Title and targetSteps are required and must be valid.',
+    });
+  }
+
+  const challenge = await Challenge.create(req.body);
+
+  res.status(201).json(challenge);
+};
+const updateChallenge = async (req, res) => {
+  const { title, targetSteps } = req.body;
+
+  if (!req.params.id) {
+    return res.status(400).json({
+      message: 'Challenge id is required.',
+    });
+  }
+
+  if (
+    !title ||
+    typeof title !== 'string' ||
+    title.trim() === '' ||
+    !targetSteps ||
+    typeof targetSteps !== 'number' ||
+    targetSteps <= 0
+  ) {
+    return res.status(400).json({
+      message: 'Title and targetSteps are required and must be valid.',
+    });
+  }
+
+  const challenge = await Challenge.findByIdAndUpdate(req.params.id, req.body, {
+    new: true,
+    runValidators: true,
+  });
+
+  if (!challenge) {
+    return res.status(404).json({
+      message: 'Challenge not found',
+    });
+  }
+
+  res.status(200).json(challenge);
+};
+const deleteChallenge = async (req, res) => {
+  const challenge = await Challenge.findByIdAndDelete(req.params.id);
+
+  if (!challenge) {
+    return res.status(404).json({
+      message: 'Challenge not found',
+    });
+  }
+
+  res.status(204).send();
+};
 module.exports = {
   getChallenges,
   getChallengeById,
+  createChallenge,
+  updateChallenge,
+  deleteChallenge,
 };
