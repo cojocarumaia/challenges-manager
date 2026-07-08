@@ -1,0 +1,5 @@
+$kind: http-request
+name: all challenges
+url: http://localhost:4000/api/challenges
+method: GET
+order: 4312206259138137
