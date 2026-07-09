@@ -4,7 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import ChallengeForm from '../components/ChallengeForm';
 import { fetchChallenge, updateChallenge } from '../api';
 
-function EditChallenge() {
+function EditChallenge({ showSuccessToast }) {
     const { id } = useParams();
     const navigate = useNavigate();
 
@@ -47,6 +47,7 @@ function EditChallenge() {
             };
 
             await updateChallenge(id, challengeData);
+            showSuccessToast('Challenge updated successfully!');
             navigate('/');
         } catch (error) {
             console.error(error);

@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import ChallengeForm from '../components/ChallengeForm';
 import { createChallenge } from '../api';
 
-function CreateChallenge() {
+function CreateChallenge({ showSuccessToast }) {
     const navigate = useNavigate();
 
     const initialValues = {
@@ -21,6 +21,7 @@ function CreateChallenge() {
             };
 
             await createChallenge(challengeData);
+            showSuccessToast('Challenge created successfully!');
             navigate('/');
         } catch (error) {
             console.error(error);

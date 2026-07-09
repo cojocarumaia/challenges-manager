@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
 import { fetchChallenges, deleteChallenge } from '../api';
+import Button from 'react-bootstrap/Button';
 
-function ChallengesList() {
+
+function ChallengesList({ showSuccessToast }) {
     const [challenges, setChallenges] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
@@ -33,6 +35,7 @@ function ChallengesList() {
 
         try {
             await deleteChallenge(id);
+            showSuccessToast('Challenge deleted successfully!');
             loadChallenges();
         } catch (err) {
             console.error(err);
@@ -90,12 +93,12 @@ function ChallengesList() {
                                         {challenge.targetSteps} steps
                                     </span>
 
-                                    <button
-                                        className="btn btn-danger btn-sm"
+                                    <Button
+                                        variant="danger"
                                         onClick={() => handleDelete(challenge._id)}
                                     >
                                         Delete
-                                    </button>
+                                    </Button>
                                 </div>
                             </li>
                         ))}
