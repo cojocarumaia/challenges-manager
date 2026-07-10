@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import Button from 'react-bootstrap/Button';
 
 import { fetchChallenges, deleteChallenge } from '../api';
+import i18n from '../i18n';
 
 function ChallengesList({ showSuccessToast }) {
     const { t } = useTranslation();
@@ -46,6 +47,11 @@ function ChallengesList({ showSuccessToast }) {
         }
     }
 
+    function changeLanguage(language) {
+        i18n.changeLanguage(language);
+        localStorage.setItem('language', language);
+    }
+
     if (loading) {
         return <p>{t('challenges.loading')}</p>;
     }
@@ -64,6 +70,24 @@ function ChallengesList({ showSuccessToast }) {
                 style={{ maxWidth: '800px', borderRadius: '20px' }}
             >
                 <div className="card-body p-4">
+                    <div className="d-flex justify-content-end mb-3 gap-2">
+                        <Button
+                            variant="outline-primary"
+                            size="sm"
+                            onClick={() => changeLanguage('en')}
+                        >
+                            English
+                        </Button>
+
+                        <Button
+                            variant="outline-primary"
+                            size="sm"
+                            onClick={() => changeLanguage('ro')}
+                        >
+                            Română
+                        </Button>
+                    </div>
+
                     <h1
                         className="text-center mb-4 fw-bold"
                         style={{ color: '#8B5CF6' }}

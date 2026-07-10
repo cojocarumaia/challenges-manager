@@ -15,7 +15,7 @@ i18n
                 translation: roTranslation,
             },
         },
-        lng: 'en',
+        lng: localStorage.getItem('language') || 'en',
         fallbackLng: 'en',
         interpolation: {
             escapeValue: false,
