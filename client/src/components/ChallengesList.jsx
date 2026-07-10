@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
+import Dropdown from 'react-bootstrap/Dropdown';
 
 import { fetchChallenges, deleteChallenge } from '../api';
 import i18n from '../i18n';
@@ -72,22 +73,41 @@ function ChallengesList({ showSuccessToast }) {
                 style={{ maxWidth: '800px', borderRadius: '20px' }}
             >
                 <div className="card-body p-4">
-                    <div className="d-flex flex-wrap justify-content-end mb-3 gap-2">
-                        <Button
-                            variant="outline-primary"
-                            size="sm"
-                            onClick={() => changeLanguage('en')}
-                        >
-                            {t('english')}
-                        </Button>
+                    <div className="d-flex justify-content-end mb-3">
+                        <Dropdown>
+                            <Dropdown.Toggle
+                                variant="outline-primary"
+                                size="sm"
+                            >
+                                {i18n.language === 'ro' ? (
+                                    <>
+                                        <span className="fi fi-ro me-2" />
+                                        {t('romanian')}
+                                    </>
+                                ) : (
+                                    <>
+                                        <span className="fi fi-gb me-2" />
+                                        {t('english')}
+                                    </>
+                                )}
+                            </Dropdown.Toggle>
 
-                        <Button
-                            variant="outline-primary"
-                            size="sm"
-                            onClick={() => changeLanguage('ro')}
-                        >
-                            {t('romanian')}
-                        </Button>
+                            <Dropdown.Menu align="end">
+                                <Dropdown.Item
+                                    onClick={() => changeLanguage('en')}
+                                >
+                                    <span className="fi fi-gb me-2" />
+                                    {t('english')}
+                                </Dropdown.Item>
+
+                                <Dropdown.Item
+                                    onClick={() => changeLanguage('ro')}
+                                >
+                                    <span className="fi fi-ro me-2" />
+                                    {t('romanian')}
+                                </Dropdown.Item>
+                            </Dropdown.Menu>
+                        </Dropdown>
                     </div>
 
                     <div className="d-flex justify-content-center mb-4">
