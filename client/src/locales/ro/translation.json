@@ -1,5 +1,40 @@
 {
     "language": "Limba",
     "english": "Engleză",
-    "romanian": "Română"
+    "romanian": "Română",
+    "form": {
+        "title": "Titlu",
+        "description": "Descriere",
+        "targetSteps": "Număr țintă de pași",
+        "startDate": "Data de început",
+        "endDate": "Data de sfârșit"
+    },
+    "validation": {
+        "titleRequired": "Titlul este obligatoriu.",
+        "targetStepsPositive": "Numărul țintă de pași trebuie să fie mai mare decât zero."
+    },
+    "createChallenge": {
+        "title": "Creează provocare",
+        "submit": "Creează",
+        "success": "Provocarea a fost creată cu succes!",
+        "failed": "Crearea provocării a eșuat."
+    },
+    "editChallenge": {
+        "title": "Editează provocarea",
+        "submit": "Actualizează",
+        "loading": "Se încarcă...",
+        "failedToLoad": "Încărcarea provocării a eșuat.",
+        "success": "Provocarea a fost actualizată cu succes!",
+        "failed": "Actualizarea provocării a eșuat."
+    },
+    "challenges": {
+        "title": "Provocări",
+        "loading": "Se încarcă...",
+        "failedToLoad": "Încărcarea provocărilor a eșuat.",
+        "deleteConfirmation": "Sigur dorești să ștergi această provocare?",
+        "deleteSuccess": "Provocarea a fost ștearsă cu succes!",
+        "deleteFailed": "Ștergerea provocării a eșuat.",
+        "delete": "Șterge",
+        "steps": "{{steps}} pași"
+    }
 }

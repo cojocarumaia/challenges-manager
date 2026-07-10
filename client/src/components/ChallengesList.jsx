@@ -1,9 +1,12 @@
 import { useEffect, useState } from 'react';
-import { fetchChallenges, deleteChallenge } from '../api';
+import { useTranslation } from 'react-i18next';
 import Button from 'react-bootstrap/Button';
 
+import { fetchChallenges, deleteChallenge } from '../api';
 
 function ChallengesList({ showSuccessToast }) {
+    const { t } = useTranslation();
+
     const [challenges, setChallenges] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
@@ -14,7 +17,7 @@ function ChallengesList({ showSuccessToast }) {
             setChallenges(data);
         } catch (err) {
             console.error(err);
-            setError('Failed to load challenges.');
+            setError(t('challenges.failedToLoad'));
         } finally {
             setLoading(false);
         }
@@ -26,7 +29,7 @@ function ChallengesList({ showSuccessToast }) {
 
     async function handleDelete(id) {
         const confirmed = window.confirm(
-            'Are you sure you want to delete this challenge?'
+            t('challenges.deleteConfirmation')
         );
 
         if (!confirmed) {
@@ -35,16 +38,16 @@ function ChallengesList({ showSuccessToast }) {
 
         try {
             await deleteChallenge(id);
-            showSuccessToast('Challenge deleted successfully!');
+            showSuccessToast(t('challenges.deleteSuccess'));
             loadChallenges();
         } catch (err) {
             console.error(err);
-            alert('Failed to delete challenge.');
+            alert(t('challenges.deleteFailed'));
         }
     }
 
     if (loading) {
-        return <p>Loading...</p>;
+        return <p>{t('challenges.loading')}</p>;
     }
 
     if (error) {
@@ -65,7 +68,7 @@ function ChallengesList({ showSuccessToast }) {
                         className="text-center mb-4 fw-bold"
                         style={{ color: '#8B5CF6' }}
                     >
-                        Challenges
+                        {t('challenges.title')}
                     </h1>
 
                     <ul className="list-group">
@@ -90,14 +93,16 @@ function ChallengesList({ showSuccessToast }) {
                                             fontSize: '0.9rem',
                                         }}
                                     >
-                                        {challenge.targetSteps} steps
+                                        {t('challenges.steps', {
+                                            steps: challenge.targetSteps,
+                                        })}
                                     </span>
 
                                     <Button
                                         variant="danger"
                                         onClick={() => handleDelete(challenge._id)}
                                     >
-                                        Delete
+                                        {t('challenges.delete')}
                                     </Button>
                                 </div>
                             </li>
