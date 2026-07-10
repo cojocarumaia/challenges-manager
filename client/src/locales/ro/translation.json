@@ -29,7 +29,9 @@
     },
     "challenges": {
         "title": "Provocări",
+        "create": "Creează provocare",
         "loading": "Se încarcă...",
+        "edit": "Editează",
         "failedToLoad": "Încărcarea provocărilor a eșuat.",
         "deleteConfirmation": "Sigur dorești să ștergi această provocare?",
         "deleteSuccess": "Provocarea a fost ștearsă cu succes!",

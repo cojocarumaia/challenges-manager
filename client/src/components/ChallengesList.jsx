@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 
 import { fetchChallenges, deleteChallenge } from '../api';
@@ -7,6 +8,7 @@ import i18n from '../i18n';
 
 function ChallengesList({ showSuccessToast }) {
     const { t } = useTranslation();
+    const navigate = useNavigate();
 
     const [challenges, setChallenges] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -88,6 +90,15 @@ function ChallengesList({ showSuccessToast }) {
                         </Button>
                     </div>
 
+                    <div className="d-flex justify-content-center mb-4">
+                        <Button
+                            variant="success"
+                            onClick={() => navigate('/create')}
+                        >
+                            {t('challenges.create')}
+                        </Button>
+                    </div>
+
                     <h1
                         className="text-center mb-4 fw-bold"
                         style={{ color: '#8B5CF6' }}
@@ -126,6 +137,15 @@ function ChallengesList({ showSuccessToast }) {
                                                 steps: challenge.targetSteps,
                                             })}
                                         </span>
+
+                                        <Button
+                                            variant="warning"
+                                            onClick={() =>
+                                                navigate(`/edit/${challenge._id}`)
+                                            }
+                                        >
+                                            {t('challenges.edit')}
+                                        </Button>
 
                                         <Button
                                             variant="danger"
