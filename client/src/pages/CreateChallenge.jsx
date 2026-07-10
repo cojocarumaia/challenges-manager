@@ -1,8 +1,11 @@
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+
 import ChallengeForm from '../components/ChallengeForm';
 import { createChallenge } from '../api';
 
 function CreateChallenge({ showSuccessToast }) {
+    const { t } = useTranslation();
     const navigate = useNavigate();
 
     const initialValues = {
@@ -21,22 +24,22 @@ function CreateChallenge({ showSuccessToast }) {
             };
 
             await createChallenge(challengeData);
-            showSuccessToast('Challenge created successfully!');
+            showSuccessToast(t('createChallenge.success'));
             navigate('/');
         } catch (error) {
             console.error(error);
-            alert('Failed to create challenge.');
+            alert(t('createChallenge.failed'));
         }
     }
 
     return (
-        <div className="container py-5">
-            <h1 className="mb-4">Create Challenge</h1>
+        <div className="container py-5" style={{ maxWidth: '800px' }}>
+            <h1 className="mb-4">{t('createChallenge.title')}</h1>
 
             <ChallengeForm
                 initialValues={initialValues}
                 onSubmit={handleCreate}
-                submitLabel="Create"
+                submitLabel={t('createChallenge.submit')}
             />
         </div>
     );

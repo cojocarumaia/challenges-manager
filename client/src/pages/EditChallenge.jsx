@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 import ChallengeForm from '../components/ChallengeForm';
 import { fetchChallenge, updateChallenge } from '../api';
 
 function EditChallenge({ showSuccessToast }) {
+    const { t } = useTranslation();
     const { id } = useParams();
     const navigate = useNavigate();
 
@@ -30,14 +32,14 @@ function EditChallenge({ showSuccessToast }) {
                 });
             } catch (error) {
                 console.error(error);
-                setError('Failed to load challenge.');
+                setError(t('editChallenge.failedToLoad'));
             } finally {
                 setLoading(false);
             }
         }
 
         loadChallenge();
-    }, [id]);
+    }, [id, t]);
 
     async function handleUpdate(formData) {
         try {
@@ -47,16 +49,16 @@ function EditChallenge({ showSuccessToast }) {
             };
 
             await updateChallenge(id, challengeData);
-            showSuccessToast('Challenge updated successfully!');
+            showSuccessToast(t('editChallenge.success'));
             navigate('/');
         } catch (error) {
             console.error(error);
-            alert('Failed to update challenge.');
+            alert(t('editChallenge.failed'));
         }
     }
 
     if (loading) {
-        return <p>Loading...</p>;
+        return <p>{t('editChallenge.loading')}</p>;
     }
 
     if (error) {
@@ -64,13 +66,13 @@ function EditChallenge({ showSuccessToast }) {
     }
 
     return (
-        <div className="container py-5">
-            <h1 className="mb-4">Edit Challenge</h1>
+        <div className="container py-5" style={{ maxWidth: '800px' }}>
+            <h1 className="mb-4">{t('editChallenge.title')}</h1>
 
             <ChallengeForm
                 initialValues={initialValues}
                 onSubmit={handleUpdate}
-                submitLabel="Update"
+                submitLabel={t('editChallenge.submit')}
             />
         </div>
     );

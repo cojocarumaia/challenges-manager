@@ -2,9 +2,11 @@ import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { useDebouncedCallback } from 'use-debounce';
+import { useTranslation } from 'react-i18next';
 
 function ChallengeForm({ initialValues, onSubmit, submitLabel }) {
     const [formData, setFormData] = useState(initialValues);
+    const { t } = useTranslation();
 
     function handleChange(event) {
         const { name, value } = event.target;
@@ -14,6 +16,7 @@ function ChallengeForm({ initialValues, onSubmit, submitLabel }) {
             [name]: value,
         });
     }
+
     const debouncedSubmit = useDebouncedCallback((data) => {
         onSubmit(data);
     }, 500);
@@ -22,12 +25,12 @@ function ChallengeForm({ initialValues, onSubmit, submitLabel }) {
         event.preventDefault();
 
         if (!formData.title.trim()) {
-            alert('Title is required.');
+            alert(t('validation.titleRequired'));
             return;
         }
 
         if (Number(formData.targetSteps) <= 0) {
-            alert('Target steps must be greater than zero.');
+            alert(t('validation.targetStepsPositive'));
             return;
         }
 
@@ -37,7 +40,7 @@ function ChallengeForm({ initialValues, onSubmit, submitLabel }) {
     return (
         <Form onSubmit={handleSubmit} className="card p-4 shadow-sm">
             <Form.Group className="mb-3">
-                <Form.Label>Title</Form.Label>
+                <Form.Label>{t('form.title')}</Form.Label>
                 <Form.Control
                     type="text"
                     name="title"
@@ -47,7 +50,7 @@ function ChallengeForm({ initialValues, onSubmit, submitLabel }) {
             </Form.Group>
 
             <Form.Group className="mb-3">
-                <Form.Label>Description</Form.Label>
+                <Form.Label>{t('form.description')}</Form.Label>
                 <Form.Control
                     as="textarea"
                     name="description"
@@ -57,7 +60,7 @@ function ChallengeForm({ initialValues, onSubmit, submitLabel }) {
             </Form.Group>
 
             <Form.Group className="mb-3">
-                <Form.Label>Target Steps</Form.Label>
+                <Form.Label>{t('form.targetSteps')}</Form.Label>
                 <Form.Control
                     type="number"
                     name="targetSteps"
@@ -67,7 +70,7 @@ function ChallengeForm({ initialValues, onSubmit, submitLabel }) {
             </Form.Group>
 
             <Form.Group className="mb-3">
-                <Form.Label>Start Date</Form.Label>
+                <Form.Label>{t('form.startDate')}</Form.Label>
                 <Form.Control
                     type="date"
                     name="startDate"
@@ -77,7 +80,7 @@ function ChallengeForm({ initialValues, onSubmit, submitLabel }) {
             </Form.Group>
 
             <Form.Group className="mb-3">
-                <Form.Label>End Date</Form.Label>
+                <Form.Label>{t('form.endDate')}</Form.Label>
                 <Form.Control
                     type="date"
                     name="endDate"

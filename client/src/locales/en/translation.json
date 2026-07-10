@@ -1,0 +1,42 @@
+{
+    "language": "Language",
+    "english": "English",
+    "romanian": "Romanian",
+    "form": {
+        "title": "Title",
+        "description": "Description",
+        "targetSteps": "Target Steps",
+        "startDate": "Start Date",
+        "endDate": "End Date"
+    },
+    "validation": {
+        "titleRequired": "Title is required.",
+        "targetStepsPositive": "Target steps must be greater than zero."
+    },
+    "createChallenge": {
+        "title": "Create Challenge",
+        "submit": "Create",
+        "success": "Challenge created successfully!",
+        "failed": "Failed to create challenge."
+    },
+    "editChallenge": {
+        "title": "Edit Challenge",
+        "submit": "Update",
+        "loading": "Loading...",
+        "failedToLoad": "Failed to load challenge.",
+        "success": "Challenge updated successfully!",
+        "failed": "Failed to update challenge."
+    },
+    "challenges": {
+        "title": "Challenges",
+        "create": "Create Challenge",
+        "loading": "Loading...",
+        "edit": "Edit",
+        "failedToLoad": "Failed to load challenges.",
+        "deleteConfirmation": "Are you sure you want to delete this challenge?",
+        "deleteSuccess": "Challenge deleted successfully!",
+        "deleteFailed": "Failed to delete challenge.",
+        "delete": "Delete",
+        "steps": "{{steps}} steps"
+    }
+}
