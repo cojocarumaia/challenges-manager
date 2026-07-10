@@ -33,7 +33,7 @@ function CreateChallenge({ showSuccessToast }) {
     }
 
     return (
-        <div className="container py-5">
+        <div className="container py-5" style={{ maxWidth: '800px' }}>
             <h1 className="mb-4">{t('createChallenge.title')}</h1>
 
             <ChallengeForm

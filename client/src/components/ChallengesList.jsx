@@ -70,13 +70,13 @@ function ChallengesList({ showSuccessToast }) {
                 style={{ maxWidth: '800px', borderRadius: '20px' }}
             >
                 <div className="card-body p-4">
-                    <div className="d-flex justify-content-end mb-3 gap-2">
+                    <div className="d-flex flex-wrap justify-content-end mb-3 gap-2">
                         <Button
                             variant="outline-primary"
                             size="sm"
                             onClick={() => changeLanguage('en')}
                         >
-                            English
+                            {t('english')}
                         </Button>
 
                         <Button
@@ -84,7 +84,7 @@ function ChallengesList({ showSuccessToast }) {
                             size="sm"
                             onClick={() => changeLanguage('ro')}
                         >
-                            Română
+                            {t('romanian')}
                         </Button>
                     </div>
 
@@ -95,43 +95,51 @@ function ChallengesList({ showSuccessToast }) {
                         {t('challenges.title')}
                     </h1>
 
-                    <ul className="list-group">
+                    <div className="d-flex flex-column gap-3">
                         {challenges.map((challenge) => (
-                            <li
+                            <div
                                 key={challenge._id}
-                                className="list-group-item d-flex justify-content-between align-items-center border-0 border-bottom py-3"
+                                className="card shadow-sm border-0"
+                                style={{
+                                    borderRadius: '15px',
+                                    backgroundColor: '#FFFFFF',
+                                }}
                             >
-                                <h5
-                                    className="mb-0 fw-semibold"
-                                    style={{ color: '#5B4B8A' }}
-                                >
-                                    {challenge.title}
-                                </h5>
-
-                                <div className="d-flex align-items-center gap-3">
-                                    <span
-                                        className="badge rounded-pill px-3 py-2"
-                                        style={{
-                                            backgroundColor: '#C4B5FD',
-                                            color: '#4C1D95',
-                                            fontSize: '0.9rem',
-                                        }}
+                                <div className="card-body d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-3">
+                                    <h5
+                                        className="mb-0 fw-semibold"
+                                        style={{ color: '#5B4B8A' }}
                                     >
-                                        {t('challenges.steps', {
-                                            steps: challenge.targetSteps,
-                                        })}
-                                    </span>
+                                        {challenge.title}
+                                    </h5>
 
-                                    <Button
-                                        variant="danger"
-                                        onClick={() => handleDelete(challenge._id)}
-                                    >
-                                        {t('challenges.delete')}
-                                    </Button>
+                                    <div className="d-flex flex-wrap align-items-center gap-2">
+                                        <span
+                                            className="badge rounded-pill px-3 py-2"
+                                            style={{
+                                                backgroundColor: '#C4B5FD',
+                                                color: '#4C1D95',
+                                                fontSize: '0.9rem',
+                                            }}
+                                        >
+                                            {t('challenges.steps', {
+                                                steps: challenge.targetSteps,
+                                            })}
+                                        </span>
+
+                                        <Button
+                                            variant="danger"
+                                            onClick={() =>
+                                                handleDelete(challenge._id)
+                                            }
+                                        >
+                                            {t('challenges.delete')}
+                                        </Button>
+                                    </div>
                                 </div>
-                            </li>
+                            </div>
                         ))}
-                    </ul>
+                    </div>
                 </div>
             </div>
         </div>

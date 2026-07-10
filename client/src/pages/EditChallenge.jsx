@@ -66,7 +66,7 @@ function EditChallenge({ showSuccessToast }) {
     }
 
     return (
-        <div className="container py-5">
+        <div className="container py-5" style={{ maxWidth: '800px' }}>
             <h1 className="mb-4">{t('editChallenge.title')}</h1>
 
             <ChallengeForm
