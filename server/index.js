@@ -1,30 +1,9 @@
-const express = require('express');
-const cors = require('cors');
+require('dotenv').config();
 
-const app = express();
-
-app.use(cors());
-app.use(express.json());
+const app = require('./app');
+const connectDB = require('./db');
 
 const port = 4000;
-
-require('dotenv').config();
-const connectDB = require('./db');
-const challengesRoutes = require('./routes/challenges');
-
-app.use('/api/challenges', challengesRoutes);
-
-app.get('/health', (req, res) => {
-  res.json({ status: 'ok' });
-});
-
-app.use((err, req, res) => {
-  console.error(err);
-
-  res.status(500).json({
-    message: 'Internal Server Error',
-  });
-});
 
 (async () => {
   try {
