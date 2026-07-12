@@ -40,8 +40,12 @@ function ChallengeForm({ initialValues, onSubmit, submitLabel }) {
     return (
         <Form onSubmit={handleSubmit} className="card p-4 shadow-sm">
             <Form.Group className="mb-3">
-                <Form.Label>{t('form.title')}</Form.Label>
+                <Form.Label htmlFor="title">
+                    {t('form.title')}
+                </Form.Label>
+
                 <Form.Control
+                    id="title"
                     type="text"
                     name="title"
                     value={formData.title}
@@ -50,8 +54,12 @@ function ChallengeForm({ initialValues, onSubmit, submitLabel }) {
             </Form.Group>
 
             <Form.Group className="mb-3">
-                <Form.Label>{t('form.description')}</Form.Label>
+                <Form.Label htmlFor="description">
+                    {t('form.description')}
+                </Form.Label>
+
                 <Form.Control
+                    id="description"
                     as="textarea"
                     name="description"
                     value={formData.description}
@@ -60,8 +68,12 @@ function ChallengeForm({ initialValues, onSubmit, submitLabel }) {
             </Form.Group>
 
             <Form.Group className="mb-3">
-                <Form.Label>{t('form.targetSteps')}</Form.Label>
+                <Form.Label htmlFor="targetSteps">
+                    {t('form.targetSteps')}
+                </Form.Label>
+
                 <Form.Control
+                    id="targetSteps"
                     type="number"
                     name="targetSteps"
                     value={formData.targetSteps}
@@ -70,8 +82,12 @@ function ChallengeForm({ initialValues, onSubmit, submitLabel }) {
             </Form.Group>
 
             <Form.Group className="mb-3">
-                <Form.Label>{t('form.startDate')}</Form.Label>
+                <Form.Label htmlFor="startDate">
+                    {t('form.startDate')}
+                </Form.Label>
+
                 <Form.Control
+                    id="startDate"
                     type="date"
                     name="startDate"
                     value={formData.startDate}
@@ -80,8 +96,12 @@ function ChallengeForm({ initialValues, onSubmit, submitLabel }) {
             </Form.Group>
 
             <Form.Group className="mb-3">
-                <Form.Label>{t('form.endDate')}</Form.Label>
+                <Form.Label htmlFor="endDate">
+                    {t('form.endDate')}
+                </Form.Label>
+
                 <Form.Control
+                    id="endDate"
                     type="date"
                     name="endDate"
                     value={formData.endDate}
