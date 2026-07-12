@@ -17,3 +17,15 @@ describe('GET /api/challenges', () => {
         expect(Array.isArray(response.body)).toBe(true);
     });
 });
+
+describe('POST /api/challenges', () => {
+    it('returns status 400 when title is missing', async () => {
+        const response = await request(app)
+            .post('/api/challenges')
+            .send({
+                targetSteps: 1000,
+            });
+
+        expect(response.status).toBe(400);
+    });
+});
