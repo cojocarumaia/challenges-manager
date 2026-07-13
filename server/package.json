@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "vitest run --globals",
     "dev": "nodemon index.js"
   },
   "keywords": [],
@@ -22,7 +22,10 @@
     "eslint": "^10.6.0",
     "eslint-config-prettier": "^10.1.8",
     "globals": "^17.7.0",
+    "mongodb-memory-server": "^11.2.0",
     "nodemon": "^3.1.14",
-    "prettier": "^3.9.4"
+    "prettier": "^3.9.4",
+    "supertest": "^7.2.2",
+    "vitest": "^4.1.10"
   }
 }
