@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
@@ -15,21 +15,22 @@ function ChallengesList({ showSuccessToast }) {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
 
-    async function loadChallenges() {
+    const loadChallenges = useCallback(async () => {
         try {
             const data = await fetchChallenges();
             setChallenges(data);
+            setError('');
         } catch (err) {
             console.error(err);
             setError(t('challenges.failedToLoad'));
         } finally {
             setLoading(false);
         }
-    }
+    }, [t]);
 
     useEffect(() => {
         loadChallenges();
-    }, []);
+    }, [loadChallenges]);
 
     async function handleDelete(id) {
         const confirmed = window.confirm(
@@ -43,7 +44,7 @@ function ChallengesList({ showSuccessToast }) {
         try {
             await deleteChallenge(id);
             showSuccessToast(t('challenges.deleteSuccess'));
-            loadChallenges();
+            await loadChallenges();
         } catch (err) {
             console.error(err);
             alert(t('challenges.deleteFailed'));
