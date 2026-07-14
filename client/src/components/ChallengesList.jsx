@@ -64,7 +64,7 @@ function ChallengeSkeleton() {
     );
 }
 
-function ChallengesList({ showSuccessToast }) {
+function ChallengesList({ showSuccessToast, theme }) {
     const { t } = useTranslation();
     const navigate = useNavigate();
 
@@ -187,14 +187,20 @@ function ChallengesList({ showSuccessToast }) {
         return (
             <div
                 className="container-fluid min-vh-100 py-5"
-                style={{ backgroundColor: '#F8F0FF' }}
+                style={{
+                    backgroundColor:
+                        theme === 'dark' ? '#121212' : '#F8F0FF',
+                }}
             >
                 <div
                     className="card shadow-lg mx-auto border-0"
                     style={{
                         maxWidth: '800px',
                         borderRadius: '20px',
+                        backgroundColor:
+                            theme === 'dark' ? '#1F2327' : '#FFFFFF',
                     }}
+
                 >
                     <div className="card-body p-4">
                         <div className="d-flex flex-column gap-3">
@@ -208,7 +214,7 @@ function ChallengesList({ showSuccessToast }) {
                         </div>
                     </div>
                 </div>
-            </div>
+            </div >
         );
     }
 
@@ -226,6 +232,8 @@ function ChallengesList({ showSuccessToast }) {
                 style={{
                     maxWidth: '800px',
                     borderRadius: '20px',
+                    backgroundColor:
+                        theme === 'dark' ? '#1F2327' : '#FFFFFF',
                 }}
             >
                 <div className="card-body p-4">
@@ -303,7 +311,7 @@ function ChallengesList({ showSuccessToast }) {
                                     style={{
                                         borderRadius: '15px',
                                         backgroundColor:
-                                            '#FFFFFF',
+                                            theme === 'dark' ? '#2A2F34' : '#FFFFFF',
                                         overflow: 'hidden',
                                     }}
                                 >
