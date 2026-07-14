@@ -1,7 +1,9 @@
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-export async function fetchChallenges() {
-    const response = await fetch(`${API_BASE_URL}/api/challenges`);
+export async function fetchChallenges(page = 1, limit = 10) {
+    const response = await fetch(
+        `${API_BASE_URL}/api/challenges?page=${page}&limit=${limit}`
+    );
 
     if (!response.ok) {
         throw new Error('Failed to fetch challenges');
@@ -11,7 +13,9 @@ export async function fetchChallenges() {
 }
 
 export async function fetchChallenge(id) {
-    const response = await fetch(`${API_BASE_URL}/api/challenges/${id}`);
+    const response = await fetch(
+        `${API_BASE_URL}/api/challenges/${id}`
+    );
 
     if (!response.ok) {
         throw new Error('Failed to fetch challenge');
@@ -21,13 +25,16 @@ export async function fetchChallenge(id) {
 }
 
 export async function createChallenge(challengeData) {
-    const response = await fetch(`${API_BASE_URL}/api/challenges`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(challengeData),
-    });
+    const response = await fetch(
+        `${API_BASE_URL}/api/challenges`,
+        {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(challengeData),
+        }
+    );
 
     if (!response.ok) {
         throw new Error('Failed to create challenge');
@@ -37,13 +44,16 @@ export async function createChallenge(challengeData) {
 }
 
 export async function updateChallenge(id, challengeData) {
-    const response = await fetch(`${API_BASE_URL}/api/challenges/${id}`, {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(challengeData),
-    });
+    const response = await fetch(
+        `${API_BASE_URL}/api/challenges/${id}`,
+        {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(challengeData),
+        }
+    );
 
     if (!response.ok) {
         throw new Error('Failed to update challenge');
@@ -53,9 +63,12 @@ export async function updateChallenge(id, challengeData) {
 }
 
 export async function deleteChallenge(id) {
-    const response = await fetch(`${API_BASE_URL}/api/challenges/${id}`, {
-        method: 'DELETE',
-    });
+    const response = await fetch(
+        `${API_BASE_URL}/api/challenges/${id}`,
+        {
+            method: 'DELETE',
+        }
+    );
 
     if (!response.ok) {
         throw new Error('Failed to delete challenge');

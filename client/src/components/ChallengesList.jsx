@@ -1,10 +1,15 @@
-import { useEffect, useState, useCallback } from 'react';
+import {
+    useCallback,
+    useEffect,
+    useRef,
+    useState,
+} from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import Dropdown from 'react-bootstrap/Dropdown';
 
-import { fetchChallenges, deleteChallenge } from '../api';
+import { deleteChallenge, fetchChallenges } from '../api';
 import i18n from '../i18n';
 
 function ChallengeSkeleton() {
@@ -18,9 +23,7 @@ function ChallengeSkeleton() {
         >
             <div
                 className="placeholder w-100"
-                style={{
-                    height: '220px',
-                }}
+                style={{ height: '220px' }}
             />
 
             <div className="card-body">
@@ -66,28 +69,89 @@ function ChallengesList({ showSuccessToast }) {
     const navigate = useNavigate();
 
     const [challenges, setChallenges] = useState([]);
+    const [page, setPage] = useState(1);
+    const [hasMore, setHasMore] = useState(true);
     const [loading, setLoading] = useState(true);
+    const [loadingMore, setLoadingMore] = useState(false);
     const [error, setError] = useState('');
 
-    const loadChallenges = useCallback(async () => {
-        try {
-            setLoading(true);
+    const observer = useRef(null);
 
-            const data = await fetchChallenges();
+    const loadChallenges = useCallback(
+        async (pageToLoad = 1, replace = false) => {
+            try {
+                if (pageToLoad === 1) {
+                    setLoading(true);
+                } else {
+                    setLoadingMore(true);
+                }
 
-            setChallenges(data);
-            setError('');
-        } catch (err) {
-            console.error(err);
-            setError(t('challenges.failedToLoad'));
-        } finally {
-            setLoading(false);
-        }
-    }, [t]);
+                const data = await fetchChallenges(pageToLoad, 10);
+
+                if (replace) {
+                    setChallenges(data.challenges);
+                } else {
+                    setChallenges((currentChallenges) => [
+                        ...currentChallenges,
+                        ...data.challenges,
+                    ]);
+                }
+
+                setHasMore(data.hasMore);
+                setError('');
+            } catch (err) {
+                console.error(err);
+                setError(t('challenges.failedToLoad'));
+            } finally {
+                setLoading(false);
+                setLoadingMore(false);
+            }
+        },
+        [t]
+    );
 
     useEffect(() => {
-        loadChallenges();
+        loadChallenges(1, true);
     }, [loadChallenges]);
+
+    useEffect(() => {
+        if (page === 1) {
+            return;
+        }
+
+        loadChallenges(page);
+    }, [page, loadChallenges]);
+
+    const lastChallengeRef = useCallback(
+        (node) => {
+            if (loading || loadingMore) {
+                return;
+            }
+
+            if (observer.current) {
+                observer.current.disconnect();
+            }
+
+            observer.current = new IntersectionObserver(
+                (entries) => {
+                    if (
+                        entries[0].isIntersecting &&
+                        hasMore
+                    ) {
+                        setPage(
+                            (currentPage) =>
+                                currentPage + 1
+                        );
+                    }
+                }
+            );
+
+            if (node) {
+                observer.current.observe(node);
+            }
+        },
+        [loading, loadingMore, hasMore]
+    );
 
     async function handleDelete(id) {
         const confirmed = window.confirm(
@@ -100,8 +164,14 @@ function ChallengesList({ showSuccessToast }) {
 
         try {
             await deleteChallenge(id);
-            showSuccessToast(t('challenges.deleteSuccess'));
-            await loadChallenges();
+
+            showSuccessToast(
+                t('challenges.deleteSuccess')
+            );
+
+            setPage(1);
+            setHasMore(true);
+            await loadChallenges(1, true);
         } catch (err) {
             console.error(err);
             alert(t('challenges.deleteFailed'));
@@ -130,7 +200,9 @@ function ChallengesList({ showSuccessToast }) {
                         <div className="d-flex flex-column gap-3">
                             {Array.from({ length: 5 }).map(
                                 (_, index) => (
-                                    <ChallengeSkeleton key={index} />
+                                    <ChallengeSkeleton
+                                        key={index}
+                                    />
                                 )
                             )}
                         </div>
@@ -201,7 +273,9 @@ function ChallengesList({ showSuccessToast }) {
                     <div className="d-flex justify-content-center mb-4">
                         <Button
                             variant="success"
-                            onClick={() => navigate('/create')}
+                            onClick={() =>
+                                navigate('/create')
+                            }
                         >
                             {t('challenges.create')}
                         </Button>
@@ -215,81 +289,107 @@ function ChallengesList({ showSuccessToast }) {
                     </h1>
 
                     <div className="d-flex flex-column gap-3">
-                        {challenges.map((challenge) => (
-                            <div
-                                key={challenge._id}
-                                className="card shadow-sm border-0"
-                                style={{
-                                    borderRadius: '15px',
-                                    backgroundColor: '#FFFFFF',
-                                    overflow: 'hidden',
-                                }}
-                            >
-                                <img
-                                    src={
-                                        challenge.image ||
-                                        'https://placehold.co/800x400?text=Challenge'
+                        {challenges.map(
+                            (challenge, index) => (
+                                <div
+                                    key={challenge._id}
+                                    ref={
+                                        index ===
+                                            challenges.length - 1
+                                            ? lastChallengeRef
+                                            : null
                                     }
-                                    alt={challenge.title}
-                                    className="card-img-top"
+                                    className="card shadow-sm border-0"
                                     style={{
-                                        width: '100%',
-                                        height: '220px',
-                                        objectFit: 'cover',
+                                        borderRadius: '15px',
+                                        backgroundColor:
+                                            '#FFFFFF',
+                                        overflow: 'hidden',
                                     }}
-                                />
-
-                                <div className="card-body d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-3">
-                                    <h5
-                                        className="mb-0 fw-semibold"
+                                >
+                                    <img
+                                        src={
+                                            challenge.image ||
+                                            'https://placehold.co/800x400?text=Challenge'
+                                        }
+                                        alt={challenge.title}
+                                        className="card-img-top"
                                         style={{
-                                            color: '#5B4B8A',
+                                            width: '100%',
+                                            height: '220px',
+                                            objectFit: 'cover',
                                         }}
-                                    >
-                                        {challenge.title}
-                                    </h5>
+                                    />
 
-                                    <div className="d-flex flex-wrap align-items-center gap-2">
-                                        <span
-                                            className="badge rounded-pill px-3 py-2"
+                                    <div className="card-body d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-3">
+                                        <h5
+                                            className="mb-0 fw-semibold"
                                             style={{
-                                                backgroundColor:
-                                                    '#C4B5FD',
-                                                color: '#4C1D95',
-                                                fontSize: '0.9rem',
+                                                color:
+                                                    '#5B4B8A',
                                             }}
                                         >
-                                            {t('challenges.steps', {
-                                                steps:
-                                                    challenge.targetSteps,
-                                            })}
-                                        </span>
+                                            {challenge.title}
+                                        </h5>
 
-                                        <Button
-                                            variant="warning"
-                                            onClick={() =>
-                                                navigate(
-                                                    `/edit/${challenge._id}`
-                                                )
-                                            }
-                                        >
-                                            {t('challenges.edit')}
-                                        </Button>
+                                        <div className="d-flex flex-wrap align-items-center gap-2">
+                                            <span
+                                                className="badge rounded-pill px-3 py-2"
+                                                style={{
+                                                    backgroundColor:
+                                                        '#C4B5FD',
+                                                    color:
+                                                        '#4C1D95',
+                                                    fontSize:
+                                                        '0.9rem',
+                                                }}
+                                            >
+                                                {t(
+                                                    'challenges.steps',
+                                                    {
+                                                        steps:
+                                                            challenge.targetSteps,
+                                                    }
+                                                )}
+                                            </span>
 
-                                        <Button
-                                            variant="danger"
-                                            onClick={() =>
-                                                handleDelete(
-                                                    challenge._id
-                                                )
-                                            }
-                                        >
-                                            {t('challenges.delete')}
-                                        </Button>
+                                            <Button
+                                                variant="warning"
+                                                onClick={() =>
+                                                    navigate(
+                                                        `/edit/${challenge._id}`
+                                                    )
+                                                }
+                                            >
+                                                {t(
+                                                    'challenges.edit'
+                                                )}
+                                            </Button>
+
+                                            <Button
+                                                variant="danger"
+                                                onClick={() =>
+                                                    handleDelete(
+                                                        challenge._id
+                                                    )
+                                                }
+                                            >
+                                                {t(
+                                                    'challenges.delete'
+                                                )}
+                                            </Button>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        ))}
+                            )
+                        )}
+
+                        {loadingMore && (
+                            <>
+                                <ChallengeSkeleton />
+                                <ChallengeSkeleton />
+                            </>
+                        )}
                     </div>
                 </div>
             </div>
