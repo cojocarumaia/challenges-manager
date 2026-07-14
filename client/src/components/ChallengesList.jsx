@@ -7,6 +7,60 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import { fetchChallenges, deleteChallenge } from '../api';
 import i18n from '../i18n';
 
+function ChallengeSkeleton() {
+    return (
+        <div
+            className="card shadow-sm border-0 placeholder-glow"
+            style={{
+                borderRadius: '15px',
+                overflow: 'hidden',
+            }}
+        >
+            <div
+                className="placeholder w-100"
+                style={{
+                    height: '220px',
+                }}
+            />
+
+            <div className="card-body">
+                <div className="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-3">
+                    <span
+                        className="placeholder col-5"
+                        style={{ height: '24px' }}
+                    />
+
+                    <div className="d-flex flex-wrap gap-2">
+                        <span
+                            className="placeholder rounded-pill"
+                            style={{
+                                width: '100px',
+                                height: '36px',
+                            }}
+                        />
+
+                        <span
+                            className="placeholder rounded"
+                            style={{
+                                width: '70px',
+                                height: '38px',
+                            }}
+                        />
+
+                        <span
+                            className="placeholder rounded"
+                            style={{
+                                width: '70px',
+                                height: '38px',
+                            }}
+                        />
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+}
+
 function ChallengesList({ showSuccessToast }) {
     const { t } = useTranslation();
     const navigate = useNavigate();
@@ -17,7 +71,10 @@ function ChallengesList({ showSuccessToast }) {
 
     const loadChallenges = useCallback(async () => {
         try {
+            setLoading(true);
+
             const data = await fetchChallenges();
+
             setChallenges(data);
             setError('');
         } catch (err) {
@@ -57,7 +114,30 @@ function ChallengesList({ showSuccessToast }) {
     }
 
     if (loading) {
-        return <p>{t('challenges.loading')}</p>;
+        return (
+            <div
+                className="container-fluid min-vh-100 py-5"
+                style={{ backgroundColor: '#F8F0FF' }}
+            >
+                <div
+                    className="card shadow-lg mx-auto border-0"
+                    style={{
+                        maxWidth: '800px',
+                        borderRadius: '20px',
+                    }}
+                >
+                    <div className="card-body p-4">
+                        <div className="d-flex flex-column gap-3">
+                            {Array.from({ length: 5 }).map(
+                                (_, index) => (
+                                    <ChallengeSkeleton key={index} />
+                                )
+                            )}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
     }
 
     if (error) {
@@ -71,7 +151,10 @@ function ChallengesList({ showSuccessToast }) {
         >
             <div
                 className="card shadow-lg mx-auto border-0"
-                style={{ maxWidth: '800px', borderRadius: '20px' }}
+                style={{
+                    maxWidth: '800px',
+                    borderRadius: '20px',
+                }}
             >
                 <div className="card-body p-4">
                     <div className="d-flex justify-content-end mb-3">
@@ -95,14 +178,18 @@ function ChallengesList({ showSuccessToast }) {
 
                             <Dropdown.Menu align="end">
                                 <Dropdown.Item
-                                    onClick={() => changeLanguage('en')}
+                                    onClick={() =>
+                                        changeLanguage('en')
+                                    }
                                 >
                                     <span className="fi fi-gb me-2" />
                                     {t('english')}
                                 </Dropdown.Item>
 
                                 <Dropdown.Item
-                                    onClick={() => changeLanguage('ro')}
+                                    onClick={() =>
+                                        changeLanguage('ro')
+                                    }
                                 >
                                     <span className="fi fi-ro me-2" />
                                     {t('romanian')}
@@ -155,7 +242,9 @@ function ChallengesList({ showSuccessToast }) {
                                 <div className="card-body d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-3">
                                     <h5
                                         className="mb-0 fw-semibold"
-                                        style={{ color: '#5B4B8A' }}
+                                        style={{
+                                            color: '#5B4B8A',
+                                        }}
                                     >
                                         {challenge.title}
                                     </h5>
@@ -164,13 +253,15 @@ function ChallengesList({ showSuccessToast }) {
                                         <span
                                             className="badge rounded-pill px-3 py-2"
                                             style={{
-                                                backgroundColor: '#C4B5FD',
+                                                backgroundColor:
+                                                    '#C4B5FD',
                                                 color: '#4C1D95',
                                                 fontSize: '0.9rem',
                                             }}
                                         >
                                             {t('challenges.steps', {
-                                                steps: challenge.targetSteps,
+                                                steps:
+                                                    challenge.targetSteps,
                                             })}
                                         </span>
 
@@ -188,7 +279,9 @@ function ChallengesList({ showSuccessToast }) {
                                         <Button
                                             variant="danger"
                                             onClick={() =>
-                                                handleDelete(challenge._id)
+                                                handleDelete(
+                                                    challenge._id
+                                                )
                                             }
                                         >
                                             {t('challenges.delete')}
