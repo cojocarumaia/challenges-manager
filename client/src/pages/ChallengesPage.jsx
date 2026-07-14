@@ -1,13 +1,9 @@
 import ChallengesList from '../components/ChallengesList';
 
-function ChallengesPage({
-    showSuccessToast,
-    theme,
-}) {
+function ChallengesPage({ showSuccessToast }) {
     return (
         <ChallengesList
             showSuccessToast={showSuccessToast}
-            theme={theme}
         />
     );
 }

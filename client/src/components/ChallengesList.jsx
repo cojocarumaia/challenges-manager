@@ -15,7 +15,7 @@ import i18n from '../i18n';
 function ChallengeSkeleton() {
     return (
         <div
-            className="card shadow-sm border-0 placeholder-glow"
+            className="card shadow-sm border-0 placeholder-glow bg-body"
             style={{
                 borderRadius: '15px',
                 overflow: 'hidden',
@@ -64,7 +64,7 @@ function ChallengeSkeleton() {
     );
 }
 
-function ChallengesList({ showSuccessToast, theme }) {
+function ChallengesList({ showSuccessToast }) {
     const { t } = useTranslation();
     const navigate = useNavigate();
 
@@ -185,22 +185,13 @@ function ChallengesList({ showSuccessToast, theme }) {
 
     if (loading) {
         return (
-            <div
-                className="container-fluid min-vh-100 py-5"
-                style={{
-                    backgroundColor:
-                        theme === 'dark' ? '#121212' : '#F8F0FF',
-                }}
-            >
+            <div className="container-fluid min-vh-100 py-5 bg-body-tertiary">
                 <div
-                    className="card shadow-lg mx-auto border-0"
+                    className="card shadow-lg mx-auto border-0 bg-body"
                     style={{
                         maxWidth: '800px',
                         borderRadius: '20px',
-                        backgroundColor:
-                            theme === 'dark' ? '#1F2327' : '#FFFFFF',
                     }}
-
                 >
                     <div className="card-body p-4">
                         <div className="d-flex flex-column gap-3">
@@ -214,26 +205,31 @@ function ChallengesList({ showSuccessToast, theme }) {
                         </div>
                     </div>
                 </div>
-            </div >
+            </div>
         );
     }
 
     if (error) {
-        return <p>{error}</p>;
+        return (
+            <div className="container-fluid min-vh-100 py-5 bg-body-tertiary">
+                <div
+                    className="alert alert-danger mx-auto"
+                    style={{ maxWidth: '800px' }}
+                    role="alert"
+                >
+                    {error}
+                </div>
+            </div>
+        );
     }
 
     return (
-        <div
-            className="container-fluid min-vh-100 py-5"
-            style={{ backgroundColor: '#F8F0FF' }}
-        >
+        <div className="container-fluid min-vh-100 py-5 bg-body-tertiary">
             <div
-                className="card shadow-lg mx-auto border-0"
+                className="card shadow-lg mx-auto border-0 bg-body"
                 style={{
                     maxWidth: '800px',
                     borderRadius: '20px',
-                    backgroundColor:
-                        theme === 'dark' ? '#1F2327' : '#FFFFFF',
                 }}
             >
                 <div className="card-body p-4">
@@ -289,10 +285,7 @@ function ChallengesList({ showSuccessToast, theme }) {
                         </Button>
                     </div>
 
-                    <h1
-                        className="text-center mb-4 fw-bold"
-                        style={{ color: '#8B5CF6' }}
-                    >
+                    <h1 className="text-center mb-4 fw-bold text-primary">
                         {t('challenges.title')}
                     </h1>
 
@@ -307,11 +300,9 @@ function ChallengesList({ showSuccessToast, theme }) {
                                             ? lastChallengeRef
                                             : null
                                     }
-                                    className="card shadow-sm border-0"
+                                    className="card shadow-sm border-0 bg-body"
                                     style={{
                                         borderRadius: '15px',
-                                        backgroundColor:
-                                            theme === 'dark' ? '#2A2F34' : '#FFFFFF',
                                         overflow: 'hidden',
                                     }}
                                 >
@@ -330,28 +321,12 @@ function ChallengesList({ showSuccessToast, theme }) {
                                     />
 
                                     <div className="card-body d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-3">
-                                        <h5
-                                            className="mb-0 fw-semibold"
-                                            style={{
-                                                color:
-                                                    '#5B4B8A',
-                                            }}
-                                        >
+                                        <h5 className="mb-0 fw-semibold text-primary">
                                             {challenge.title}
                                         </h5>
 
                                         <div className="d-flex flex-wrap align-items-center gap-2">
-                                            <span
-                                                className="badge rounded-pill px-3 py-2"
-                                                style={{
-                                                    backgroundColor:
-                                                        '#C4B5FD',
-                                                    color:
-                                                        '#4C1D95',
-                                                    fontSize:
-                                                        '0.9rem',
-                                                }}
-                                            >
+                                            <span className="badge rounded-pill bg-primary-subtle text-primary-emphasis px-3 py-2 fs-6">
                                                 {t(
                                                     'challenges.steps',
                                                     {

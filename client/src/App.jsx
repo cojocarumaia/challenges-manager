@@ -74,7 +74,6 @@ function App() {
           element={
             <ChallengesPage
               showSuccessToast={showSuccessToast}
-              theme={theme}
             />
           }
         />
@@ -84,7 +83,6 @@ function App() {
           element={
             <CreateChallenge
               showSuccessToast={showSuccessToast}
-              theme={theme}
             />
           }
         />
@@ -94,7 +92,6 @@ function App() {
           element={
             <EditChallenge
               showSuccessToast={showSuccessToast}
-              theme={theme}
             />
           }
         />
