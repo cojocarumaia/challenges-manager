@@ -135,8 +135,23 @@ function ChallengesList({ showSuccessToast }) {
                                 style={{
                                     borderRadius: '15px',
                                     backgroundColor: '#FFFFFF',
+                                    overflow: 'hidden',
                                 }}
                             >
+                                <img
+                                    src={
+                                        challenge.image ||
+                                        'https://placehold.co/800x400?text=Challenge'
+                                    }
+                                    alt={challenge.title}
+                                    className="card-img-top"
+                                    style={{
+                                        width: '100%',
+                                        height: '220px',
+                                        objectFit: 'cover',
+                                    }}
+                                />
+
                                 <div className="card-body d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-3">
                                     <h5
                                         className="mb-0 fw-semibold"
@@ -162,7 +177,9 @@ function ChallengesList({ showSuccessToast }) {
                                         <Button
                                             variant="warning"
                                             onClick={() =>
-                                                navigate(`/edit/${challenge._id}`)
+                                                navigate(
+                                                    `/edit/${challenge._id}`
+                                                )
                                             }
                                         >
                                             {t('challenges.edit')}

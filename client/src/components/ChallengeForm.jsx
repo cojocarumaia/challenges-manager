@@ -1,11 +1,16 @@
 import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
+import Image from 'react-bootstrap/Image';
 import { useDebouncedCallback } from 'use-debounce';
 import { useTranslation } from 'react-i18next';
 
 function ChallengeForm({ initialValues, onSubmit, submitLabel }) {
-    const [formData, setFormData] = useState(initialValues);
+    const [formData, setFormData] = useState({
+        ...initialValues,
+        image: initialValues.image || '',
+    });
+
     const { t } = useTranslation();
 
     function handleChange(event) {
@@ -15,6 +20,42 @@ function ChallengeForm({ initialValues, onSubmit, submitLabel }) {
             ...formData,
             [name]: value,
         });
+    }
+
+    function handleImageChange(event) {
+        const file = event.target.files[0];
+
+        if (!file) {
+            return;
+        }
+
+        if (!file.type.startsWith('image/')) {
+            alert('Please select a valid image.');
+            event.target.value = '';
+            return;
+        }
+
+        const reader = new FileReader();
+
+        reader.onloadend = () => {
+            setFormData((currentFormData) => ({
+                ...currentFormData,
+                image: reader.result,
+            }));
+        };
+
+        reader.onerror = () => {
+            alert('The image could not be read.');
+        };
+
+        reader.readAsDataURL(file);
+    }
+
+    function handleRemoveImage() {
+        setFormData((currentFormData) => ({
+            ...currentFormData,
+            image: '',
+        }));
     }
 
     const debouncedSubmit = useDebouncedCallback((data) => {
@@ -34,7 +75,10 @@ function ChallengeForm({ initialValues, onSubmit, submitLabel }) {
             return;
         }
 
-        debouncedSubmit(formData);
+        debouncedSubmit({
+            ...formData,
+            targetSteps: Number(formData.targetSteps),
+        });
     }
 
     return (
@@ -108,6 +152,44 @@ function ChallengeForm({ initialValues, onSubmit, submitLabel }) {
                     onChange={handleChange}
                 />
             </Form.Group>
+
+            <Form.Group className="mb-3">
+                <Form.Label htmlFor="image">
+                    Challenge image
+                </Form.Label>
+
+                <Form.Control
+                    id="image"
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageChange}
+                />
+            </Form.Group>
+
+            {formData.image && (
+                <div className="mb-3">
+                    <Image
+                        src={formData.image}
+                        alt="Challenge preview"
+                        fluid
+                        rounded
+                        style={{
+                            width: '100%',
+                            maxHeight: '300px',
+                            objectFit: 'cover',
+                        }}
+                    />
+
+                    <Button
+                        type="button"
+                        variant="outline-danger"
+                        className="mt-2"
+                        onClick={handleRemoveImage}
+                    >
+                        Remove image
+                    </Button>
+                </div>
+            )}
 
             <Button type="submit" variant="primary">
                 {submitLabel}
