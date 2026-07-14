@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "vitest run --globals",
-    "dev": "nodemon index.js"
+    "dev": "nodemon index.js",
+    "lint": "eslint ."
   },
   "keywords": [],
   "author": "",

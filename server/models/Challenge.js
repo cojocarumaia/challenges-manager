@@ -24,6 +24,11 @@ const challengeSchema = new mongoose.Schema({
     type: Date,
   },
 
+  image: {
+    type: String,
+    default: '',
+  },
+
   createdAt: {
     type: Date,
     default: Date.now,

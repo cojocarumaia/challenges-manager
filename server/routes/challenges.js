@@ -7,12 +7,14 @@ const {
   deleteChallenge,
 } = require('../controllers/challenges');
 
+const validateChallenge = require('../middleware/validateChallenge');
+
 const router = express.Router();
 
 router.get('/', getChallenges);
 router.get('/:id', getChallengeById);
-router.post('/', createChallenge);
-router.put('/:id', updateChallenge);
+router.post('/', validateChallenge, createChallenge);
+router.put('/:id', validateChallenge, updateChallenge);
 router.delete('/:id', deleteChallenge);
 
 module.exports = router;

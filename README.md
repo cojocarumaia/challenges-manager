@@ -1,52 +1,148 @@
-# Challenges Manager 
+# Challenges Manager
 
-STEPathON Intership Preoject 
+Challenges Manager is a full-stack web application developed during the STEPathON Internship.
 
-This project is developed as part of the STEPathON Intership Project. 
-  
-The goal of the project is to learn and practice: 
-- Git and GitHub 
-- Node.js 
-- MongoDB Atlas 
-- Software developement best practices 
+The application allows users to create, view, edit and delete walking challenges.
 
-## Scripts
+## Installation
 
-### Seed Database
-Run the following command to populate the database with sample challenges:
+### 1. Clone the repository
+
 ```bash
-node scripts/seed.js
+git clone https://github.com/cojocarumaia/challenges-manager.git
+cd challenges-manager
 ```
-This script removes the existing challenges and inserts four sample challenges into the database.
 
-### Aggregation
-Run the following command to execute the aggregation example:
+### 2. Configure the back end
+
+Go to the `server` folder and create a file named `.env`.
+
+You can use `.env.sample` as a template.
+
+Add your MongoDB Atlas connection string:
+
+```env
+MONGO_URI=your_mongodb_connection_string
+```
+
+### 3. Install the back-end dependencies
+
 ```bash
-node scripts/aggregation.js
+cd server
+npm install
 ```
-This script counts the number of challenges with `targetSteps` greater than or equal to `100000`.
 
-# API Endpoints
+### 4. Configure the front end
+
+Go to the `client` folder and create a file named `.env`.
+
+You can use `.env.sample` as a template.
+
+Add:
+
+```env
+VITE_API_BASE_URL=http://localhost:4000
+```
+
+### 5. Install the front-end dependencies
+
+```bash
+cd ../client
+npm install
+```
+
+## Running the application
+
+Open **two terminals**.
+
+### Terminal 1 - Back end
+
+```bash
+cd server
+npm run dev
+```
+
+The server runs at:
+
+```
+http://localhost:4000
+```
+
+### Terminal 2 - Front end
+
+```bash
+cd client
+npm run dev
+```
+
+The application runs at:
+
+```
+http://localhost:5173
+```
+
+Open:
+
+```
+http://localhost:5173
+```
+
+## Back-end addresses
+
+### Health check
+
+```
+GET /health
+```
+
+Returns:
+
+```json
+{
+  "status": "ok"
+}
+```
+
+### Get all challenges
+
+```
 GET /api/challenges
-- Returns all challenges.
+```
+
+Returns all challenges.
+
+### Get one challenge
+
+```
 GET /api/challenges/:id
-- Returns one challenge by ID.
+```
+
+Returns a challenge by its ID.
+
+### Create a challenge
+
+```
 POST /api/challenges
-- Creates a new challenge.
+```
+
+### Update a challenge
+
+```
 PUT /api/challenges/:id
-- Updates an existing challenge.
+```
+
+### Delete a challenge
+
+```
 DELETE /api/challenges/:id
-- Deletes a challenge by ID.
- 
-## Sprint 1 Checklist 
- 
-- [x] Day 1 
-- [x] Day 2 
-- [x] Day 3 
-- [x] Day 4 
-- [x] Day 5 
-- [ ] Day 6 
-- [ ] Day 7 
-- [ ] Day 8 
-- [ ] Day 9 
-- [ ] Day 10 
+```
+
+## Screenshots
+
+### Challenges List
+
+![Challenges List](docs/screenshots/challenges-list.png)
+
+### Create Challenge
+
+![Create Challenge](docs/screenshots/create-challenge.png)

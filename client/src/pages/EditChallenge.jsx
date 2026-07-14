@@ -29,6 +29,7 @@ function EditChallenge({ showSuccessToast }) {
                     endDate: challenge.endDate
                         ? challenge.endDate.slice(0, 10)
                         : '',
+                    image: challenge.image || '',
                 });
             } catch (error) {
                 console.error(error);
