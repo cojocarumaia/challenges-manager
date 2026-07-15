@@ -146,3 +146,15 @@ DELETE /api/challenges/:id
 ### Create Challenge
 
 ![Create Challenge](docs/screenshots/create-challenge.png)
+
+## Live Backend
+
+The deployed back-end is available at:
+
+https://challenges-manager.onrender.com
+
+Health check:
+https://challenges-manager.onrender.com/health
+
+API:
+https://challenges-manager.onrender.com/api/challenges
