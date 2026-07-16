@@ -53,7 +53,10 @@ function RegisterForm({ onSubmit }) {
                 )}
 
                 <Form onSubmit={handleSubmit}>
-                    <Form.Group className="mb-3">
+                    <Form.Group
+                        className="mb-3"
+                        controlId="register-email"
+                    >
                         <Form.Label>
                             {t('register.email')}
                         </Form.Label>
@@ -68,7 +71,10 @@ function RegisterForm({ onSubmit }) {
                         />
                     </Form.Group>
 
-                    <Form.Group className="mb-4">
+                    <Form.Group
+                        className="mb-4"
+                        controlId="register-password"
+                    >
                         <Form.Label>
                             {t('register.password')}
                         </Form.Label>
