@@ -158,3 +158,11 @@ https://challenges-manager.onrender.com/health
 
 API:
 https://challenges-manager.onrender.com/api/challenges
+
+## Live Demo
+
+Frontend:
+https://challenges-manager.web.app
+
+Backend:
+https://challenges-manager.onrender.com

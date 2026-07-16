@@ -6,7 +6,22 @@ const challengesRoutes = require('./routes/challenges');
 const app = express();
 
 
-app.use(cors());
+const allowedOrigins = [
+    'http://localhost:5173',
+    'https://challenges-manager.web.app',
+];
+
+app.use(
+    cors({
+        origin(origin, callback) {
+            if (!origin || allowedOrigins.includes(origin)) {
+                return callback(null, true);
+            }
+
+            return callback(new Error('Not allowed by CORS'));
+        },
+    })
+);
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
