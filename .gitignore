@@ -1,6 +1,10 @@
-node_modules/ 
-.env  
-NOTES.txt 
+node_modules/
+
+# Environment files
+.env
+.env.*
+
+NOTES.txt
 .postman/
 
 # Playwright
