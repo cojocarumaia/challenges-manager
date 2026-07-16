@@ -10,6 +10,12 @@ const firebaseConfig = {
     measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
 };
 
-const app = initializeApp(firebaseConfig);
+let app;
+
+try {
+    app = initializeApp(firebaseConfig);
+} catch (error) {
+    console.error('Failed to initialize Firebase:', error);
+}
 
 export default app;
