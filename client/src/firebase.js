@@ -1,4 +1,5 @@
-import { initializeApp } from "firebase/app";
+import { initializeApp } from 'firebase/app';
+import { getAuth } from 'firebase/auth';
 
 const firebaseConfig = {
     apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -10,12 +11,8 @@ const firebaseConfig = {
     measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
 };
 
-let app;
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
 
-try {
-    app = initializeApp(firebaseConfig);
-} catch (error) {
-    console.error('Failed to initialize Firebase:', error);
-}
-
+export { auth };
 export default app;
