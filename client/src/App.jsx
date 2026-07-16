@@ -5,8 +5,9 @@ import Button from 'react-bootstrap/Button';
 import ChallengesPage from './pages/ChallengesPage';
 import CreateChallenge from './pages/CreateChallenge';
 import EditChallenge from './pages/EditChallenge';
-import SuccessToast from './components/SuccessToast';
 import RegisterPage from './pages/RegisterPage';
+import LoginPage from './pages/LoginPage';
+import SuccessToast from './components/SuccessToast';
 
 function App() {
   const [toast, setToast] = useState({
@@ -87,10 +88,6 @@ function App() {
             />
           }
         />
-        <Route
-          path="/register"
-          element={<RegisterPage />}
-        />
 
         <Route
           path="/edit/:id"
@@ -99,6 +96,16 @@ function App() {
               showSuccessToast={showSuccessToast}
             />
           }
+        />
+
+        <Route
+          path="/register"
+          element={<RegisterPage />}
+        />
+
+        <Route
+          path="/login"
+          element={<LoginPage />}
         />
       </Routes>
     </>

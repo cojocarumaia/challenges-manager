@@ -44,5 +44,11 @@
         "email": "Email",
         "password": "Parolă",
         "submit": "Creează cont"
+    },
+    "login": {
+        "title": "Autentificare",
+        "email": "Email",
+        "password": "Parolă",
+        "submit": "Autentificare"
     }
 }
