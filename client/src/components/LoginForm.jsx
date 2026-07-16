@@ -9,9 +9,26 @@ function LoginForm({ onSubmit }) {
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
 
     function handleSubmit(event) {
         event.preventDefault();
+        setError('');
+
+        const emailRegex =
+            /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        if (!emailRegex.test(email)) {
+            setError('Please enter a valid email address.');
+            return;
+        }
+
+        if (password.length < 6) {
+            setError(
+                'Password must contain at least 6 characters.'
+            );
+            return;
+        }
 
         onSubmit({
             email,
@@ -20,11 +37,20 @@ function LoginForm({ onSubmit }) {
     }
 
     return (
-        <Card className="mx-auto mt-4" style={{ maxWidth: '450px' }}>
+        <Card
+            className="mx-auto mt-4"
+            style={{ maxWidth: '450px' }}
+        >
             <Card.Body>
                 <h2 className="text-center mb-4">
                     {t('login.title')}
                 </h2>
+
+                {error && (
+                    <p className="text-danger text-center">
+                        {error}
+                    </p>
+                )}
 
                 <Form onSubmit={handleSubmit}>
                     <Form.Group className="mb-3">
@@ -57,7 +83,10 @@ function LoginForm({ onSubmit }) {
                         />
                     </Form.Group>
 
-                    <Button type="submit" className="w-100">
+                    <Button
+                        type="submit"
+                        className="w-100"
+                    >
                         {t('login.submit')}
                     </Button>
                 </Form>
