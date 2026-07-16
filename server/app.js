@@ -9,6 +9,7 @@ const app = express();
 const allowedOrigins = [
     'http://localhost:5173',
     'https://challenges-manager.web.app',
+    'https://challenges-manager.firebaseapp.com',
 ];
 
 app.use(
