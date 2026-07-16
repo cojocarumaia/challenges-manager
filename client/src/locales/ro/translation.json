@@ -38,5 +38,11 @@
         "deleteFailed": "Ștergerea provocării a eșuat.",
         "delete": "Șterge",
         "steps": "{{steps}} pași"
+    },
+    "register": {
+        "title": "Înregistrare",
+        "email": "Email",
+        "password": "Parolă",
+        "submit": "Creează cont"
     }
 }

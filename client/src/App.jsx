@@ -6,6 +6,7 @@ import ChallengesPage from './pages/ChallengesPage';
 import CreateChallenge from './pages/CreateChallenge';
 import EditChallenge from './pages/EditChallenge';
 import SuccessToast from './components/SuccessToast';
+import RegisterPage from './pages/RegisterPage';
 
 function App() {
   const [toast, setToast] = useState({
@@ -85,6 +86,10 @@ function App() {
               showSuccessToast={showSuccessToast}
             />
           }
+        />
+        <Route
+          path="/register"
+          element={<RegisterPage />}
         />
 
         <Route

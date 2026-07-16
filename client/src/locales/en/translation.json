@@ -38,5 +38,11 @@
         "deleteFailed": "Failed to delete challenge.",
         "delete": "Delete",
         "steps": "{{steps}} steps"
+    },
+    "register": {
+        "title": "Register",
+        "email": "Email",
+        "password": "Password",
+        "submit": "Register"
     }
 }
