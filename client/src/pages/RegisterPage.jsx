@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 
 import RegisterForm from '../components/RegisterForm';
@@ -7,6 +8,7 @@ import { auth } from '../firebase';
 
 function RegisterPage() {
     const navigate = useNavigate();
+    const { t } = useTranslation();
 
     const [error, setError] = useState('');
 
@@ -24,19 +26,19 @@ function RegisterPage() {
         } catch (error) {
             switch (error.code) {
                 case 'auth/email-already-in-use':
-                    setError('Email is already in use.');
+                    setError(t('auth.emailAlreadyInUse'));
                     break;
 
                 case 'auth/weak-password':
-                    setError('Password must contain at least 6 characters.');
+                    setError(t('auth.passwordTooShort'));
                     break;
 
                 case 'auth/invalid-email':
-                    setError('Please enter a valid email address.');
+                    setError(t('auth.invalidEmail'));
                     break;
 
                 default:
-                    setError('Registration failed. Please try again.');
+                    setError(t('auth.registrationFailed'));
             }
         }
     }

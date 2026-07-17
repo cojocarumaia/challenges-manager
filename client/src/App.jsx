@@ -7,6 +7,7 @@ import CreateChallenge from './pages/CreateChallenge';
 import EditChallenge from './pages/EditChallenge';
 import RegisterPage from './pages/RegisterPage';
 import LoginPage from './pages/LoginPage';
+import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import SuccessToast from './components/SuccessToast';
 
 function App() {
@@ -106,6 +107,11 @@ function App() {
         <Route
           path="/login"
           element={<LoginPage />}
+        />
+
+        <Route
+          path="/forgot-password"
+          element={<ForgotPasswordPage />}
         />
       </Routes>
     </>

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
@@ -19,14 +20,12 @@ function LoginForm({ onSubmit }) {
             /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
         if (!emailRegex.test(email)) {
-            setError('Please enter a valid email address.');
+            setError(t('auth.invalidEmail'));
             return;
         }
 
         if (password.length < 6) {
-            setError(
-                'Password must contain at least 6 characters.'
-            );
+            setError(t('auth.passwordTooShort'));
             return;
         }
 
@@ -53,7 +52,10 @@ function LoginForm({ onSubmit }) {
                 )}
 
                 <Form onSubmit={handleSubmit}>
-                    <Form.Group className="mb-3">
+                    <Form.Group
+                        className="mb-3"
+                        controlId="login-email"
+                    >
                         <Form.Label>
                             {t('login.email')}
                         </Form.Label>
@@ -68,7 +70,10 @@ function LoginForm({ onSubmit }) {
                         />
                     </Form.Group>
 
-                    <Form.Group className="mb-4">
+                    <Form.Group
+                        className="mb-4"
+                        controlId="login-password"
+                    >
                         <Form.Label>
                             {t('login.password')}
                         </Form.Label>
@@ -89,6 +94,12 @@ function LoginForm({ onSubmit }) {
                     >
                         {t('login.submit')}
                     </Button>
+
+                    <div className="text-center mt-3">
+                        <Link to="/forgot-password">
+                            {t('forgotPassword.link')}
+                        </Link>
+                    </div>
                 </Form>
             </Card.Body>
         </Card>

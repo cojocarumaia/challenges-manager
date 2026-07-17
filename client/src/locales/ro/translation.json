@@ -50,5 +50,26 @@
         "email": "Email",
         "password": "Parolă",
         "submit": "Autentificare"
+    },
+    "auth": {
+        "emailAlreadyInUse": "Adresa de email este deja folosită.",
+        "invalidEmail": "Introdu o adresă de email validă.",
+        "passwordTooShort": "Parola trebuie să conțină cel puțin 6 caractere.",
+        "registrationFailed": "Înregistrarea a eșuat. Încearcă din nou.",
+        "invalidCredentials": "Emailul sau parola sunt incorecte.",
+        "tooManyRequests": "Prea multe încercări nereușite. Încearcă din nou mai târziu.",
+        "loginFailed": "Autentificarea a eșuat. Încearcă din nou.",
+        "logout": "Delogare",
+        "logoutFailed": "Delogarea a eșuat. Încearcă din nou."
+    },
+    "forgotPassword": {
+        "title": "Resetează parola",
+        "description": "Introdu adresa de email și îți vom trimite un link pentru resetarea parolei.",
+        "email": "Email",
+        "submit": "Trimite emailul de resetare",
+        "sending": "Se trimite...",
+        "success": "Emailul pentru resetarea parolei a fost trimis. Verifică inboxul.",
+        "failed": "Trimiterea emailului de resetare a eșuat. Încearcă din nou.",
+        "link": "Ai uitat parola?"
     }
 }

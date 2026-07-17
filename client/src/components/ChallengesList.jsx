@@ -322,7 +322,7 @@ function ChallengesList({ showSuccessToast }) {
 
                                     <div className="card-body d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-3">
                                         <h5 className="mb-0 fw-semibold text-primary">
-                                            {challenge.title}
+                                            #{index + 1} {challenge.title}
                                         </h5>
 
                                         <div className="d-flex flex-wrap align-items-center gap-2">

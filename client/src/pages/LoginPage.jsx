@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 
 import LoginForm from '../components/LoginForm';
@@ -7,6 +8,8 @@ import { auth } from '../firebase';
 
 function LoginPage() {
     const navigate = useNavigate();
+    const { t } = useTranslation();
+
     const [error, setError] = useState('');
 
     async function handleLogin(data) {
@@ -23,23 +26,21 @@ function LoginPage() {
         } catch (error) {
             switch (error.code) {
                 case 'auth/invalid-email':
-                    setError('Please enter a valid email address.');
+                    setError(t('auth.invalidEmail'));
                     break;
 
                 case 'auth/invalid-credential':
                 case 'auth/user-not-found':
                 case 'auth/wrong-password':
-                    setError('Email or password is incorrect.');
+                    setError(t('auth.invalidCredentials'));
                     break;
 
                 case 'auth/too-many-requests':
-                    setError(
-                        'Too many failed attempts. Please try again later.'
-                    );
+                    setError(t('auth.tooManyRequests'));
                     break;
 
                 default:
-                    setError('Login failed. Please try again.');
+                    setError(t('auth.loginFailed'));
             }
         }
     }

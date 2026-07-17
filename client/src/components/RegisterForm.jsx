@@ -19,14 +19,12 @@ function RegisterForm({ onSubmit }) {
             /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
         if (!emailRegex.test(email)) {
-            setError('Please enter a valid email address.');
+            setError(t('auth.invalidEmail'));
             return;
         }
 
         if (password.length < 6) {
-            setError(
-                'Password must contain at least 6 characters.'
-            );
+            setError(t('auth.passwordTooShort'));
             return;
         }
 
