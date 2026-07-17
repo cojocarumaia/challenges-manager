@@ -9,6 +9,7 @@ import EditChallenge from './pages/EditChallenge';
 import RegisterPage from './pages/RegisterPage';
 import LoginPage from './pages/LoginPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
+import ProtectedRoute from './components/ProtectedRoute';
 import SuccessToast from './components/SuccessToast';
 
 function App() {
@@ -82,33 +83,39 @@ function App() {
         <Route
           path="/"
           element={
-            <ChallengesPage
-              showSuccessToast={
-                showSuccessToast
-              }
-            />
+            <ProtectedRoute>
+              <ChallengesPage
+                showSuccessToast={
+                  showSuccessToast
+                }
+              />
+            </ProtectedRoute>
           }
         />
 
         <Route
           path="/create"
           element={
-            <CreateChallenge
-              showSuccessToast={
-                showSuccessToast
-              }
-            />
+            <ProtectedRoute>
+              <CreateChallenge
+                showSuccessToast={
+                  showSuccessToast
+                }
+              />
+            </ProtectedRoute>
           }
         />
 
         <Route
           path="/edit/:id"
           element={
-            <EditChallenge
-              showSuccessToast={
-                showSuccessToast
-              }
-            />
+            <ProtectedRoute>
+              <EditChallenge
+                showSuccessToast={
+                  showSuccessToast
+                }
+              />
+            </ProtectedRoute>
           }
         />
 
