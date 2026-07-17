@@ -1,8 +1,11 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import Alert from 'react-bootstrap/Alert';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import Form from 'react-bootstrap/Form';
+
+import { isValidEmail } from '../utils/validation';
 
 function ForgotPasswordForm({
     onSubmit,
@@ -17,10 +20,7 @@ function ForgotPasswordForm({
         event.preventDefault();
         setError('');
 
-        const emailRegex =
-            /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-        if (!emailRegex.test(email)) {
+        if (!isValidEmail(email)) {
             setError(t('auth.invalidEmail'));
             return;
         }
@@ -45,9 +45,9 @@ function ForgotPasswordForm({
                 </p>
 
                 {error && (
-                    <p className="text-danger text-center">
+                    <Alert variant="danger">
                         {error}
-                    </p>
+                    </Alert>
                 )}
 
                 <Form onSubmit={handleSubmit}>
