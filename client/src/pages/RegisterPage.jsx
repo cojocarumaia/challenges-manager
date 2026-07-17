@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
+import Alert from 'react-bootstrap/Alert';
 
 import RegisterForm from '../components/RegisterForm';
 import { auth } from '../firebase';
@@ -46,9 +47,12 @@ function RegisterPage() {
     return (
         <>
             {error && (
-                <p className="text-danger text-center mt-3">
+                <Alert
+                    variant="danger"
+                    className="mt-3"
+                >
                     {error}
-                </p>
+                </Alert>
             )}
 
             <RegisterForm

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Routes, Route } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 
@@ -11,6 +12,8 @@ import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import SuccessToast from './components/SuccessToast';
 
 function App() {
+  const { t } = useTranslation();
+
   const [toast, setToast] = useState({
     show: false,
     message: '',
@@ -45,7 +48,9 @@ function App() {
 
   function toggleTheme() {
     setTheme((currentTheme) =>
-      currentTheme === 'light' ? 'dark' : 'light'
+      currentTheme === 'light'
+        ? 'dark'
+        : 'light'
     );
   }
 
@@ -62,7 +67,9 @@ function App() {
         className="position-fixed top-0 start-0 m-3"
         style={{ zIndex: 1050 }}
       >
-        {theme === 'light' ? '🌙 Dark' : '☀️ Light'}
+        {theme === 'light'
+          ? `🌙 ${t('theme.dark')}`
+          : `☀️ ${t('theme.light')}`}
       </Button>
 
       <SuccessToast
@@ -76,7 +83,9 @@ function App() {
           path="/"
           element={
             <ChallengesPage
-              showSuccessToast={showSuccessToast}
+              showSuccessToast={
+                showSuccessToast
+              }
             />
           }
         />
@@ -85,7 +94,9 @@ function App() {
           path="/create"
           element={
             <CreateChallenge
-              showSuccessToast={showSuccessToast}
+              showSuccessToast={
+                showSuccessToast
+              }
             />
           }
         />
@@ -94,7 +105,9 @@ function App() {
           path="/edit/:id"
           element={
             <EditChallenge
-              showSuccessToast={showSuccessToast}
+              showSuccessToast={
+                showSuccessToast
+              }
             />
           }
         />
@@ -111,7 +124,9 @@ function App() {
 
         <Route
           path="/forgot-password"
-          element={<ForgotPasswordPage />}
+          element={
+            <ForgotPasswordPage />
+          }
         />
       </Routes>
     </>

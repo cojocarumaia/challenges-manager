@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { signInWithEmailAndPassword } from 'firebase/auth';
+import Alert from 'react-bootstrap/Alert';
 
 import LoginForm from '../components/LoginForm';
 import { auth } from '../firebase';
@@ -48,9 +49,12 @@ function LoginPage() {
     return (
         <>
             {error && (
-                <p className="text-danger text-center mt-3">
+                <Alert
+                    variant="danger"
+                    className="mt-3"
+                >
                     {error}
-                </p>
+                </Alert>
             )}
 
             <LoginForm onSubmit={handleLogin} />

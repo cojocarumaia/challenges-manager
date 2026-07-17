@@ -7,11 +7,16 @@
         "description": "Descriere",
         "targetSteps": "Număr țintă de pași",
         "startDate": "Data de început",
-        "endDate": "Data de sfârșit"
+        "endDate": "Data de sfârșit",
+        "image": "Imaginea provocării",
+        "imagePreview": "Previzualizarea provocării",
+        "removeImage": "Șterge imaginea"
     },
     "validation": {
         "titleRequired": "Titlul este obligatoriu.",
-        "targetStepsPositive": "Numărul țintă de pași trebuie să fie mai mare decât zero."
+        "targetStepsPositive": "Numărul țintă de pași trebuie să fie mai mare decât zero.",
+        "invalidImage": "Selectează o imagine validă.",
+        "imageReadFailed": "Imaginea nu a putut fi citită."
     },
     "createChallenge": {
         "title": "Creează provocare",
@@ -71,5 +76,9 @@
         "success": "Emailul pentru resetarea parolei a fost trimis. Verifică inboxul.",
         "failed": "Trimiterea emailului de resetare a eșuat. Încearcă din nou.",
         "link": "Ai uitat parola?"
+    },
+    "theme": {
+        "dark": "Întunecat",
+        "light": "Luminos"
     }
 }

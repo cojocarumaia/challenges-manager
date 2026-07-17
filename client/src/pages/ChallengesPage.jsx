@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { signOut } from 'firebase/auth';
+import Alert from 'react-bootstrap/Alert';
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
 
@@ -11,6 +12,7 @@ import { auth } from '../firebase';
 function ChallengesPage({ showSuccessToast }) {
     const { t } = useTranslation();
     const navigate = useNavigate();
+
     const [error, setError] = useState('');
 
     async function handleLogout() {
@@ -19,7 +21,8 @@ function ChallengesPage({ showSuccessToast }) {
         try {
             await signOut(auth);
             navigate('/login');
-        } catch {
+        } catch (error) {
+            console.error(error);
             setError(t('auth.logoutFailed'));
         }
     }
@@ -37,9 +40,12 @@ function ChallengesPage({ showSuccessToast }) {
             </div>
 
             {error && (
-                <p className="text-danger text-center">
+                <Alert
+                    variant="danger"
+                    className="text-center"
+                >
                     {error}
-                </p>
+                </Alert>
             )}
 
             <ChallengesList

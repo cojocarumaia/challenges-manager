@@ -6,7 +6,11 @@ import {
 } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import Alert from 'react-bootstrap/Alert';
+import Badge from 'react-bootstrap/Badge';
 import Button from 'react-bootstrap/Button';
+import Card from 'react-bootstrap/Card';
+import Container from 'react-bootstrap/Container';
 import Dropdown from 'react-bootstrap/Dropdown';
 
 import { deleteChallenge, fetchChallenges } from '../api';
@@ -14,8 +18,8 @@ import i18n from '../i18n';
 
 function ChallengeSkeleton() {
     return (
-        <div
-            className="card shadow-sm border-0 placeholder-glow bg-body"
+        <Card
+            className="shadow-sm border-0 placeholder-glow bg-body"
             style={{
                 borderRadius: '15px',
                 overflow: 'hidden',
@@ -26,7 +30,7 @@ function ChallengeSkeleton() {
                 style={{ height: '220px' }}
             />
 
-            <div className="card-body">
+            <Card.Body>
                 <div className="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-3">
                     <span
                         className="placeholder col-5"
@@ -59,8 +63,8 @@ function ChallengeSkeleton() {
                         />
                     </div>
                 </div>
-            </div>
-        </div>
+            </Card.Body>
+        </Card>
     );
 }
 
@@ -72,7 +76,8 @@ function ChallengesList({ showSuccessToast }) {
     const [page, setPage] = useState(1);
     const [hasMore, setHasMore] = useState(true);
     const [loading, setLoading] = useState(true);
-    const [loadingMore, setLoadingMore] = useState(false);
+    const [loadingMore, setLoadingMore] =
+        useState(false);
     const [error, setError] = useState('');
 
     const observer = useRef(null);
@@ -86,22 +91,29 @@ function ChallengesList({ showSuccessToast }) {
                     setLoadingMore(true);
                 }
 
-                const data = await fetchChallenges(pageToLoad, 10);
+                const data = await fetchChallenges(
+                    pageToLoad,
+                    10
+                );
 
                 if (replace) {
                     setChallenges(data.challenges);
                 } else {
-                    setChallenges((currentChallenges) => [
-                        ...currentChallenges,
-                        ...data.challenges,
-                    ]);
+                    setChallenges(
+                        (currentChallenges) => [
+                            ...currentChallenges,
+                            ...data.challenges,
+                        ]
+                    );
                 }
 
                 setHasMore(data.hasMore);
                 setError('');
             } catch (err) {
                 console.error(err);
-                setError(t('challenges.failedToLoad'));
+                setError(
+                    t('challenges.failedToLoad')
+                );
             } finally {
                 setLoading(false);
                 setLoadingMore(false);
@@ -132,8 +144,8 @@ function ChallengesList({ showSuccessToast }) {
                 observer.current.disconnect();
             }
 
-            observer.current = new IntersectionObserver(
-                (entries) => {
+            observer.current =
+                new IntersectionObserver((entries) => {
                     if (
                         entries[0].isIntersecting &&
                         hasMore
@@ -143,8 +155,7 @@ function ChallengesList({ showSuccessToast }) {
                                 currentPage + 1
                         );
                     }
-                }
-            );
+                });
 
             if (node) {
                 observer.current.observe(node);
@@ -171,75 +182,91 @@ function ChallengesList({ showSuccessToast }) {
 
             setPage(1);
             setHasMore(true);
+
             await loadChallenges(1, true);
         } catch (err) {
             console.error(err);
-            alert(t('challenges.deleteFailed'));
+            window.alert(
+                t('challenges.deleteFailed')
+            );
         }
     }
 
     function changeLanguage(language) {
         i18n.changeLanguage(language);
-        localStorage.setItem('language', language);
+        localStorage.setItem(
+            'language',
+            language
+        );
     }
 
     if (loading) {
         return (
-            <div className="container-fluid min-vh-100 py-5 bg-body-tertiary">
-                <div
-                    className="card shadow-lg mx-auto border-0 bg-body"
+            <Container
+                fluid
+                className="min-vh-100 py-5 bg-body-tertiary"
+            >
+                <Card
+                    className="shadow-lg mx-auto border-0 bg-body"
                     style={{
                         maxWidth: '800px',
                         borderRadius: '20px',
                     }}
                 >
-                    <div className="card-body p-4">
+                    <Card.Body className="p-4">
                         <div className="d-flex flex-column gap-3">
-                            {Array.from({ length: 5 }).map(
-                                (_, index) => (
-                                    <ChallengeSkeleton
-                                        key={index}
-                                    />
-                                )
-                            )}
+                            {Array.from({
+                                length: 5,
+                            }).map((_, index) => (
+                                <ChallengeSkeleton
+                                    key={index}
+                                />
+                            ))}
                         </div>
-                    </div>
-                </div>
-            </div>
+                    </Card.Body>
+                </Card>
+            </Container>
         );
     }
 
     if (error) {
         return (
-            <div className="container-fluid min-vh-100 py-5 bg-body-tertiary">
-                <div
-                    className="alert alert-danger mx-auto"
+            <Container
+                fluid
+                className="min-vh-100 py-5 bg-body-tertiary"
+            >
+                <Alert
+                    variant="danger"
+                    className="mx-auto"
                     style={{ maxWidth: '800px' }}
-                    role="alert"
                 >
                     {error}
-                </div>
-            </div>
+                </Alert>
+            </Container>
         );
     }
 
     return (
-        <div className="container-fluid min-vh-100 py-5 bg-body-tertiary">
-            <div
-                className="card shadow-lg mx-auto border-0 bg-body"
+        <Container
+            fluid
+            className="min-vh-100 py-5 bg-body-tertiary"
+        >
+            <Card
+                className="shadow-lg mx-auto border-0 bg-body"
                 style={{
                     maxWidth: '800px',
                     borderRadius: '20px',
                 }}
             >
-                <div className="card-body p-4">
+                <Card.Body className="p-4">
                     <div className="d-flex justify-content-end mb-3">
                         <Dropdown>
                             <Dropdown.Toggle
                                 variant="outline-primary"
                                 size="sm"
                             >
-                                {i18n.language === 'ro' ? (
+                                {i18n.language ===
+                                    'ro' ? (
                                     <>
                                         <span className="fi fi-ro me-2" />
                                         {t('romanian')}
@@ -255,7 +282,9 @@ function ChallengesList({ showSuccessToast }) {
                             <Dropdown.Menu align="end">
                                 <Dropdown.Item
                                     onClick={() =>
-                                        changeLanguage('en')
+                                        changeLanguage(
+                                            'en'
+                                        )
                                     }
                                 >
                                     <span className="fi fi-gb me-2" />
@@ -264,7 +293,9 @@ function ChallengesList({ showSuccessToast }) {
 
                                 <Dropdown.Item
                                     onClick={() =>
-                                        changeLanguage('ro')
+                                        changeLanguage(
+                                            'ro'
+                                        )
                                     }
                                 >
                                     <span className="fi fi-ro me-2" />
@@ -281,7 +312,9 @@ function ChallengesList({ showSuccessToast }) {
                                 navigate('/create')
                             }
                         >
-                            {t('challenges.create')}
+                            {t(
+                                'challenges.create'
+                            )}
                         </Button>
                     </div>
 
@@ -292,41 +325,58 @@ function ChallengesList({ showSuccessToast }) {
                     <div className="d-flex flex-column gap-3">
                         {challenges.map(
                             (challenge, index) => (
-                                <div
+                                <Card
                                     key={challenge._id}
                                     ref={
                                         index ===
-                                            challenges.length - 1
+                                            challenges.length -
+                                            1
                                             ? lastChallengeRef
                                             : null
                                     }
-                                    className="card shadow-sm border-0 bg-body"
+                                    className="shadow-sm border-0 bg-body"
                                     style={{
-                                        borderRadius: '15px',
-                                        overflow: 'hidden',
+                                        borderRadius:
+                                            '15px',
+                                        overflow:
+                                            'hidden',
                                     }}
                                 >
-                                    <img
+                                    <Card.Img
+                                        variant="top"
                                         src={
                                             challenge.image ||
                                             'https://placehold.co/800x400?text=Challenge'
                                         }
-                                        alt={challenge.title}
-                                        className="card-img-top"
+                                        alt={
+                                            challenge.title
+                                        }
                                         style={{
                                             width: '100%',
                                             height: '220px',
-                                            objectFit: 'cover',
+                                            objectFit:
+                                                'cover',
                                         }}
                                     />
 
-                                    <div className="card-body d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-3">
-                                        <h5 className="mb-0 fw-semibold text-primary">
-                                            #{index + 1} {challenge.title}
-                                        </h5>
+                                    <Card.Body className="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-3">
+                                        <Card.Title
+                                            as="h5"
+                                            className="mb-0 fw-semibold text-primary"
+                                        >
+                                            #{index + 1}{' '}
+                                            {
+                                                challenge.title
+                                            }
+                                        </Card.Title>
 
                                         <div className="d-flex flex-wrap align-items-center gap-2">
-                                            <span className="badge rounded-pill bg-primary-subtle text-primary-emphasis px-3 py-2 fs-6">
+                                            <Badge
+                                                pill
+                                                bg="primary-subtle"
+                                                text="primary-emphasis"
+                                                className="px-3 py-2 fs-6"
+                                            >
                                                 {t(
                                                     'challenges.steps',
                                                     {
@@ -334,7 +384,7 @@ function ChallengesList({ showSuccessToast }) {
                                                             challenge.targetSteps,
                                                     }
                                                 )}
-                                            </span>
+                                            </Badge>
 
                                             <Button
                                                 variant="warning"
@@ -362,8 +412,8 @@ function ChallengesList({ showSuccessToast }) {
                                                 )}
                                             </Button>
                                         </div>
-                                    </div>
-                                </div>
+                                    </Card.Body>
+                                </Card>
                             )
                         )}
 
@@ -374,9 +424,9 @@ function ChallengesList({ showSuccessToast }) {
                             </>
                         )}
                     </div>
-                </div>
-            </div>
-        </div>
+                </Card.Body>
+            </Card>
+        </Container>
     );
 }
 

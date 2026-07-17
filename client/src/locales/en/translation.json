@@ -7,11 +7,16 @@
         "description": "Description",
         "targetSteps": "Target Steps",
         "startDate": "Start Date",
-        "endDate": "End Date"
+        "endDate": "End Date",
+        "image": "Challenge image",
+        "imagePreview": "Challenge preview",
+        "removeImage": "Remove image"
     },
     "validation": {
         "titleRequired": "Title is required.",
-        "targetStepsPositive": "Target steps must be greater than zero."
+        "targetStepsPositive": "Target steps must be greater than zero.",
+        "invalidImage": "Please select a valid image.",
+        "imageReadFailed": "The image could not be read."
     },
     "createChallenge": {
         "title": "Create Challenge",
@@ -71,5 +76,9 @@
         "success": "Password reset email sent. Check your inbox.",
         "failed": "Failed to send the password reset email. Please try again.",
         "link": "Forgot password?"
+    },
+    "theme": {
+        "dark": "Dark",
+        "light": "Light"
     }
 }
