@@ -3,10 +3,16 @@ import {
     screen,
 } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { beforeEach, describe, expect, test, vi } from 'vitest';
+import {
+    beforeEach,
+    describe,
+    expect,
+    test,
+    vi,
+} from 'vitest';
+import { sendPasswordResetEmail } from 'firebase/auth';
 
 import ForgotPasswordPage from './ForgotPasswordPage';
-import { sendPasswordResetEmail } from 'firebase/auth';
 
 vi.mock('react-i18next', () => ({
     useTranslation: () => ({
@@ -22,6 +28,22 @@ vi.mock('../firebase', () => ({
     auth: {},
 }));
 
+vi.mock('../components/ForgotPasswordForm', () => ({
+    default: ({ onSubmit, isSubmitting }) => (
+        <button
+            type="button"
+            disabled={isSubmitting}
+            onClick={() =>
+                onSubmit({
+                    email: 'test@example.com',
+                })
+            }
+        >
+            submit-forgot-password
+        </button>
+    ),
+}));
+
 describe('ForgotPasswordPage', () => {
     beforeEach(() => {
         vi.clearAllMocks();
@@ -34,16 +56,9 @@ describe('ForgotPasswordPage', () => {
 
         render(<ForgotPasswordPage />);
 
-        await user.type(
-            screen.getByLabelText(
-                'forgotPassword.email'
-            ),
-            'test@example.com'
-        );
-
         await user.click(
             screen.getByRole('button', {
-                name: 'forgotPassword.submit',
+                name: 'submit-forgot-password',
             })
         );
 
@@ -61,32 +76,25 @@ describe('ForgotPasswordPage', () => {
         ).toBeInTheDocument();
     });
 
-    test('shows an error for an invalid email', async () => {
+    test('shows an error when sending fails', async () => {
         const user = userEvent.setup();
+
+        sendPasswordResetEmail.mockRejectedValue({
+            code: 'auth/too-many-requests',
+        });
 
         render(<ForgotPasswordPage />);
 
-        await user.type(
-            screen.getByLabelText(
-                'forgotPassword.email'
-            ),
-            'test@example'
-        );
-
         await user.click(
             screen.getByRole('button', {
-                name: 'forgotPassword.submit',
+                name: 'submit-forgot-password',
             })
         );
 
         expect(
             await screen.findByText(
-                'auth.invalidEmail'
+                'auth.tooManyRequests'
             )
         ).toBeInTheDocument();
-
-        expect(
-            sendPasswordResetEmail
-        ).not.toHaveBeenCalled();
     });
 });
