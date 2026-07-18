@@ -77,7 +77,7 @@ describe('RegisterPage', () => {
         });
     });
 
-    test('shows an error when the email is already in use', async () => {
+    test('shows a generic registration error', async () => {
         const user = userEvent.setup();
 
         createUserWithEmailAndPassword.mockRejectedValue({
@@ -94,7 +94,7 @@ describe('RegisterPage', () => {
 
         expect(
             await screen.findByText(
-                'auth.emailAlreadyInUse'
+                'auth.registrationFailed'
             )
         ).toBeInTheDocument();
 

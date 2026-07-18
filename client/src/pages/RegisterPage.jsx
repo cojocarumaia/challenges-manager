@@ -27,9 +27,8 @@ function RegisterPage() {
         } catch (error) {
             switch (error.code) {
                 case 'auth/email-already-in-use':
-                    setError(t('auth.emailAlreadyInUse'));
+                    setError(t('auth.registrationFailed'));
                     break;
-
                 case 'auth/weak-password':
                     setError(t('auth.passwordTooShort'));
                     break;
