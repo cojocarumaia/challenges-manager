@@ -80,5 +80,10 @@
     "theme": {
         "dark": "Întunecat",
         "light": "Luminos"
+    },
+    "navigation": {
+        "login": "Autentificare",
+        "register": "Înregistrare",
+        "logout": "Deconectare"
     }
 }
