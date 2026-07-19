@@ -34,9 +34,20 @@ describe('GET /api/challenges', () => {
         const response = await request(app).get('/api/challenges');
 
         expect(response.status).toBe(200);
-        expect(Array.isArray(response.body)).toBe(true);
-        expect(response.body).toHaveLength(1);
-        expect(response.body[0].title).toBe('Test challenge');
+
+        expect(Array.isArray(response.body.challenges)).toBe(
+            true
+        );
+
+        expect(response.body.challenges).toHaveLength(1);
+
+        expect(response.body.challenges[0].title).toBe(
+            'Test challenge'
+        );
+
+        expect(response.body.currentPage).toBe(1);
+        expect(response.body.totalChallenges).toBe(1);
+        expect(response.body.hasMore).toBe(false);
     });
 });
 

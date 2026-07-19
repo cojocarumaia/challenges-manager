@@ -1,25 +1,30 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useDebouncedCallback } from 'use-debounce';
 import Button from 'react-bootstrap/Button';
+import Card from 'react-bootstrap/Card';
 import Form from 'react-bootstrap/Form';
 import Image from 'react-bootstrap/Image';
-import { useDebouncedCallback } from 'use-debounce';
-import { useTranslation } from 'react-i18next';
 
-function ChallengeForm({ initialValues, onSubmit, submitLabel }) {
+function ChallengeForm({
+    initialValues,
+    onSubmit,
+    submitLabel,
+}) {
+    const { t } = useTranslation();
+
     const [formData, setFormData] = useState({
         ...initialValues,
         image: initialValues.image || '',
     });
 
-    const { t } = useTranslation();
-
     function handleChange(event) {
         const { name, value } = event.target;
 
-        setFormData({
-            ...formData,
+        setFormData((currentFormData) => ({
+            ...currentFormData,
             [name]: value,
-        });
+        }));
     }
 
     function handleImageChange(event) {
@@ -30,7 +35,7 @@ function ChallengeForm({ initialValues, onSubmit, submitLabel }) {
         }
 
         if (!file.type.startsWith('image/')) {
-            alert('Please select a valid image.');
+            window.alert(t('validation.invalidImage'));
             event.target.value = '';
             return;
         }
@@ -45,7 +50,7 @@ function ChallengeForm({ initialValues, onSubmit, submitLabel }) {
         };
 
         reader.onerror = () => {
-            alert('The image could not be read.');
+            window.alert(t('validation.imageReadFailed'));
         };
 
         reader.readAsDataURL(file);
@@ -58,143 +63,173 @@ function ChallengeForm({ initialValues, onSubmit, submitLabel }) {
         }));
     }
 
-    const debouncedSubmit = useDebouncedCallback((data) => {
-        onSubmit(data);
-    }, 500);
+    const debouncedSubmit = useDebouncedCallback(
+        (data) => {
+            onSubmit(data);
+        },
+        500
+    );
 
     function handleSubmit(event) {
         event.preventDefault();
 
         if (!formData.title.trim()) {
-            alert(t('validation.titleRequired'));
+            window.alert(t('validation.titleRequired'));
             return;
         }
 
         if (Number(formData.targetSteps) <= 0) {
-            alert(t('validation.targetStepsPositive'));
+            window.alert(
+                t('validation.targetStepsPositive')
+            );
             return;
         }
 
         debouncedSubmit({
             ...formData,
-            targetSteps: Number(formData.targetSteps),
+            targetSteps: Number(
+                formData.targetSteps
+            ),
         });
     }
 
     return (
-        <Form onSubmit={handleSubmit} className="card p-4 shadow-sm">
-            <Form.Group className="mb-3">
-                <Form.Label htmlFor="title">
-                    {t('form.title')}
-                </Form.Label>
+        <Card className="shadow-sm">
+            <Card.Body className="p-4">
+                <Form onSubmit={handleSubmit}>
+                    <Form.Group
+                        className="mb-3"
+                        controlId="title"
+                    >
+                        <Form.Label>
+                            {t('form.title')}
+                        </Form.Label>
 
-                <Form.Control
-                    id="title"
-                    type="text"
-                    name="title"
-                    value={formData.title}
-                    onChange={handleChange}
-                />
-            </Form.Group>
+                        <Form.Control
+                            type="text"
+                            name="title"
+                            value={formData.title}
+                            onChange={handleChange}
+                        />
+                    </Form.Group>
 
-            <Form.Group className="mb-3">
-                <Form.Label htmlFor="description">
-                    {t('form.description')}
-                </Form.Label>
+                    <Form.Group
+                        className="mb-3"
+                        controlId="description"
+                    >
+                        <Form.Label>
+                            {t('form.description')}
+                        </Form.Label>
 
-                <Form.Control
-                    id="description"
-                    as="textarea"
-                    name="description"
-                    value={formData.description}
-                    onChange={handleChange}
-                />
-            </Form.Group>
+                        <Form.Control
+                            as="textarea"
+                            name="description"
+                            value={formData.description}
+                            onChange={handleChange}
+                        />
+                    </Form.Group>
 
-            <Form.Group className="mb-3">
-                <Form.Label htmlFor="targetSteps">
-                    {t('form.targetSteps')}
-                </Form.Label>
+                    <Form.Group
+                        className="mb-3"
+                        controlId="targetSteps"
+                    >
+                        <Form.Label>
+                            {t('form.targetSteps')}
+                        </Form.Label>
 
-                <Form.Control
-                    id="targetSteps"
-                    type="number"
-                    name="targetSteps"
-                    value={formData.targetSteps}
-                    onChange={handleChange}
-                />
-            </Form.Group>
+                        <Form.Control
+                            type="number"
+                            name="targetSteps"
+                            value={formData.targetSteps}
+                            onChange={handleChange}
+                        />
+                    </Form.Group>
 
-            <Form.Group className="mb-3">
-                <Form.Label htmlFor="startDate">
-                    {t('form.startDate')}
-                </Form.Label>
+                    <Form.Group
+                        className="mb-3"
+                        controlId="startDate"
+                    >
+                        <Form.Label>
+                            {t('form.startDate')}
+                        </Form.Label>
 
-                <Form.Control
-                    id="startDate"
-                    type="date"
-                    name="startDate"
-                    value={formData.startDate}
-                    onChange={handleChange}
-                />
-            </Form.Group>
+                        <Form.Control
+                            type="date"
+                            name="startDate"
+                            value={formData.startDate}
+                            onChange={handleChange}
+                        />
+                    </Form.Group>
 
-            <Form.Group className="mb-3">
-                <Form.Label htmlFor="endDate">
-                    {t('form.endDate')}
-                </Form.Label>
+                    <Form.Group
+                        className="mb-3"
+                        controlId="endDate"
+                    >
+                        <Form.Label>
+                            {t('form.endDate')}
+                        </Form.Label>
 
-                <Form.Control
-                    id="endDate"
-                    type="date"
-                    name="endDate"
-                    value={formData.endDate}
-                    onChange={handleChange}
-                />
-            </Form.Group>
+                        <Form.Control
+                            type="date"
+                            name="endDate"
+                            value={formData.endDate}
+                            onChange={handleChange}
+                        />
+                    </Form.Group>
 
-            <Form.Group className="mb-3">
-                <Form.Label htmlFor="image">
-                    Challenge image
-                </Form.Label>
+                    <Form.Group
+                        className="mb-3"
+                        controlId="image"
+                    >
+                        <Form.Label>
+                            {t('form.image')}
+                        </Form.Label>
 
-                <Form.Control
-                    id="image"
-                    type="file"
-                    accept="image/*"
-                    onChange={handleImageChange}
-                />
-            </Form.Group>
+                        <Form.Control
+                            type="file"
+                            accept="image/*"
+                            onChange={handleImageChange}
+                        />
+                    </Form.Group>
 
-            {formData.image && (
-                <div className="mb-3">
-                    <Image
-                        src={formData.image}
-                        alt="Challenge preview"
-                        fluid
-                        rounded
-                        style={{
-                            width: '100%',
-                            maxHeight: '300px',
-                            objectFit: 'cover',
-                        }}
-                    />
+                    {formData.image && (
+                        <div className="mb-3">
+                            <Image
+                                src={formData.image}
+                                alt={t(
+                                    'form.imagePreview'
+                                )}
+                                fluid
+                                rounded
+                                style={{
+                                    width: '100%',
+                                    maxHeight: '300px',
+                                    objectFit: 'cover',
+                                }}
+                            />
+
+                            <Button
+                                type="button"
+                                variant="outline-danger"
+                                className="mt-2"
+                                onClick={
+                                    handleRemoveImage
+                                }
+                            >
+                                {t('form.removeImage')}
+                            </Button>
+                        </div>
+                    )}
 
                     <Button
-                        type="button"
-                        variant="outline-danger"
-                        className="mt-2"
-                        onClick={handleRemoveImage}
+                        type="submit"
+                        variant="primary"
                     >
-                        Remove image
+                        {submitLabel}
                     </Button>
-                </div>
-            )}
-
-            <Button type="submit" variant="primary">
-                {submitLabel}
-            </Button>
-        </Form>
+                </Form>
+            </Card.Body>
+        </Card>
     );
 }
 

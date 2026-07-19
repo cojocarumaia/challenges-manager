@@ -1,13 +1,20 @@
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Routes, Route } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 
 import ChallengesPage from './pages/ChallengesPage';
 import CreateChallenge from './pages/CreateChallenge';
 import EditChallenge from './pages/EditChallenge';
+import RegisterPage from './pages/RegisterPage';
+import LoginPage from './pages/LoginPage';
+import ForgotPasswordPage from './pages/ForgotPasswordPage';
+import ProtectedRoute from './components/ProtectedRoute';
 import SuccessToast from './components/SuccessToast';
 
 function App() {
+  const { t } = useTranslation();
+
   const [toast, setToast] = useState({
     show: false,
     message: '',
@@ -42,7 +49,9 @@ function App() {
 
   function toggleTheme() {
     setTheme((currentTheme) =>
-      currentTheme === 'light' ? 'dark' : 'light'
+      currentTheme === 'light'
+        ? 'dark'
+        : 'light'
     );
   }
 
@@ -59,7 +68,9 @@ function App() {
         className="position-fixed top-0 start-0 m-3"
         style={{ zIndex: 1050 }}
       >
-        {theme === 'light' ? '🌙 Dark' : '☀️ Light'}
+        {theme === 'light'
+          ? `🌙 ${t('theme.dark')}`
+          : `☀️ ${t('theme.light')}`}
       </Button>
 
       <SuccessToast
@@ -72,27 +83,56 @@ function App() {
         <Route
           path="/"
           element={
-            <ChallengesPage
-              showSuccessToast={showSuccessToast}
-            />
+            <ProtectedRoute>
+              <ChallengesPage
+                showSuccessToast={
+                  showSuccessToast
+                }
+              />
+            </ProtectedRoute>
           }
         />
 
         <Route
           path="/create"
           element={
-            <CreateChallenge
-              showSuccessToast={showSuccessToast}
-            />
+            <ProtectedRoute>
+              <CreateChallenge
+                showSuccessToast={
+                  showSuccessToast
+                }
+              />
+            </ProtectedRoute>
           }
         />
 
         <Route
           path="/edit/:id"
           element={
-            <EditChallenge
-              showSuccessToast={showSuccessToast}
-            />
+            <ProtectedRoute>
+              <EditChallenge
+                showSuccessToast={
+                  showSuccessToast
+                }
+              />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/register"
+          element={<RegisterPage />}
+        />
+
+        <Route
+          path="/login"
+          element={<LoginPage />}
+        />
+
+        <Route
+          path="/forgot-password"
+          element={
+            <ForgotPasswordPage />
           }
         />
       </Routes>

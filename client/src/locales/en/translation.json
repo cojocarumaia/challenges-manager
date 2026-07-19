@@ -7,11 +7,16 @@
         "description": "Description",
         "targetSteps": "Target Steps",
         "startDate": "Start Date",
-        "endDate": "End Date"
+        "endDate": "End Date",
+        "image": "Challenge image",
+        "imagePreview": "Challenge preview",
+        "removeImage": "Remove image"
     },
     "validation": {
         "titleRequired": "Title is required.",
-        "targetStepsPositive": "Target steps must be greater than zero."
+        "targetStepsPositive": "Target steps must be greater than zero.",
+        "invalidImage": "Please select a valid image.",
+        "imageReadFailed": "The image could not be read."
     },
     "createChallenge": {
         "title": "Create Challenge",
@@ -38,5 +43,42 @@
         "deleteFailed": "Failed to delete challenge.",
         "delete": "Delete",
         "steps": "{{steps}} steps"
+    },
+    "register": {
+        "title": "Register",
+        "email": "Email",
+        "password": "Password",
+        "submit": "Register"
+    },
+    "login": {
+        "title": "Log in",
+        "email": "Email",
+        "password": "Password",
+        "submit": "Log in"
+    },
+    "auth": {
+        "emailAlreadyInUse": "Email is already in use.",
+        "invalidEmail": "Please enter a valid email address.",
+        "passwordTooShort": "Password must contain at least 6 characters.",
+        "registrationFailed": "Registration failed. Please try again.",
+        "invalidCredentials": "Email or password is incorrect.",
+        "tooManyRequests": "Too many failed attempts. Please try again later.",
+        "loginFailed": "Login failed. Please try again.",
+        "logout": "Log out",
+        "logoutFailed": "Log out failed. Please try again."
+    },
+    "forgotPassword": {
+        "title": "Reset password",
+        "description": "Enter your email address and we will send you a password reset link.",
+        "email": "Email",
+        "submit": "Send reset email",
+        "sending": "Sending...",
+        "success": "Password reset email sent. Check your inbox.",
+        "failed": "Failed to send the password reset email. Please try again.",
+        "link": "Forgot password?"
+    },
+    "theme": {
+        "dark": "Dark",
+        "light": "Light"
     }
 }
