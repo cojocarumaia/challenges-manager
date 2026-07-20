@@ -317,27 +317,24 @@ function ChallengesList({ showSuccessToast }) {
                             <Dropdown.Toggle
                                 variant="outline-primary"
                                 size="sm"
-                            ></Dropdown.Toggle>
-                            {i18n.language ===
-                                'ro' ? (
-                                <>
-                                    <span className="fi fi-ro me-2" />
-                                    {t('romanian')}
-                                </>
-                            ) : (
-                                <>
-                                    <span className="fi fi-gb me-2" />
-                                    {t('english')}
-                                </>
-                            )}
-
+                            >
+                                {i18n.language === 'ro' ? (
+                                    <>
+                                        <span className="fi fi-ro me-2" />
+                                        {t('romanian')}
+                                    </>
+                                ) : (
+                                    <>
+                                        <span className="fi fi-gb me-2" />
+                                        {t('english')}
+                                    </>
+                                )}
+                            </Dropdown.Toggle>
 
                             <Dropdown.Menu align="end">
                                 <Dropdown.Item
                                     onClick={() =>
-                                        changeLanguage(
-                                            'en'
-                                        )
+                                        changeLanguage('en')
                                     }
                                 >
                                     <span className="fi fi-gb me-2" />
@@ -346,9 +343,7 @@ function ChallengesList({ showSuccessToast }) {
 
                                 <Dropdown.Item
                                     onClick={() =>
-                                        changeLanguage(
-                                            'ro'
-                                        )
+                                        changeLanguage('ro')
                                     }
                                 >
                                     <span className="fi fi-ro me-2" />
