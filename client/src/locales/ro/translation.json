@@ -89,6 +89,13 @@
     "navigation": {
         "login": "Autentificare",
         "register": "Înregistrare",
-        "logout": "Deconectare"
+        "logout": "Deconectare",
+        "home": "Acasă"
+    },
+    "logoutModal": {
+        "title": "Deconectare",
+        "message": "Sigur vrei să te deconectezi?",
+        "cancel": "Anulează",
+        "confirm": "Deconectare"
     }
 }

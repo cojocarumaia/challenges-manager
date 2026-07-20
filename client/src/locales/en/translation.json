@@ -89,6 +89,13 @@
     "navigation": {
         "login": "Log in",
         "register": "Register",
-        "logout": "Log out"
+        "logout": "Log out",
+        "home": "Home"
+    },
+    "logoutModal": {
+        "title": "Log out",
+        "message": "Are you sure you want to log out?",
+        "cancel": "Cancel",
+        "confirm": "Log out"
     }
 }

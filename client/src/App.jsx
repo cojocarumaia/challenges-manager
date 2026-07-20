@@ -9,6 +9,7 @@ import {
 import { signOut } from 'firebase/auth';
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
+import Modal from 'react-bootstrap/Modal';
 import Navbar from 'react-bootstrap/Navbar';
 
 import ChallengesPage from './pages/ChallengesPage';
@@ -27,6 +28,9 @@ function App() {
   const navigate = useNavigate();
 
   const { currentUser, loading } = useAuth();
+
+  const [showLogoutModal, setShowLogoutModal] =
+    useState(false);
 
   const [toast, setToast] = useState({
     show: false,
@@ -68,9 +72,18 @@ function App() {
     );
   }
 
+  function openLogoutModal() {
+    setShowLogoutModal(true);
+  }
+
+  function closeLogoutModal() {
+    setShowLogoutModal(false);
+  }
+
   async function handleLogout() {
     try {
       await signOut(auth);
+      closeLogoutModal();
       navigate('/login');
     } catch (error) {
       console.error('Logout failed:', error);
@@ -121,7 +134,7 @@ function App() {
                 <Button
                   type="button"
                   variant="outline-danger"
-                  onClick={handleLogout}
+                  onClick={openLogoutModal}
                   className="text-nowrap"
                 >
                   {t('navigation.logout')}
@@ -131,6 +144,40 @@ function App() {
           </div>
         </Container>
       </Navbar>
+
+      <Modal
+        show={showLogoutModal}
+        onHide={closeLogoutModal}
+        centered
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>
+            {t('logoutModal.title')}
+          </Modal.Title>
+        </Modal.Header>
+
+        <Modal.Body>
+          {t('logoutModal.message')}
+        </Modal.Body>
+
+        <Modal.Footer>
+          <Button
+            type="button"
+            variant="secondary"
+            onClick={closeLogoutModal}
+          >
+            {t('logoutModal.cancel')}
+          </Button>
+
+          <Button
+            type="button"
+            variant="danger"
+            onClick={handleLogout}
+          >
+            {t('logoutModal.confirm')}
+          </Button>
+        </Modal.Footer>
+      </Modal>
 
       <SuccessToast
         show={toast.show}
