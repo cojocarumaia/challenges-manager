@@ -23,11 +23,35 @@ function RegisterPage() {
         setError('');
 
         try {
-            await createUserWithEmailAndPassword(
-                auth,
-                data.email,
-                data.password
+            const userCredential =
+                await createUserWithEmailAndPassword(
+                    auth,
+                    data.email,
+                    data.password
+                );
+
+            const response = await fetch(
+                `${import.meta.env.VITE_API_BASE_URL}/api/users`,
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type':
+                            'application/json',
+                    },
+                    body: JSON.stringify({
+                        firebaseUid:
+                            userCredential.user.uid,
+                        email:
+                            userCredential.user.email,
+                    }),
+                }
             );
+
+            if (!response.ok) {
+                throw new Error(
+                    'User profile could not be saved.'
+                );
+            }
 
             navigate('/');
         } catch (error) {
