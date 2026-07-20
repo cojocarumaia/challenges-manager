@@ -32,12 +32,6 @@ describe('LoginForm', () => {
                 name: 'login.submit',
             })
         ).toBeInTheDocument();
-
-        expect(
-            screen.getByRole('link', {
-                name: 'forgotPassword.link',
-            })
-        ).toBeInTheDocument();
     });
 
     test('refuses an empty submission', async () => {

@@ -48,13 +48,18 @@
         "title": "Înregistrare",
         "email": "Email",
         "password": "Parolă",
-        "submit": "Creează cont"
+        "submit": "Creează cont",
+        "alreadyHaveAccount": "Ai deja cont?",
+        "login": "Autentifică-te"
     },
     "login": {
         "title": "Autentificare",
         "email": "Email",
         "password": "Parolă",
-        "submit": "Autentificare"
+        "submit": "Autentificare",
+        "forgotPassword": "Ai uitat parola?",
+        "noAccount": "Nu ai cont?",
+        "register": "Înregistrează-te"
     },
     "auth": {
         "emailAlreadyInUse": "Adresa de email este deja folosită.",

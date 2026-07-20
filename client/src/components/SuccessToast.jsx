@@ -3,7 +3,13 @@ import ToastContainer from 'react-bootstrap/ToastContainer';
 
 function SuccessToast({ show, message, onClose }) {
     return (
-        <ToastContainer position="top-end" className="p-3">
+        <ToastContainer
+            position="top-end"
+            className="p-3"
+            style={{
+                marginTop: '70px',
+            }}
+        >
             <Toast
                 show={show}
                 onClose={onClose}
@@ -11,7 +17,9 @@ function SuccessToast({ show, message, onClose }) {
                 autohide
                 bg="success"
             >
-                <Toast.Body className="text-white">{message}</Toast.Body>
+                <Toast.Body className="text-white">
+                    {message}
+                </Toast.Body>
             </Toast>
         </ToastContainer>
     );

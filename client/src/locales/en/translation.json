@@ -48,13 +48,18 @@
         "title": "Register",
         "email": "Email",
         "password": "Password",
-        "submit": "Register"
+        "submit": "Register",
+        "alreadyHaveAccount": "Already have an account?",
+        "login": "Log in"
     },
     "login": {
         "title": "Log in",
         "email": "Email",
         "password": "Password",
-        "submit": "Log in"
+        "submit": "Log in",
+        "forgotPassword": "Forgot your password?",
+        "noAccount": "Don't have an account?",
+        "register": "Register"
     },
     "auth": {
         "emailAlreadyInUse": "Email is already in use.",

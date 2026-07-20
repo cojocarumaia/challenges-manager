@@ -8,6 +8,8 @@ import {
 } from 'react-router-dom';
 import { signOut } from 'firebase/auth';
 import Button from 'react-bootstrap/Button';
+import Container from 'react-bootstrap/Container';
+import Navbar from 'react-bootstrap/Navbar';
 
 import ChallengesPage from './pages/ChallengesPage';
 import CreateChallenge from './pages/CreateChallenge';
@@ -77,77 +79,58 @@ function App() {
 
   return (
     <>
-      <Button
-        type="button"
-        variant={
-          theme === 'light'
-            ? 'outline-dark'
-            : 'outline-light'
-        }
-        onClick={toggleTheme}
-        className="position-fixed top-0 start-0 m-3"
-        style={{
-          zIndex: 1050,
-        }}
+      <Navbar
+        expand="md"
+        bg={theme}
+        data-bs-theme={theme}
+        className="shadow-sm"
       >
-        {theme === 'light'
-          ? `🌙 ${t('theme.dark')}`
-          : `☀️ ${t('theme.light')}`}
-      </Button>
+        <Container>
+          <Navbar.Brand as={Link} to="/">
+            Challenges Manager
+          </Navbar.Brand>
 
-      {!loading && (
-        <div
-          className="position-fixed top-0 end-0 m-3 d-flex align-items-center justify-content-end"
-          style={{
-            zIndex: 1050,
-            maxWidth: '70%',
-          }}
-        >
-          {currentUser ? (
-            <div className="d-flex align-items-center gap-3">
-              <span
-                className="text-truncate"
-                title={currentUser.email}
-                style={{
-                  maxWidth: '240px',
-                  minWidth: 0,
-                }}
-              >
-                {currentUser.email}
-              </span>
+          <div className="d-flex align-items-center gap-2 ms-auto">
+            <Button
+              type="button"
+              variant={
+                theme === 'light'
+                  ? 'outline-dark'
+                  : 'outline-light'
+              }
+              onClick={toggleTheme}
+              className="text-nowrap"
+            >
+              {theme === 'light'
+                ? `🌙 ${t('theme.dark')}`
+                : `☀️ ${t('theme.light')}`}
+            </Button>
 
-              <Button
-                type="button"
-                variant="outline-danger"
-                onClick={handleLogout}
-                className="flex-shrink-0 text-nowrap"
-              >
-                {t('navigation.logout')}
-              </Button>
-            </div>
-          ) : (
-            <div className="d-flex align-items-center gap-2">
-              <Button
-                as={Link}
-                to="/login"
-                variant="outline-primary"
-                className="text-nowrap"
-              >
-                {t('navigation.login')}
-              </Button>
+            {!loading && currentUser && (
+              <>
+                <span
+                  className="d-none d-sm-inline text-truncate"
+                  title={currentUser.email}
+                  style={{
+                    maxWidth: '220px',
+                  }}
+                >
+                  {currentUser.email}
+                </span>
 
-              <Button
-                as={Link}
-                to="/register"
-                variant="primary"
-                className="text-nowrap"
-              >
-                {t('navigation.register')}
-              </Button>
-            </div>
-          )}
-        </div>
-      )}
+                <Button
+                  type="button"
+                  variant="outline-danger"
+                  onClick={handleLogout}
+                  className="text-nowrap"
+                >
+                  {t('navigation.logout')}
+                </Button>
+              </>
+            )}
+          </div>
+        </Container>
+      </Navbar>
 
       <SuccessToast
         show={toast.show}
