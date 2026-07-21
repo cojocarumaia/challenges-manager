@@ -59,6 +59,8 @@ vi.mock('../components/RegisterForm', () => ({
     ),
 }));
 
+vi.stubGlobal('fetch', vi.fn());
+
 describe('RegisterPage', () => {
     beforeEach(() => {
         vi.clearAllMocks();
@@ -68,7 +70,19 @@ describe('RegisterPage', () => {
         const user = userEvent.setup();
 
         createUserWithEmailAndPassword.mockResolvedValue({
-            user: {},
+            user: {
+                uid: 'firebase-user-id',
+                email: 'test@example.com',
+            },
+        });
+
+        fetch.mockResolvedValue({
+            ok: true,
+            json: vi.fn().mockResolvedValue({
+                firebaseUid: 'firebase-user-id',
+                email: 'test@example.com',
+                role: 'user',
+            }),
         });
 
         render(
@@ -91,8 +105,12 @@ describe('RegisterPage', () => {
             '123456'
         );
 
+        expect(fetch).toHaveBeenCalled();
+
         await waitFor(() => {
-            expect(mockNavigate).toHaveBeenCalledWith('/');
+            expect(
+                mockNavigate
+            ).toHaveBeenCalledWith('/');
         });
     });
 
@@ -121,6 +139,10 @@ describe('RegisterPage', () => {
             )
         ).toBeInTheDocument();
 
-        expect(mockNavigate).not.toHaveBeenCalled();
+        expect(fetch).not.toHaveBeenCalled();
+
+        expect(
+            mockNavigate
+        ).not.toHaveBeenCalled();
     });
 });
