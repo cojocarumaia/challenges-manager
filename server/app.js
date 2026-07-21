@@ -2,9 +2,9 @@ const express = require('express');
 const cors = require('cors');
 
 const challengesRoutes = require('./routes/challenges');
+const usersRoutes = require('./routes/users');
 
 const app = express();
-
 
 const allowedOrigins = [
     'http://localhost:5173',
@@ -23,10 +23,12 @@ app.use(
         },
     })
 );
+
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 app.use('/api/challenges', challengesRoutes);
+app.use('/api/users', usersRoutes);
 
 app.get('/health', (req, res) => {
     res.json({ status: 'ok' });

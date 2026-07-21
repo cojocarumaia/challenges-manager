@@ -6,6 +6,7 @@ import {
 } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 import Alert from 'react-bootstrap/Alert';
 import Badge from 'react-bootstrap/Badge';
 import Button from 'react-bootstrap/Button';
@@ -104,6 +105,7 @@ function formatChallengeDate(date) {
 function ChallengesList({ showSuccessToast }) {
     const { t } = useTranslation();
     const navigate = useNavigate();
+    const { role } = useAuth();
 
     const [challenges, setChallenges] = useState([]);
     const [page, setPage] = useState(1);
@@ -353,16 +355,16 @@ function ChallengesList({ showSuccessToast }) {
                         </Dropdown>
                     </div>
 
-                    <div className="d-flex justify-content-center mb-4">
-                        <Button
-                            variant="success"
-                            onClick={() =>
-                                navigate('/create')
-                            }
-                        >
-                            {t('challenges.create')}
-                        </Button>
-                    </div>
+                    {role === 'admin' && (
+                        <div className="d-flex justify-content-center mb-4">
+                            <Button
+                                variant="success"
+                                onClick={() => navigate('/create')}
+                            >
+                                {t('challenges.create')}
+                            </Button>
+                        </div>
+                    )}
 
                     <h1 className="text-center mb-4 fw-bold text-primary">
                         {t('challenges.title')}
@@ -477,27 +479,21 @@ function ChallengesList({ showSuccessToast }) {
                                                         )}
                                                     </Button>
 
-                                                    <Button
-                                                        type="button"
-                                                        variant="danger"
-                                                        onClick={() =>
-                                                            handleDelete(
-                                                                challenge._id
-                                                            )
-                                                        }
-                                                        aria-label={t(
-                                                            'challenges.delete'
-                                                        )}
-                                                        title={t(
-                                                            'challenges.delete'
-                                                        )}
-                                                    >
-                                                        <FontAwesomeIcon
-                                                            icon={
-                                                                faTrashCan
+                                                    {role === 'admin' && (
+                                                        <Button
+                                                            type="button"
+                                                            variant="danger"
+                                                            onClick={() =>
+                                                                handleDelete(challenge._id)
                                                             }
-                                                        />
-                                                    </Button>
+                                                            aria-label={t('challenges.delete')}
+                                                            title={t('challenges.delete')}
+                                                        >
+                                                            <FontAwesomeIcon
+                                                                icon={faTrashCan}
+                                                            />
+                                                        </Button>
+                                                    )}
                                                 </div>
                                             </div>
                                         </Card.Body>

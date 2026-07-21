@@ -12,6 +12,7 @@ import Row from 'react-bootstrap/Row';
 
 import RegisterForm from '../components/RegisterForm';
 import { auth } from '../firebase';
+import { createUserProfile } from '../api';
 
 function RegisterPage() {
     const navigate = useNavigate();
@@ -23,11 +24,19 @@ function RegisterPage() {
         setError('');
 
         try {
-            await createUserWithEmailAndPassword(
-                auth,
-                data.email,
-                data.password
-            );
+            const userCredential =
+                await createUserWithEmailAndPassword(
+                    auth,
+                    data.email,
+                    data.password
+                );
+
+            await createUserProfile({
+                firebaseUid:
+                    userCredential.user.uid,
+                email:
+                    userCredential.user.email,
+            });
 
             navigate('/');
         } catch (error) {
