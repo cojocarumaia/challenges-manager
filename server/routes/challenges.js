@@ -8,13 +8,31 @@ const {
 } = require('../controllers/challenges');
 
 const validateChallenge = require('../middleware/validateChallenge');
+const authenticate = require('../middleware/authenticate');
 
 const router = express.Router();
 
 router.get('/', getChallenges);
 router.get('/:id', getChallengeById);
-router.post('/', validateChallenge, createChallenge);
-router.put('/:id', validateChallenge, updateChallenge);
-router.delete('/:id', deleteChallenge);
+
+router.post(
+  '/',
+  authenticate,
+  validateChallenge,
+  createChallenge
+);
+
+router.put(
+  '/:id',
+  authenticate,
+  validateChallenge,
+  updateChallenge
+);
+
+router.delete(
+  '/:id',
+  authenticate,
+  deleteChallenge
+);
 
 module.exports = router;
