@@ -4,6 +4,7 @@ import {
     waitFor,
 } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { MemoryRouter } from 'react-router-dom';
 import {
     beforeEach,
     describe,
@@ -18,9 +19,16 @@ import LoginPage from './LoginPage';
 
 const mockNavigate = vi.fn();
 
-vi.mock('react-router-dom', () => ({
-    useNavigate: () => mockNavigate,
-}));
+vi.mock('react-router-dom', async () => {
+    const actual = await vi.importActual(
+        'react-router-dom'
+    );
+
+    return {
+        ...actual,
+        useNavigate: () => mockNavigate,
+    };
+});
 
 vi.mock('react-i18next', () => ({
     useTranslation: () => ({
@@ -64,7 +72,11 @@ describe('LoginPage', () => {
             user: {},
         });
 
-        render(<LoginPage />);
+        render(
+            <MemoryRouter>
+                <LoginPage />
+            </MemoryRouter>
+        );
 
         await user.click(
             screen.getByRole('button', {
@@ -92,7 +104,11 @@ describe('LoginPage', () => {
             code: 'auth/invalid-credential',
         });
 
-        render(<LoginPage />);
+        render(
+            <MemoryRouter>
+                <LoginPage />
+            </MemoryRouter>
+        );
 
         await user.click(
             screen.getByRole('button', {

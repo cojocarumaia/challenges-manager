@@ -12,8 +12,13 @@ import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import Container from 'react-bootstrap/Container';
 import Dropdown from 'react-bootstrap/Dropdown';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrashCan } from '@fortawesome/free-solid-svg-icons';
 
-import { deleteChallenge, fetchChallenges } from '../api';
+import {
+    deleteChallenge,
+    fetchChallenges,
+} from '../api';
 import i18n from '../i18n';
 
 function ChallengeSkeleton() {
@@ -32,10 +37,21 @@ function ChallengeSkeleton() {
 
             <Card.Body>
                 <div className="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-3">
-                    <span
-                        className="placeholder col-5"
-                        style={{ height: '24px' }}
-                    />
+                    <div className="d-flex flex-column gap-2">
+                        <span
+                            className="placeholder col-8"
+                            style={{
+                                height: '24px',
+                            }}
+                        />
+
+                        <span
+                            className="placeholder col-6"
+                            style={{
+                                height: '18px',
+                            }}
+                        />
+                    </div>
 
                     <div className="d-flex flex-wrap gap-2">
                         <span
@@ -57,7 +73,7 @@ function ChallengeSkeleton() {
                         <span
                             className="placeholder rounded"
                             style={{
-                                width: '70px',
+                                width: '45px',
                                 height: '38px',
                             }}
                         />
@@ -66,6 +82,23 @@ function ChallengeSkeleton() {
             </Card.Body>
         </Card>
     );
+}
+
+function formatChallengeDate(date) {
+    if (!date) {
+        return '';
+    }
+
+    const parsedDate = new Date(date);
+
+    if (Number.isNaN(parsedDate.getTime())) {
+        return '';
+    }
+
+    return new Intl.DateTimeFormat('en-GB', {
+        day: '2-digit',
+        month: 'short',
+    }).format(parsedDate);
 }
 
 function ChallengesList({ showSuccessToast }) {
@@ -97,7 +130,9 @@ function ChallengesList({ showSuccessToast }) {
                 );
 
                 if (replace) {
-                    setChallenges(data.challenges);
+                    setChallenges(
+                        data.challenges
+                    );
                 } else {
                     setChallenges(
                         (currentChallenges) => [
@@ -111,8 +146,11 @@ function ChallengesList({ showSuccessToast }) {
                 setError('');
             } catch (err) {
                 console.error(err);
+
                 setError(
-                    t('challenges.failedToLoad')
+                    t(
+                        'challenges.failedToLoad'
+                    )
                 );
             } finally {
                 setLoading(false);
@@ -145,17 +183,23 @@ function ChallengesList({ showSuccessToast }) {
             }
 
             observer.current =
-                new IntersectionObserver((entries) => {
-                    if (
-                        entries[0].isIntersecting &&
-                        hasMore
-                    ) {
-                        setPage(
-                            (currentPage) =>
-                                currentPage + 1
-                        );
+                new IntersectionObserver(
+                    (entries) => {
+                        if (
+                            entries[0]
+                                .isIntersecting &&
+                            hasMore
+                        ) {
+                            setPage(
+                                (
+                                    currentPage
+                                ) =>
+                                    currentPage +
+                                    1
+                            );
+                        }
                     }
-                });
+                );
 
             if (node) {
                 observer.current.observe(node);
@@ -163,10 +207,11 @@ function ChallengesList({ showSuccessToast }) {
         },
         [loading, loadingMore, hasMore]
     );
-
     async function handleDelete(id) {
         const confirmed = window.confirm(
-            t('challenges.deleteConfirmation')
+            t(
+                'challenges.deleteConfirmation'
+            )
         );
 
         if (!confirmed) {
@@ -177,7 +222,9 @@ function ChallengesList({ showSuccessToast }) {
             await deleteChallenge(id);
 
             showSuccessToast(
-                t('challenges.deleteSuccess')
+                t(
+                    'challenges.deleteSuccess'
+                )
             );
 
             setPage(1);
@@ -186,14 +233,18 @@ function ChallengesList({ showSuccessToast }) {
             await loadChallenges(1, true);
         } catch (err) {
             console.error(err);
+
             window.alert(
-                t('challenges.deleteFailed')
+                t(
+                    'challenges.deleteFailed'
+                )
             );
         }
     }
 
     function changeLanguage(language) {
         i18n.changeLanguage(language);
+
         localStorage.setItem(
             'language',
             language
@@ -238,7 +289,9 @@ function ChallengesList({ showSuccessToast }) {
                 <Alert
                     variant="danger"
                     className="mx-auto"
-                    style={{ maxWidth: '800px' }}
+                    style={{
+                        maxWidth: '800px',
+                    }}
                 >
                     {error}
                 </Alert>
@@ -265,8 +318,7 @@ function ChallengesList({ showSuccessToast }) {
                                 variant="outline-primary"
                                 size="sm"
                             >
-                                {i18n.language ===
-                                    'ro' ? (
+                                {i18n.language === 'ro' ? (
                                     <>
                                         <span className="fi fi-ro me-2" />
                                         {t('romanian')}
@@ -282,9 +334,7 @@ function ChallengesList({ showSuccessToast }) {
                             <Dropdown.Menu align="end">
                                 <Dropdown.Item
                                     onClick={() =>
-                                        changeLanguage(
-                                            'en'
-                                        )
+                                        changeLanguage('en')
                                     }
                                 >
                                     <span className="fi fi-gb me-2" />
@@ -293,9 +343,7 @@ function ChallengesList({ showSuccessToast }) {
 
                                 <Dropdown.Item
                                     onClick={() =>
-                                        changeLanguage(
-                                            'ro'
-                                        )
+                                        changeLanguage('ro')
                                     }
                                 >
                                     <span className="fi fi-ro me-2" />
@@ -312,9 +360,7 @@ function ChallengesList({ showSuccessToast }) {
                                 navigate('/create')
                             }
                         >
-                            {t(
-                                'challenges.create'
-                            )}
+                            {t('challenges.create')}
                         </Button>
                     </div>
 
@@ -324,97 +370,140 @@ function ChallengesList({ showSuccessToast }) {
 
                     <div className="d-flex flex-column gap-3">
                         {challenges.map(
-                            (challenge, index) => (
-                                <Card
-                                    key={challenge._id}
-                                    ref={
-                                        index ===
-                                            challenges.length -
-                                            1
-                                            ? lastChallengeRef
-                                            : null
-                                    }
-                                    className="shadow-sm border-0 bg-body"
-                                    style={{
-                                        borderRadius:
-                                            '15px',
-                                        overflow:
-                                            'hidden',
-                                    }}
-                                >
-                                    <Card.Img
-                                        variant="top"
-                                        src={
-                                            challenge.image ||
-                                            'https://placehold.co/800x400?text=Challenge'
-                                        }
-                                        alt={
-                                            challenge.title
-                                        }
-                                        style={{
-                                            width: '100%',
-                                            height: '220px',
-                                            objectFit:
-                                                'cover',
-                                        }}
-                                    />
+                            (challenge, index) => {
+                                const startDate =
+                                    formatChallengeDate(
+                                        challenge.startDate
+                                    );
 
-                                    <Card.Body className="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-3">
-                                        <Card.Title
-                                            as="h5"
-                                            className="mb-0 fw-semibold text-primary"
-                                        >
-                                            #{index + 1}{' '}
-                                            {
+                                const endDate =
+                                    formatChallengeDate(
+                                        challenge.endDate
+                                    );
+
+                                const hasDateRange =
+                                    startDate &&
+                                    endDate;
+
+                                return (
+                                    <Card
+                                        key={
+                                            challenge._id
+                                        }
+                                        ref={
+                                            index ===
+                                                challenges.length -
+                                                1
+                                                ? lastChallengeRef
+                                                : null
+                                        }
+                                        className="shadow-sm border-0 bg-body"
+                                        style={{
+                                            borderRadius:
+                                                '15px',
+                                            overflow:
+                                                'hidden',
+                                        }}
+                                    >
+                                        <Card.Img
+                                            variant="top"
+                                            src={
+                                                challenge.image ||
+                                                'https://placehold.co/800x400?text=Challenge'
+                                            }
+                                            alt={
                                                 challenge.title
                                             }
-                                        </Card.Title>
-
-                                        <div className="d-flex flex-wrap align-items-center gap-2">
-                                            <Badge
-                                                pill
-                                                bg="primary-subtle"
-                                                text="primary-emphasis"
-                                                className="px-3 py-2 fs-6"
-                                            >
-                                                {t(
-                                                    'challenges.steps',
+                                            style={{
+                                                width: '100%',
+                                                height: '220px',
+                                                objectFit:
+                                                    'cover',
+                                            }}
+                                        />                                        <Card.Body className="d-flex flex-column">
+                                            <div>
+                                                <Card.Title
+                                                    as="h5"
+                                                    className="mb-1 fw-semibold text-primary"
+                                                >
+                                                    #
+                                                    {index + 1}{' '}
                                                     {
-                                                        steps:
-                                                            challenge.targetSteps,
+                                                        challenge.title
                                                     }
-                                                )}
-                                            </Badge>
+                                                </Card.Title>
 
-                                            <Button
-                                                variant="warning"
-                                                onClick={() =>
-                                                    navigate(
-                                                        `/edit/${challenge._id}`
-                                                    )
-                                                }
-                                            >
-                                                {t(
-                                                    'challenges.edit'
+                                                {hasDateRange && (
+                                                    <Card.Text className="mb-0 text-body-secondary">
+                                                        {
+                                                            startDate
+                                                        }{' '}
+                                                        -{' '}
+                                                        {
+                                                            endDate
+                                                        }
+                                                    </Card.Text>
                                                 )}
-                                            </Button>
+                                            </div>
 
-                                            <Button
-                                                variant="danger"
-                                                onClick={() =>
-                                                    handleDelete(
-                                                        challenge._id
-                                                    )
-                                                }
-                                            >
-                                                {t(
-                                                    'challenges.delete'
-                                                )}
-                                            </Button>
-                                        </div>
-                                    </Card.Body>
-                                </Card>
-                            )
+                                            <div className="d-flex flex-wrap justify-content-between align-items-center gap-2 mt-3">
+                                                <Badge
+                                                    pill
+                                                    bg="primary-subtle"
+                                                    text="primary-emphasis"
+                                                    className="px-3 py-2 fs-6"
+                                                >
+                                                    {t(
+                                                        'challenges.steps',
+                                                        {
+                                                            steps:
+                                                                challenge.targetSteps,
+                                                        }
+                                                    )}
+                                                </Badge>
+
+                                                <div className="d-flex gap-2 ms-auto">
+                                                    <Button
+                                                        type="button"
+                                                        variant="warning"
+                                                        onClick={() =>
+                                                            navigate(
+                                                                `/edit/${challenge._id}`
+                                                            )
+                                                        }
+                                                    >
+                                                        {t(
+                                                            'challenges.edit'
+                                                        )}
+                                                    </Button>
+
+                                                    <Button
+                                                        type="button"
+                                                        variant="danger"
+                                                        onClick={() =>
+                                                            handleDelete(
+                                                                challenge._id
+                                                            )
+                                                        }
+                                                        aria-label={t(
+                                                            'challenges.delete'
+                                                        )}
+                                                        title={t(
+                                                            'challenges.delete'
+                                                        )}
+                                                    >
+                                                        <FontAwesomeIcon
+                                                            icon={
+                                                                faTrashCan
+                                                            }
+                                                        />
+                                                    </Button>
+                                                </div>
+                                            </div>
+                                        </Card.Body>
+                                    </Card>
+                                );
+                            }
                         )}
 
                         {loadingMore && (
@@ -426,7 +515,7 @@ function ChallengesList({ showSuccessToast }) {
                     </div>
                 </Card.Body>
             </Card>
-        </Container>
+        </Container >
     );
 }
 

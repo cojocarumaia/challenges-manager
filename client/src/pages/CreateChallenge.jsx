@@ -1,5 +1,9 @@
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import {
+    Link,
+    useNavigate,
+} from 'react-router-dom';
+import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
 
 import ChallengeForm from '../components/ChallengeForm';
@@ -22,7 +26,9 @@ function CreateChallenge({ showSuccessToast }) {
         try {
             const challengeData = {
                 ...formData,
-                targetSteps: Number(formData.targetSteps),
+                targetSteps: Number(
+                    formData.targetSteps
+                ),
             };
 
             await createChallenge(challengeData);
@@ -34,6 +40,7 @@ function CreateChallenge({ showSuccessToast }) {
             navigate('/');
         } catch (error) {
             console.error(error);
+
             window.alert(
                 t('createChallenge.failed')
             );
@@ -45,7 +52,17 @@ function CreateChallenge({ showSuccessToast }) {
             className="py-5"
             style={{ maxWidth: '800px' }}
         >
-            <h1 className="mb-4">
+            <div className="d-flex justify-content-end mb-4">
+                <Button
+                    as={Link}
+                    to="/"
+                    variant="outline-secondary"
+                >
+                    🏠 {t('navigation.home')}
+                </Button>
+            </div>
+
+            <h1 className="text-center mb-4">
                 {t('createChallenge.title')}
             </h1>
 

@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import Alert from 'react-bootstrap/Alert';
 import Button from 'react-bootstrap/Button';
@@ -39,11 +38,8 @@ function LoginForm({ onSubmit }) {
     }
 
     return (
-        <Card
-            className="mx-auto mt-4"
-            style={{ maxWidth: '450px' }}
-        >
-            <Card.Body>
+        <Card className="w-100">
+            <Card.Body className="p-4">
                 <h2 className="text-center mb-4">
                     {t('login.title')}
                 </h2>
@@ -97,12 +93,6 @@ function LoginForm({ onSubmit }) {
                     >
                         {t('login.submit')}
                     </Button>
-
-                    <div className="text-center mt-3">
-                        <Link to="/forgot-password">
-                            {t('forgotPassword.link')}
-                        </Link>
-                    </div>
                 </Form>
             </Card.Body>
         </Card>

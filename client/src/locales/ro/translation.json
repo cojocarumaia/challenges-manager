@@ -48,13 +48,18 @@
         "title": "Înregistrare",
         "email": "Email",
         "password": "Parolă",
-        "submit": "Creează cont"
+        "submit": "Creează cont",
+        "alreadyHaveAccount": "Ai deja cont?",
+        "login": "Autentifică-te"
     },
     "login": {
         "title": "Autentificare",
         "email": "Email",
         "password": "Parolă",
-        "submit": "Autentificare"
+        "submit": "Autentificare",
+        "forgotPassword": "Ai uitat parola?",
+        "noAccount": "Nu ai cont?",
+        "register": "Înregistrează-te"
     },
     "auth": {
         "emailAlreadyInUse": "Adresa de email este deja folosită.",
@@ -80,5 +85,17 @@
     "theme": {
         "dark": "Întunecat",
         "light": "Luminos"
+    },
+    "navigation": {
+        "login": "Autentificare",
+        "register": "Înregistrare",
+        "logout": "Deconectare",
+        "home": "Acasă"
+    },
+    "logoutModal": {
+        "title": "Deconectare",
+        "message": "Sigur vrei să te deconectezi?",
+        "cancel": "Anulează",
+        "confirm": "Deconectare"
     }
 }

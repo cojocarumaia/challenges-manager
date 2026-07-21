@@ -4,15 +4,30 @@ import {
     waitFor,
 } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { beforeEach, describe, expect, test, vi } from 'vitest';
+import { MemoryRouter } from 'react-router-dom';
+import {
+    beforeEach,
+    describe,
+    expect,
+    test,
+    vi,
+} from 'vitest';
 
 import RegisterPage from './RegisterPage';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
+
 const mockNavigate = vi.fn();
 
-vi.mock('react-router-dom', () => ({
-    useNavigate: () => mockNavigate,
-}));
+vi.mock('react-router-dom', async () => {
+    const actual = await vi.importActual(
+        'react-router-dom'
+    );
+
+    return {
+        ...actual,
+        useNavigate: () => mockNavigate,
+    };
+});
 
 vi.mock('react-i18next', () => ({
     useTranslation: () => ({
@@ -56,7 +71,11 @@ describe('RegisterPage', () => {
             user: {},
         });
 
-        render(<RegisterPage />);
+        render(
+            <MemoryRouter>
+                <RegisterPage />
+            </MemoryRouter>
+        );
 
         await user.click(
             screen.getByRole('button', {
@@ -84,7 +103,11 @@ describe('RegisterPage', () => {
             code: 'auth/email-already-in-use',
         });
 
-        render(<RegisterPage />);
+        render(
+            <MemoryRouter>
+                <RegisterPage />
+            </MemoryRouter>
+        );
 
         await user.click(
             screen.getByRole('button', {

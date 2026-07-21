@@ -1,36 +1,54 @@
 import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import {
+    Link,
+    useNavigate,
+    useParams,
+} from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import Alert from 'react-bootstrap/Alert';
+import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
 import Spinner from 'react-bootstrap/Spinner';
 
 import ChallengeForm from '../components/ChallengeForm';
-import { fetchChallenge, updateChallenge } from '../api';
+import {
+    fetchChallenge,
+    updateChallenge,
+} from '../api';
 
 function EditChallenge({ showSuccessToast }) {
     const { t } = useTranslation();
     const { id } = useParams();
     const navigate = useNavigate();
 
-    const [initialValues, setInitialValues] = useState(null);
+    const [initialValues, setInitialValues] =
+        useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
 
     useEffect(() => {
         async function loadChallenge() {
             try {
-                const challenge = await fetchChallenge(id);
+                const challenge =
+                    await fetchChallenge(id);
 
                 setInitialValues({
                     title: challenge.title || '',
-                    description: challenge.description || '',
-                    targetSteps: challenge.targetSteps || '',
+                    description:
+                        challenge.description || '',
+                    targetSteps:
+                        challenge.targetSteps || '',
                     startDate: challenge.startDate
-                        ? challenge.startDate.slice(0, 10)
+                        ? challenge.startDate.slice(
+                            0,
+                            10
+                        )
                         : '',
                     endDate: challenge.endDate
-                        ? challenge.endDate.slice(0, 10)
+                        ? challenge.endDate.slice(
+                            0,
+                            10
+                        )
                         : '',
                     image: challenge.image || '',
                 });
@@ -38,7 +56,12 @@ function EditChallenge({ showSuccessToast }) {
                 setError('');
             } catch (error) {
                 console.error(error);
-                setError(t('editChallenge.failedToLoad'));
+
+                setError(
+                    t(
+                        'editChallenge.failedToLoad'
+                    )
+                );
             } finally {
                 setLoading(false);
             }
@@ -51,10 +74,15 @@ function EditChallenge({ showSuccessToast }) {
         try {
             const challengeData = {
                 ...formData,
-                targetSteps: Number(formData.targetSteps),
+                targetSteps: Number(
+                    formData.targetSteps
+                ),
             };
 
-            await updateChallenge(id, challengeData);
+            await updateChallenge(
+                id,
+                challengeData
+            );
 
             showSuccessToast(
                 t('editChallenge.success')
@@ -63,6 +91,7 @@ function EditChallenge({ showSuccessToast }) {
             navigate('/');
         } catch (error) {
             console.error(error);
+
             window.alert(
                 t('editChallenge.failed')
             );
@@ -94,6 +123,16 @@ function EditChallenge({ showSuccessToast }) {
                 className="py-5"
                 style={{ maxWidth: '800px' }}
             >
+                <div className="d-flex justify-content-end mb-4">
+                    <Button
+                        as={Link}
+                        to="/"
+                        variant="outline-secondary"
+                    >
+                        🏠 {t('navigation.home')}
+                    </Button>
+                </div>
+
                 <Alert variant="danger">
                     {error}
                 </Alert>
@@ -106,7 +145,17 @@ function EditChallenge({ showSuccessToast }) {
             className="py-5"
             style={{ maxWidth: '800px' }}
         >
-            <h1 className="mb-4">
+            <div className="d-flex justify-content-end mb-4">
+                <Button
+                    as={Link}
+                    to="/"
+                    variant="outline-secondary"
+                >
+                    🏠 {t('navigation.home')}
+                </Button>
+            </div>
+
+            <h1 className="text-center mb-4">
                 {t('editChallenge.title')}
             </h1>
 

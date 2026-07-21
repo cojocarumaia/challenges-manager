@@ -1,7 +1,16 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Routes, Route } from 'react-router-dom';
+import {
+  Link,
+  Route,
+  Routes,
+  useNavigate,
+} from 'react-router-dom';
+import { signOut } from 'firebase/auth';
 import Button from 'react-bootstrap/Button';
+import Container from 'react-bootstrap/Container';
+import Modal from 'react-bootstrap/Modal';
+import Navbar from 'react-bootstrap/Navbar';
 
 import ChallengesPage from './pages/ChallengesPage';
 import CreateChallenge from './pages/CreateChallenge';
@@ -11,9 +20,17 @@ import LoginPage from './pages/LoginPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import ProtectedRoute from './components/ProtectedRoute';
 import SuccessToast from './components/SuccessToast';
+import { useAuth } from './context/AuthContext';
+import { auth } from './firebase';
 
 function App() {
   const { t } = useTranslation();
+  const navigate = useNavigate();
+
+  const { currentUser, loading } = useAuth();
+
+  const [showLogoutModal, setShowLogoutModal] =
+    useState(false);
 
   const [toast, setToast] = useState({
     show: false,
@@ -55,23 +72,112 @@ function App() {
     );
   }
 
+  function openLogoutModal() {
+    setShowLogoutModal(true);
+  }
+
+  function closeLogoutModal() {
+    setShowLogoutModal(false);
+  }
+
+  async function handleLogout() {
+    try {
+      await signOut(auth);
+      closeLogoutModal();
+      navigate('/login');
+    } catch (error) {
+      console.error('Logout failed:', error);
+    }
+  }
+
   return (
     <>
-      <Button
-        type="button"
-        variant={
-          theme === 'light'
-            ? 'outline-dark'
-            : 'outline-light'
-        }
-        onClick={toggleTheme}
-        className="position-fixed top-0 start-0 m-3"
-        style={{ zIndex: 1050 }}
+      <Navbar
+        expand="md"
+        bg={theme}
+        data-bs-theme={theme}
+        className="shadow-sm"
       >
-        {theme === 'light'
-          ? `🌙 ${t('theme.dark')}`
-          : `☀️ ${t('theme.light')}`}
-      </Button>
+        <Container>
+          <Navbar.Brand as={Link} to="/">
+            Challenges Manager
+          </Navbar.Brand>
+
+          <div className="d-flex align-items-center gap-2 ms-auto">
+            <Button
+              type="button"
+              variant={
+                theme === 'light'
+                  ? 'outline-dark'
+                  : 'outline-light'
+              }
+              onClick={toggleTheme}
+              className="text-nowrap"
+            >
+              {theme === 'light'
+                ? `🌙 ${t('theme.dark')}`
+                : `☀️ ${t('theme.light')}`}
+            </Button>
+
+            {!loading && currentUser && (
+              <>
+                <span
+                  className="d-none d-sm-inline text-truncate"
+                  title={currentUser.email}
+                  style={{
+                    maxWidth: '220px',
+                  }}
+                >
+                  {currentUser.email}
+                </span>
+
+                <Button
+                  type="button"
+                  variant="outline-danger"
+                  onClick={openLogoutModal}
+                  className="text-nowrap"
+                >
+                  {t('navigation.logout')}
+                </Button>
+              </>
+            )}
+          </div>
+        </Container>
+      </Navbar>
+
+      <Modal
+        show={showLogoutModal}
+        onHide={closeLogoutModal}
+        centered
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>
+            {t('logoutModal.title')}
+          </Modal.Title>
+        </Modal.Header>
+
+        <Modal.Body>
+          {t('logoutModal.message')}
+        </Modal.Body>
+
+        <Modal.Footer>
+          <Button
+            type="button"
+            variant="secondary"
+            onClick={closeLogoutModal}
+          >
+            {t('logoutModal.cancel')}
+          </Button>
+
+          <Button
+            type="button"
+            variant="danger"
+            onClick={handleLogout}
+          >
+            {t('logoutModal.confirm')}
+          </Button>
+        </Modal.Footer>
+      </Modal>
 
       <SuccessToast
         show={toast.show}
@@ -131,9 +237,7 @@ function App() {
 
         <Route
           path="/forgot-password"
-          element={
-            <ForgotPasswordPage />
-          }
+          element={<ForgotPasswordPage />}
         />
       </Routes>
     </>
