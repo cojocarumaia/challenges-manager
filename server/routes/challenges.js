@@ -9,6 +9,7 @@ const {
 
 const validateChallenge = require('../middleware/validateChallenge');
 const authenticate = require('../middleware/authenticate');
+const requireAdmin = require('../middleware/requireAdmin');
 
 const router = express.Router();
 
@@ -18,6 +19,7 @@ router.get('/:id', getChallengeById);
 router.post(
   '/',
   authenticate,
+  requireAdmin,
   validateChallenge,
   createChallenge
 );
@@ -25,6 +27,7 @@ router.post(
 router.put(
   '/:id',
   authenticate,
+  requireAdmin,
   validateChallenge,
   updateChallenge
 );
@@ -32,6 +35,7 @@ router.put(
 router.delete(
   '/:id',
   authenticate,
+  requireAdmin,
   deleteChallenge
 );
 
