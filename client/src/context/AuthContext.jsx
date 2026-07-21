@@ -1,4 +1,5 @@
 /* eslint-disable react-refresh/only-export-components */
+
 import {
     createContext,
     useContext,
@@ -7,6 +8,7 @@ import {
 } from 'react';
 import { onAuthStateChanged } from 'firebase/auth';
 
+import { fetchUserProfile } from '../api';
 import { auth } from '../firebase';
 
 const AuthContext = createContext(null);
@@ -25,26 +27,18 @@ function AuthProvider({ children }) {
 
                 if (user) {
                     try {
-                        const response = await fetch(
-                            `${import.meta.env.VITE_API_BASE_URL}/api/users/${user.uid}`
-                        );
-
-                        if (!response.ok) {
-                            throw new Error(
-                                'Could not load user role'
-                            );
-                        }
-
                         const dbUser =
-                            await response.json();
+                            await fetchUserProfile(
+                                user.uid
+                            );
 
                         setRole(dbUser.role);
-
                     } catch (error) {
                         console.error(
                             'Failed to load role:',
                             error
                         );
+
                         setRole(null);
                     }
                 } else {

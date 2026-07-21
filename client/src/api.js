@@ -1,12 +1,18 @@
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+const API_BASE_URL =
+    import.meta.env.VITE_API_BASE_URL;
 
-export async function fetchChallenges(page = 1, limit = 10) {
+export async function fetchChallenges(
+    page = 1,
+    limit = 10
+) {
     const response = await fetch(
         `${API_BASE_URL}/api/challenges?page=${page}&limit=${limit}`
     );
 
     if (!response.ok) {
-        throw new Error('Failed to fetch challenges');
+        throw new Error(
+            'Failed to fetch challenges'
+        );
     }
 
     return response.json();
@@ -18,45 +24,62 @@ export async function fetchChallenge(id) {
     );
 
     if (!response.ok) {
-        throw new Error('Failed to fetch challenge');
+        throw new Error(
+            'Failed to fetch challenge'
+        );
     }
 
     return response.json();
 }
 
-export async function createChallenge(challengeData) {
+export async function createChallenge(
+    challengeData
+) {
     const response = await fetch(
         `${API_BASE_URL}/api/challenges`,
         {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
+                'Content-Type':
+                    'application/json',
             },
-            body: JSON.stringify(challengeData),
+            body: JSON.stringify(
+                challengeData
+            ),
         }
     );
 
     if (!response.ok) {
-        throw new Error('Failed to create challenge');
+        throw new Error(
+            'Failed to create challenge'
+        );
     }
 
     return response.json();
 }
 
-export async function updateChallenge(id, challengeData) {
+export async function updateChallenge(
+    id,
+    challengeData
+) {
     const response = await fetch(
         `${API_BASE_URL}/api/challenges/${id}`,
         {
             method: 'PUT',
             headers: {
-                'Content-Type': 'application/json',
+                'Content-Type':
+                    'application/json',
             },
-            body: JSON.stringify(challengeData),
+            body: JSON.stringify(
+                challengeData
+            ),
         }
     );
 
     if (!response.ok) {
-        throw new Error('Failed to update challenge');
+        throw new Error(
+            'Failed to update challenge'
+        );
     }
 
     return response.json();
@@ -71,6 +94,52 @@ export async function deleteChallenge(id) {
     );
 
     if (!response.ok) {
-        throw new Error('Failed to delete challenge');
+        throw new Error(
+            'Failed to delete challenge'
+        );
     }
+}
+
+export async function createUserProfile({
+    firebaseUid,
+    email,
+}) {
+    const response = await fetch(
+        `${API_BASE_URL}/api/users`,
+        {
+            method: 'POST',
+            headers: {
+                'Content-Type':
+                    'application/json',
+            },
+            body: JSON.stringify({
+                firebaseUid,
+                email,
+            }),
+        }
+    );
+
+    if (!response.ok) {
+        throw new Error(
+            'User profile could not be saved.'
+        );
+    }
+
+    return response.json();
+}
+
+export async function fetchUserProfile(
+    firebaseUid
+) {
+    const response = await fetch(
+        `${API_BASE_URL}/api/users/${firebaseUid}`
+    );
+
+    if (!response.ok) {
+        throw new Error(
+            'User profile could not be loaded.'
+        );
+    }
+
+    return response.json();
 }

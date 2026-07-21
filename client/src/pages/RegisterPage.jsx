@@ -12,6 +12,7 @@ import Row from 'react-bootstrap/Row';
 
 import RegisterForm from '../components/RegisterForm';
 import { auth } from '../firebase';
+import { createUserProfile } from '../api';
 
 function RegisterPage() {
     const navigate = useNavigate();
@@ -30,28 +31,12 @@ function RegisterPage() {
                     data.password
                 );
 
-            const response = await fetch(
-                `${import.meta.env.VITE_API_BASE_URL}/api/users`,
-                {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type':
-                            'application/json',
-                    },
-                    body: JSON.stringify({
-                        firebaseUid:
-                            userCredential.user.uid,
-                        email:
-                            userCredential.user.email,
-                    }),
-                }
-            );
-
-            if (!response.ok) {
-                throw new Error(
-                    'User profile could not be saved.'
-                );
-            }
+            await createUserProfile({
+                firebaseUid:
+                    userCredential.user.uid,
+                email:
+                    userCredential.user.email,
+            });
 
             navigate('/');
         } catch (error) {
