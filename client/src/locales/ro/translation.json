@@ -10,13 +10,15 @@
         "endDate": "Data de sfârșit",
         "image": "Imaginea provocării",
         "imagePreview": "Previzualizarea provocării",
-        "removeImage": "Șterge imaginea"
+        "removeImage": "Șterge imaginea",
+        "uploadingImage": "Se încarcă imaginea..."
     },
     "validation": {
         "titleRequired": "Titlul este obligatoriu.",
         "targetStepsPositive": "Numărul țintă de pași trebuie să fie mai mare decât zero.",
         "invalidImage": "Selectează o imagine validă.",
-        "imageReadFailed": "Imaginea nu a putut fi citită."
+        "imageReadFailed": "Imaginea nu a putut fi citită.",
+        "imageUploadFailed": "Imaginea nu a putut fi încărcată."
     },
     "createChallenge": {
         "title": "Creează provocare",

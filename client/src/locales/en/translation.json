@@ -10,13 +10,15 @@
         "endDate": "End Date",
         "image": "Challenge image",
         "imagePreview": "Challenge preview",
-        "removeImage": "Remove image"
+        "removeImage": "Remove image",
+        "uploadingImage": "Uploading image..."
     },
     "validation": {
         "titleRequired": "Title is required.",
         "targetStepsPositive": "Target steps must be greater than zero.",
         "invalidImage": "Please select a valid image.",
-        "imageReadFailed": "The image could not be read."
+        "imageReadFailed": "The image could not be read.",
+        "imageUploadFailed": "The image could not be uploaded."
     },
     "createChallenge": {
         "title": "Create Challenge",
