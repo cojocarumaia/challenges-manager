@@ -13,3 +13,6 @@ NOTES.txt
 /blob-report/
 /playwright/.cache/
 /playwright/.auth/
+
+# Firebase Admin
+server/secrets/

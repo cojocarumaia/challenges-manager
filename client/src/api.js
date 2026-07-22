@@ -1,5 +1,24 @@
+import { auth } from './firebase';
+
 const API_BASE_URL =
     import.meta.env.VITE_API_BASE_URL;
+
+async function getAuthHeaders() {
+    const user = auth.currentUser;
+
+    if (!user) {
+        throw new Error(
+            'User is not authenticated'
+        );
+    }
+
+    const token = await user.getIdToken();
+
+    return {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+    };
+}
 
 export async function fetchChallenges(
     page = 1,
@@ -35,14 +54,13 @@ export async function fetchChallenge(id) {
 export async function createChallenge(
     challengeData
 ) {
+    const headers = await getAuthHeaders();
+
     const response = await fetch(
         `${API_BASE_URL}/api/challenges`,
         {
             method: 'POST',
-            headers: {
-                'Content-Type':
-                    'application/json',
-            },
+            headers,
             body: JSON.stringify(
                 challengeData
             ),
@@ -62,14 +80,13 @@ export async function updateChallenge(
     id,
     challengeData
 ) {
+    const headers = await getAuthHeaders();
+
     const response = await fetch(
         `${API_BASE_URL}/api/challenges/${id}`,
         {
             method: 'PUT',
-            headers: {
-                'Content-Type':
-                    'application/json',
-            },
+            headers,
             body: JSON.stringify(
                 challengeData
             ),
@@ -86,10 +103,13 @@ export async function updateChallenge(
 }
 
 export async function deleteChallenge(id) {
+    const headers = await getAuthHeaders();
+
     const response = await fetch(
         `${API_BASE_URL}/api/challenges/${id}`,
         {
             method: 'DELETE',
+            headers,
         }
     );
 
@@ -104,14 +124,13 @@ export async function createUserProfile({
     firebaseUid,
     email,
 }) {
+    const headers = await getAuthHeaders();
+
     const response = await fetch(
         `${API_BASE_URL}/api/users`,
         {
             method: 'POST',
-            headers: {
-                'Content-Type':
-                    'application/json',
-            },
+            headers,
             body: JSON.stringify({
                 firebaseUid,
                 email,
