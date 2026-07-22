@@ -1,4 +1,8 @@
-const admin = require('../firebaseAdmin');
+require('../firebaseAdmin');
+
+const {
+    getAuth,
+} = require('firebase-admin/auth');
 
 async function authenticate(
     req,
@@ -24,14 +28,19 @@ async function authenticate(
 
     try {
         const decodedToken =
-            await admin
-                .auth()
-                .verifyIdToken(token);
+            await getAuth().verifyIdToken(
+                token
+            );
 
         req.user = decodedToken;
 
         next();
-    } catch {
+    } catch (error) {
+        console.error(
+            'Firebase token verification failed:',
+            error
+        );
+
         return res.status(401).json({
             message:
                 'Not authenticated',
