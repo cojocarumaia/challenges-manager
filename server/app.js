@@ -3,6 +3,7 @@ const cors = require('cors');
 
 const challengesRoutes = require('./routes/challenges');
 const usersRoutes = require('./routes/users');
+const apiLimiter = require('./middleware/rateLimiter');
 
 const app = express();
 
@@ -26,6 +27,8 @@ app.use(
 
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+
+app.use('/api', apiLimiter);
 
 app.use('/api/challenges', challengesRoutes);
 app.use('/api/users', usersRoutes);
