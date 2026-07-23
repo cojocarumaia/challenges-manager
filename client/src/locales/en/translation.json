@@ -44,7 +44,8 @@
         "deleteSuccess": "Challenge deleted successfully!",
         "deleteFailed": "Failed to delete challenge.",
         "delete": "Delete",
-        "steps": "{{steps}} steps"
+        "steps": "{{steps}} steps",
+        "details": "Details"
     },
     "register": {
         "title": "Register",
@@ -99,5 +100,10 @@
         "message": "Are you sure you want to log out?",
         "cancel": "Cancel",
         "confirm": "Log out"
+    },
+    "challengeDetails": {
+        "targetSteps": "Target steps",
+        "back": "Back to challenges",
+        "failedToLoad": "Challenge could not be loaded."
     }
 }

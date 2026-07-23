@@ -44,7 +44,8 @@
         "deleteSuccess": "Provocarea a fost ștearsă cu succes!",
         "deleteFailed": "Ștergerea provocării a eșuat.",
         "delete": "Șterge",
-        "steps": "{{steps}} pași"
+        "steps": "{{steps}} pași",
+        "details": "Detalii"
     },
     "register": {
         "title": "Înregistrare",
@@ -99,5 +100,10 @@
         "message": "Sigur vrei să te deconectezi?",
         "cancel": "Anulează",
         "confirm": "Deconectare"
+    },
+    "challengeDetails": {
+        "targetSteps": "Pași țintă",
+        "back": "Înapoi la provocări",
+        "failedToLoad": "Provocarea nu a putut fi încărcată."
     }
 }

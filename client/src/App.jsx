@@ -16,6 +16,7 @@ import Navbar from 'react-bootstrap/Navbar';
 import ChallengesPage from './pages/ChallengesPage';
 import CreateChallenge from './pages/CreateChallenge';
 import EditChallenge from './pages/EditChallenge';
+import ChallengeDetailsPage from './pages/ChallengeDetailsPage';
 import RegisterPage from './pages/RegisterPage';
 import LoginPage from './pages/LoginPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
@@ -202,6 +203,15 @@ function App() {
       />
 
       <Routes>
+        <Route
+          path="/challenges/:id"
+          element={
+            <ProtectedRoute>
+              <ChallengeDetailsPage />
+            </ProtectedRoute>
+          }
+        />
+
         <Route
           path="/"
           element={
