@@ -1,3 +1,4 @@
+/* global __APP_VERSION__ */
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
@@ -26,6 +27,13 @@ import { auth } from './firebase';
 function App() {
   const { t } = useTranslation();
   const navigate = useNavigate();
+
+  const isLocal =
+    window.location.hostname === 'localhost' ||
+    window.location.hostname === '127.0.0.1';
+
+  const versionLabel = `v${__APP_VERSION__}${isLocal ? ' · local' : ''
+    }`;
 
   const { currentUser, loading } = useAuth();
 
@@ -99,8 +107,16 @@ function App() {
         className="shadow-sm"
       >
         <Container>
-          <Navbar.Brand as={Link} to="/">
-            Challenges Manager
+          <Navbar.Brand
+            as={Link}
+            to="/"
+            className="d-flex align-items-center gap-2"
+          >
+            <span>Challenges Manager</span>
+
+            <span className="small text-body-secondary ms-2">
+              {versionLabel}
+            </span>
           </Navbar.Brand>
 
           <div className="d-flex align-items-center gap-2 ms-auto">
