@@ -23,7 +23,6 @@ function ChallengeForm({
 
     const [formData, setFormData] = useState({
         ...initialValues,
-        image: initialValues.image || '',
         imageMedium:
             initialValues.imageMedium || '',
         imageThumbnail:
@@ -134,10 +133,7 @@ function ChallengeForm({
                 await createResizedImage(file, 1200);
             const timestamp = Date.now();
 
-            const imageReference = ref(
-                storage,
-                `challenge-images/${timestamp}-${safeFileName}`
-            );
+
 
             const thumbnailReference = ref(
                 storage,
@@ -154,25 +150,9 @@ function ChallengeForm({
                     'public,max-age=31536000,immutable',
             };
 
-            const uploadTask =
-                uploadBytesResumable(
-                    imageReference,
-                    file,
-                    metadata
-                );
 
-            await new Promise((resolve, reject) => {
-                uploadTask.on(
-                    'state_changed',
-                    null,
-                    reject,
-                    () => resolve()
-                );
-            });
 
-            const imageUrl = await getDownloadURL(
-                uploadTask.snapshot.ref
-            );
+
             const thumbnailUploadTask =
                 uploadBytesResumable(
                     thumbnailReference,
@@ -216,7 +196,6 @@ function ChallengeForm({
 
             setFormData((currentFormData) => ({
                 ...currentFormData,
-                image: imageUrl,
                 imageMedium: mediumUrl,
                 imageThumbnail: thumbnailUrl,
             }));
@@ -238,7 +217,7 @@ function ChallengeForm({
     function handleRemoveImage() {
         setFormData((currentFormData) => ({
             ...currentFormData,
-            image: '',
+
             imageMedium: '',
             imageThumbnail: '',
         }));
@@ -396,13 +375,11 @@ function ChallengeForm({
                         )}
                     </Form.Group>
 
-                    {formData.image && (
+                    {formData.imageMedium && (
                         <div className="mb-3">
                             <Image
-                                src={formData.image}
-                                alt={t(
-                                    'form.imagePreview'
-                                )}
+                                src={formData.imageMedium}
+                                alt={t('form.imagePreview')}
                                 fluid
                                 rounded
                                 style={{

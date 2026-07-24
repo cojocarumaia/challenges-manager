@@ -19,7 +19,8 @@ function CreateChallenge({ showSuccessToast }) {
         targetSteps: '',
         startDate: '',
         endDate: '',
-        image: '',
+        imageMedium: '',
+        imageThumbnail: '',
     };
 
     async function handleCreate(formData) {

@@ -409,12 +409,9 @@ function ChallengesList({ showSuccessToast }) {
                                         }}
                                     >
                                         <ChallengeImage
-                                            src={
-                                                challenge.imageThumbnail ||
-                                                challenge.image
-                                            }
+                                            src={challenge.imageThumbnail}
                                             alt={challenge.title}
-                                        />                                       <Card.Body className="d-flex flex-column">
+                                        />                                     <Card.Body className="d-flex flex-column">
                                             <div>
                                                 <Card.Title
                                                     as="h5"
