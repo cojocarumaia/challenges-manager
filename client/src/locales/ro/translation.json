@@ -50,7 +50,13 @@
         "joined": "Înscris",
         "joining": "Se înscrie...",
         "joinSuccess": "Te-ai înscris la provocare.",
-        "joinFailed": "Înscrierea la provocare a eșuat."
+        "joinFailed": "Înscrierea la provocare a eșuat.",
+        "sendSteps": "Trimite pașii",
+        "sendingSteps": "Se trimit...",
+        "stepsPlaceholder": "Pași",
+        "stepsSent": "Pașii au fost trimiși.",
+        "stepsSendFailed": "Pașii nu au putut fi trimiși.",
+        "stepsMustBePositive": "Numărul de pași trebuie să fie pozitiv."
     },
     "register": {
         "title": "Înregistrare",

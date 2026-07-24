@@ -9,6 +9,7 @@ const {
 const {
   joinChallenge,
   getMyParticipations,
+  addSteps,
 } = require('../controllers/participations');
 const validateChallenge = require('../middleware/validateChallenge');
 const authenticate = require('../middleware/authenticate');
@@ -28,6 +29,11 @@ router.post(
   '/:challengeId/join',
   authenticate,
   joinChallenge
+);
+router.post(
+  '/:challengeId/steps',
+  authenticate,
+  addSteps
 );
 router.post(
   '/',

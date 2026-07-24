@@ -22,6 +22,7 @@ import {
     fetchChallenges,
     fetchMyParticipations,
     joinChallenge,
+    sendSteps,
 } from '../api';
 import i18n from '../i18n';
 
@@ -114,6 +115,11 @@ function ChallengesList({ showSuccessToast }) {
     const [joinedChallengeIds, setJoinedChallengeIds] =
         useState([]);
     const [joiningChallengeId, setJoiningChallengeId] =
+        useState(null);
+    const [stepsByChallenge, setStepsByChallenge] =
+        useState({});
+
+    const [sendingStepsChallengeId, setSendingStepsChallengeId] =
         useState(null);
     const [page, setPage] = useState(1);
     const [hasMore, setHasMore] = useState(true);
@@ -278,6 +284,45 @@ function ChallengesList({ showSuccessToast }) {
             );
         } finally {
             setJoiningChallengeId(null);
+        }
+    }
+    async function handleSendSteps(challengeId) {
+        const steps = Number(
+            stepsByChallenge[challengeId]
+        );
+
+        if (!steps || steps <= 0) {
+            window.alert(
+                t('challenges.stepsMustBePositive')
+            );
+            return;
+        }
+
+        try {
+            setSendingStepsChallengeId(
+                challengeId
+            );
+
+            await sendSteps(challengeId, steps);
+
+            setStepsByChallenge(
+                (currentValues) => ({
+                    ...currentValues,
+                    [challengeId]: '',
+                })
+            );
+
+            showSuccessToast(
+                t('challenges.stepsSent')
+            );
+        } catch (err) {
+            console.error(err);
+
+            window.alert(
+                t('challenges.stepsSendFailed')
+            );
+        } finally {
+            setSendingStepsChallengeId(null);
         }
     }
     async function handleDelete(id) {
@@ -555,7 +600,58 @@ function ChallengesList({ showSuccessToast }) {
                                                                     : t('challenges.join')}
                                                         </Button>
                                                     )}
+                                                    {joinedChallengeIds.includes(
+                                                        challenge._id
+                                                    ) && (
+                                                            <div className="d-flex gap-2">
+                                                                <input
+                                                                    type="number"
+                                                                    min="1"
+                                                                    className="form-control"
+                                                                    style={{ width: '120px' }}
+                                                                    placeholder={t(
+                                                                        'challenges.stepsPlaceholder'
+                                                                    )}
+                                                                    value={
+                                                                        stepsByChallenge[
+                                                                        challenge._id
+                                                                        ] || ''
+                                                                    }
+                                                                    onChange={(event) =>
+                                                                        setStepsByChallenge(
+                                                                            (currentValues) => ({
+                                                                                ...currentValues,
+                                                                                [challenge._id]:
+                                                                                    event.target.value,
+                                                                            })
+                                                                        )
+                                                                    }
+                                                                />
 
+                                                                <Button
+                                                                    type="button"
+                                                                    variant="primary"
+                                                                    disabled={
+                                                                        sendingStepsChallengeId ===
+                                                                        challenge._id
+                                                                    }
+                                                                    onClick={() =>
+                                                                        handleSendSteps(
+                                                                            challenge._id
+                                                                        )
+                                                                    }
+                                                                >
+                                                                    {sendingStepsChallengeId ===
+                                                                        challenge._id
+                                                                        ? t(
+                                                                            'challenges.sendingSteps'
+                                                                        )
+                                                                        : t(
+                                                                            'challenges.sendSteps'
+                                                                        )}
+                                                                </Button>
+                                                            </div>
+                                                        )}
                                                     <Button
                                                         type="button"
                                                         variant="outline-primary"

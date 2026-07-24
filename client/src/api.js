@@ -77,6 +77,34 @@ export async function joinChallenge(challengeId) {
 
     return response.json();
 }
+export async function sendSteps(
+    challengeId,
+    steps
+) {
+    const headers = await getAuthHeaders();
+
+    const response = await fetch(
+        `${API_BASE_URL}/api/challenges/${challengeId}/steps`,
+        {
+            method: 'POST',
+            headers,
+            body: JSON.stringify({
+                steps,
+            }),
+        }
+    );
+
+    if (!response.ok) {
+        const errorData = await response.json();
+
+        throw new Error(
+            errorData.message ||
+            'Failed to send steps'
+        );
+    }
+
+    return response.json();
+}
 export async function fetchChallenge(id) {
     const response = await fetch(
         `${API_BASE_URL}/api/challenges/${id}`
