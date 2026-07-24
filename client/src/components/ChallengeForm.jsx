@@ -9,7 +9,7 @@ import Image from 'react-bootstrap/Image';
 import {
     getDownloadURL,
     ref,
-    uploadBytes,
+    uploadBytesResumable,
 } from 'firebase/storage';
 
 import { storage } from '../firebase';
@@ -66,13 +66,30 @@ function ChallengeForm({
                 `challenge-images/${Date.now()}-${safeFileName}`
             );
 
-            const uploadResult = await uploadBytes(
-                imageReference,
-                file
-            );
+            const metadata = {
+                contentType: file.type,
+                cacheControl:
+                    'public,max-age=31536000,immutable',
+            };
+
+            const uploadTask =
+                uploadBytesResumable(
+                    imageReference,
+                    file,
+                    metadata
+                );
+
+            await new Promise((resolve, reject) => {
+                uploadTask.on(
+                    'state_changed',
+                    null,
+                    reject,
+                    () => resolve()
+                );
+            });
 
             const imageUrl = await getDownloadURL(
-                uploadResult.ref
+                uploadTask.snapshot.ref
             );
 
             setFormData((currentFormData) => ({
