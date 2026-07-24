@@ -7,6 +7,7 @@ import Container from 'react-bootstrap/Container';
 import Spinner from 'react-bootstrap/Spinner';
 
 import { fetchChallenge } from '../api';
+import ChallengeImage from '../components/ChallengeImage';
 
 function ChallengeDetailsPage() {
     const { id } = useParams();
@@ -23,7 +24,9 @@ function ChallengeDetailsPage() {
                 setChallenge(data);
             } catch (err) {
                 console.error(err);
-                setError(t('challengeDetails.failedToLoad'));
+                setError(
+                    t('challengeDetails.failedToLoad')
+                );
             } finally {
                 setLoading(false);
             }
@@ -45,7 +48,11 @@ function ChallengeDetailsPage() {
             <Container className="py-5 text-center">
                 <p>{error}</p>
 
-                <Button as={Link} to="/" variant="secondary">
+                <Button
+                    as={Link}
+                    to="/"
+                    variant="secondary"
+                >
                     {t('challengeDetails.back')}
                 </Button>
             </Container>
@@ -55,22 +62,16 @@ function ChallengeDetailsPage() {
     return (
         <Container className="py-5">
             <Card className="shadow-sm mx-auto">
-                <Card.Img
-                    variant="top"
-                    src={
-                        challenge.image ||
-                        'https://placehold.co/1200x800?text=Challenge'
-                    }
+                <ChallengeImage
+                    src={challenge.image}
                     alt={challenge.title}
-                    style={{
-                        width: '100%',
-                        maxHeight: '75vh',
-                        objectFit: 'contain',
-                    }}
+                    size="medium"
                 />
 
                 <Card.Body>
-                    <Card.Title>{challenge.title}</Card.Title>
+                    <Card.Title>
+                        {challenge.title}
+                    </Card.Title>
 
                     <Card.Text>
                         {challenge.description}
@@ -78,12 +79,19 @@ function ChallengeDetailsPage() {
 
                     <p>
                         <strong>
-                            {t('challengeDetails.targetSteps')}:
+                            {t(
+                                'challengeDetails.targetSteps'
+                            )}
+                            :
                         </strong>{' '}
                         {challenge.targetSteps}
                     </p>
 
-                    <Button as={Link} to="/" variant="secondary">
+                    <Button
+                        as={Link}
+                        to="/"
+                        variant="secondary"
+                    >
                         {t('challengeDetails.back')}
                     </Button>
                 </Card.Body>
