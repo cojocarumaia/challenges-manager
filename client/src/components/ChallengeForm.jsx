@@ -24,6 +24,10 @@ function ChallengeForm({
     const [formData, setFormData] = useState({
         ...initialValues,
         image: initialValues.image || '',
+        imageMedium:
+            initialValues.imageMedium || '',
+        imageThumbnail:
+            initialValues.imageThumbnail || '',
     });
 
     const [isUploading, setIsUploading] =
@@ -36,6 +40,69 @@ function ChallengeForm({
             ...currentFormData,
             [name]: value,
         }));
+    }
+    async function createResizedImage(
+        file,
+        maxWidth
+    ) {
+        return new Promise((resolve, reject) => {
+            const image = new window.Image();
+
+            image.onload = () => {
+                const canvas =
+                    document.createElement('canvas');
+
+
+
+                const scale =
+                    maxWidth / image.width;
+
+                canvas.width = maxWidth;
+                canvas.height =
+                    image.height * scale;
+
+                const context =
+                    canvas.getContext('2d');
+
+                context.drawImage(
+                    image,
+                    0,
+                    0,
+                    canvas.width,
+                    canvas.height
+                );
+
+                canvas.toBlob(
+                    (blob) => {
+                        if (!blob) {
+                            reject(
+                                new Error(
+                                    'Failed to create thumbnail'
+                                )
+                            );
+                            return;
+                        }
+
+                        const thumbnailFile =
+                            new File(
+                                [blob],
+                                file.name,
+                                {
+                                    type: file.type,
+                                }
+                            );
+
+                        resolve(thumbnailFile);
+                    },
+                    file.type,
+                    0.9
+                );
+            };
+
+            image.onerror = reject;
+
+            image.src = URL.createObjectURL(file);
+        });
     }
 
     async function handleImageChange(event) {
@@ -60,10 +127,25 @@ function ChallengeForm({
                 /[^a-zA-Z0-9._-]/g,
                 '-'
             );
+            const thumbnailFile =
+                await createResizedImage(file, 600);
+
+            const mediumFile =
+                await createResizedImage(file, 1200);
+            const timestamp = Date.now();
 
             const imageReference = ref(
                 storage,
-                `challenge-images/${Date.now()}-${safeFileName}`
+                `challenge-images/${timestamp}-${safeFileName}`
+            );
+
+            const thumbnailReference = ref(
+                storage,
+                `challenge-images/thumbnails/${timestamp}-${safeFileName}`
+            );
+            const mediumReference = ref(
+                storage,
+                `challenge-images/medium/${timestamp}-${safeFileName}`
             );
 
             const metadata = {
@@ -91,10 +173,52 @@ function ChallengeForm({
             const imageUrl = await getDownloadURL(
                 uploadTask.snapshot.ref
             );
+            const thumbnailUploadTask =
+                uploadBytesResumable(
+                    thumbnailReference,
+                    thumbnailFile,
+                    metadata
+                );
+
+            await new Promise((resolve, reject) => {
+                thumbnailUploadTask.on(
+                    'state_changed',
+                    null,
+                    reject,
+                    () => resolve()
+                );
+            });
+            const mediumUploadTask =
+                uploadBytesResumable(
+                    mediumReference,
+                    mediumFile,
+                    metadata
+                );
+
+            await new Promise((resolve, reject) => {
+                mediumUploadTask.on(
+                    'state_changed',
+                    null,
+                    reject,
+                    () => resolve()
+                );
+            });
+
+            const mediumUrl =
+                await getDownloadURL(
+                    mediumUploadTask.snapshot.ref
+                );
+
+            const thumbnailUrl =
+                await getDownloadURL(
+                    thumbnailUploadTask.snapshot.ref
+                );
 
             setFormData((currentFormData) => ({
                 ...currentFormData,
                 image: imageUrl,
+                imageMedium: mediumUrl,
+                imageThumbnail: thumbnailUrl,
             }));
         } catch (error) {
             console.error(
@@ -115,6 +239,8 @@ function ChallengeForm({
         setFormData((currentFormData) => ({
             ...currentFormData,
             image: '',
+            imageMedium: '',
+            imageThumbnail: '',
         }));
     }
 
