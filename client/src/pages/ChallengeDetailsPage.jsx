@@ -63,7 +63,10 @@ function ChallengeDetailsPage() {
         <Container className="py-5">
             <Card className="shadow-sm mx-auto">
                 <ChallengeImage
-                    src={challenge.image}
+                    src={
+                        challenge.imageMedium ||
+                        challenge.image
+                    }
                     alt={challenge.title}
                     size="medium"
                 />
