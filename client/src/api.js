@@ -36,7 +36,47 @@ export async function fetchChallenges(
 
     return response.json();
 }
+export async function fetchMyParticipations() {
+    const headers = await getAuthHeaders();
 
+    const response = await fetch(
+        `${API_BASE_URL}/api/challenges/participations/me`,
+        {
+            headers,
+        }
+    );
+
+    if (!response.ok) {
+        throw new Error(
+            'Failed to fetch participations'
+        );
+    }
+
+    return response.json();
+}
+
+export async function joinChallenge(challengeId) {
+    const headers = await getAuthHeaders();
+
+    const response = await fetch(
+        `${API_BASE_URL}/api/challenges/${challengeId}/join`,
+        {
+            method: 'POST',
+            headers,
+        }
+    );
+
+    if (!response.ok) {
+        const errorData = await response.json();
+
+        throw new Error(
+            errorData.message ||
+            'Failed to join challenge'
+        );
+    }
+
+    return response.json();
+}
 export async function fetchChallenge(id) {
     const response = await fetch(
         `${API_BASE_URL}/api/challenges/${id}`

@@ -45,7 +45,12 @@
         "deleteFailed": "Ștergerea provocării a eșuat.",
         "delete": "Șterge",
         "steps": "{{steps}} pași",
-        "details": "Detalii"
+        "details": "Detalii",
+        "join": "Înscrie-te",
+        "joined": "Înscris",
+        "joining": "Se înscrie...",
+        "joinSuccess": "Te-ai înscris la provocare.",
+        "joinFailed": "Înscrierea la provocare a eșuat."
     },
     "register": {
         "title": "Înregistrare",
