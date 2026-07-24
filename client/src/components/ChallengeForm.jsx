@@ -9,7 +9,7 @@ import Image from 'react-bootstrap/Image';
 import {
     getDownloadURL,
     ref,
-    uploadBytes,
+    uploadBytesResumable,
 } from 'firebase/storage';
 
 import { storage } from '../firebase';
@@ -23,7 +23,10 @@ function ChallengeForm({
 
     const [formData, setFormData] = useState({
         ...initialValues,
-        image: initialValues.image || '',
+        imageMedium:
+            initialValues.imageMedium || '',
+        imageThumbnail:
+            initialValues.imageThumbnail || '',
     });
 
     const [isUploading, setIsUploading] =
@@ -36,6 +39,69 @@ function ChallengeForm({
             ...currentFormData,
             [name]: value,
         }));
+    }
+    async function createResizedImage(
+        file,
+        maxWidth
+    ) {
+        return new Promise((resolve, reject) => {
+            const image = new window.Image();
+
+            image.onload = () => {
+                const canvas =
+                    document.createElement('canvas');
+
+
+
+                const scale =
+                    maxWidth / image.width;
+
+                canvas.width = maxWidth;
+                canvas.height =
+                    image.height * scale;
+
+                const context =
+                    canvas.getContext('2d');
+
+                context.drawImage(
+                    image,
+                    0,
+                    0,
+                    canvas.width,
+                    canvas.height
+                );
+
+                canvas.toBlob(
+                    (blob) => {
+                        if (!blob) {
+                            reject(
+                                new Error(
+                                    'Failed to create thumbnail'
+                                )
+                            );
+                            return;
+                        }
+
+                        const thumbnailFile =
+                            new File(
+                                [blob],
+                                file.name,
+                                {
+                                    type: file.type,
+                                }
+                            );
+
+                        resolve(thumbnailFile);
+                    },
+                    file.type,
+                    0.9
+                );
+            };
+
+            image.onerror = reject;
+
+            image.src = URL.createObjectURL(file);
+        });
     }
 
     async function handleImageChange(event) {
@@ -60,24 +126,78 @@ function ChallengeForm({
                 /[^a-zA-Z0-9._-]/g,
                 '-'
             );
+            const thumbnailFile =
+                await createResizedImage(file, 600);
 
-            const imageReference = ref(
+            const mediumFile =
+                await createResizedImage(file, 1200);
+            const timestamp = Date.now();
+
+
+
+            const thumbnailReference = ref(
                 storage,
-                `challenge-images/${Date.now()}-${safeFileName}`
+                `challenge-images/thumbnails/${timestamp}-${safeFileName}`
+            );
+            const mediumReference = ref(
+                storage,
+                `challenge-images/medium/${timestamp}-${safeFileName}`
             );
 
-            const uploadResult = await uploadBytes(
-                imageReference,
-                file
-            );
+            const metadata = {
+                contentType: file.type,
+                cacheControl:
+                    'public,max-age=31536000,immutable',
+            };
 
-            const imageUrl = await getDownloadURL(
-                uploadResult.ref
-            );
+
+
+
+            const thumbnailUploadTask =
+                uploadBytesResumable(
+                    thumbnailReference,
+                    thumbnailFile,
+                    metadata
+                );
+
+            await new Promise((resolve, reject) => {
+                thumbnailUploadTask.on(
+                    'state_changed',
+                    null,
+                    reject,
+                    () => resolve()
+                );
+            });
+            const mediumUploadTask =
+                uploadBytesResumable(
+                    mediumReference,
+                    mediumFile,
+                    metadata
+                );
+
+            await new Promise((resolve, reject) => {
+                mediumUploadTask.on(
+                    'state_changed',
+                    null,
+                    reject,
+                    () => resolve()
+                );
+            });
+
+            const mediumUrl =
+                await getDownloadURL(
+                    mediumUploadTask.snapshot.ref
+                );
+
+            const thumbnailUrl =
+                await getDownloadURL(
+                    thumbnailUploadTask.snapshot.ref
+                );
 
             setFormData((currentFormData) => ({
                 ...currentFormData,
-                image: imageUrl,
+                imageMedium: mediumUrl,
+                imageThumbnail: thumbnailUrl,
             }));
         } catch (error) {
             console.error(
@@ -97,7 +217,9 @@ function ChallengeForm({
     function handleRemoveImage() {
         setFormData((currentFormData) => ({
             ...currentFormData,
-            image: '',
+
+            imageMedium: '',
+            imageThumbnail: '',
         }));
     }
 
@@ -253,13 +375,11 @@ function ChallengeForm({
                         )}
                     </Form.Group>
 
-                    {formData.image && (
+                    {formData.imageMedium && (
                         <div className="mb-3">
                             <Image
-                                src={formData.image}
-                                alt={t(
-                                    'form.imagePreview'
-                                )}
+                                src={formData.imageMedium}
+                                alt={t('form.imagePreview')}
                                 fluid
                                 rounded
                                 style={{

@@ -1,4 +1,4 @@
-/* global __APP_VERSION__ */
+
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {

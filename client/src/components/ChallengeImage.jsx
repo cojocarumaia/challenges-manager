@@ -3,32 +3,68 @@ import { useState } from 'react';
 const fallbackImage =
     'https://placehold.co/800x400?text=Challenge';
 
-function getThumbnailUrl(imageUrl) {
+function getImageUrl(imageUrl, size) {
     if (!imageUrl) {
         return imageUrl;
     }
 
-    if (imageUrl.includes('picsum.photos/seed/')) {
-        return imageUrl.replace(
-            /\/\d+\/\d+$/,
-            '/600/400'
-        );
+    if (!imageUrl.includes('picsum.photos/seed/')) {
+        return imageUrl;
     }
 
-    return imageUrl;
+    switch (size) {
+        case 'thumbnail':
+            return imageUrl.replace(
+                /\/\d+\/\d+$/,
+                '/600/400'
+            );
+
+        case 'medium':
+            return imageUrl.replace(
+                /\/\d+\/\d+$/,
+                '/1200/800'
+            );
+
+        case 'full':
+        default:
+            return imageUrl;
+    }
 }
 
-function ChallengeImage({ src, alt }) {
+function ChallengeImage({
+    src,
+    alt,
+    size = 'thumbnail',
+}) {
     const [loaded, setLoaded] = useState(false);
 
-    const thumbnailUrl = getThumbnailUrl(src);
+    const imageConfig = {
+        thumbnail: {
+            url: getImageUrl(src, 'thumbnail'),
+            height: '220px',
+            objectFit: 'cover',
+        },
+        medium: {
+            url: getImageUrl(src, 'medium'),
+            height: '500px',
+            objectFit: 'contain',
+        },
+        full: {
+            url: getImageUrl(src, 'full'),
+            height: '75vh',
+            objectFit: 'contain',
+        },
+    };
+
+    const currentImage =
+        imageConfig[size] || imageConfig.thumbnail;
 
     return (
         <div
             className="position-relative bg-body-secondary"
             style={{
                 width: '100%',
-                height: '220px',
+                height: currentImage.height,
                 overflow: 'hidden',
             }}
         >
@@ -42,20 +78,26 @@ function ChallengeImage({ src, alt }) {
             )}
 
             <img
-                src={thumbnailUrl || fallbackImage}
+                src={
+                    currentImage.url ||
+                    fallbackImage
+                }
                 alt={alt}
                 loading="lazy"
                 onLoad={() => setLoaded(true)}
                 onError={(event) => {
-                    event.currentTarget.src = fallbackImage;
+                    event.currentTarget.src =
+                        fallbackImage;
                     setLoaded(true);
                 }}
                 style={{
                     width: '100%',
-                    height: '220px',
-                    objectFit: 'cover',
+                    height: currentImage.height,
+                    objectFit:
+                        currentImage.objectFit,
                     opacity: loaded ? 1 : 0,
-                    transition: 'opacity 200ms ease-in',
+                    transition:
+                        'opacity 200ms ease-in',
                 }}
             />
         </div>

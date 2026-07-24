@@ -24,7 +24,13 @@ const challengeSchema = new mongoose.Schema({
     type: Date,
   },
 
-  image: {
+
+  imageThumbnail: {
+    type: String,
+    default: '',
+  },
+
+  imageMedium: {
     type: String,
     default: '',
   },

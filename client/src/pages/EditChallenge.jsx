@@ -50,7 +50,10 @@ function EditChallenge({ showSuccessToast }) {
                             10
                         )
                         : '',
-                    image: challenge.image || '',
+                    imageMedium:
+                        challenge.imageMedium || '',
+                    imageThumbnail:
+                        challenge.imageThumbnail || '',
                 });
 
                 setError('');
