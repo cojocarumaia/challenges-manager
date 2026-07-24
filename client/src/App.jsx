@@ -1,3 +1,4 @@
+/* global __APP_VERSION__ */
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
@@ -15,6 +16,7 @@ import Navbar from 'react-bootstrap/Navbar';
 import ChallengesPage from './pages/ChallengesPage';
 import CreateChallenge from './pages/CreateChallenge';
 import EditChallenge from './pages/EditChallenge';
+import ChallengeDetailsPage from './pages/ChallengeDetailsPage';
 import RegisterPage from './pages/RegisterPage';
 import LoginPage from './pages/LoginPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
@@ -26,6 +28,13 @@ import { auth } from './firebase';
 function App() {
   const { t } = useTranslation();
   const navigate = useNavigate();
+
+  const isLocal =
+    window.location.hostname === 'localhost' ||
+    window.location.hostname === '127.0.0.1';
+
+  const versionLabel = `v${__APP_VERSION__}${isLocal ? ' · local' : ''
+    }`;
 
   const { currentUser, loading } = useAuth();
 
@@ -99,8 +108,16 @@ function App() {
         className="shadow-sm"
       >
         <Container>
-          <Navbar.Brand as={Link} to="/">
-            Challenges Manager
+          <Navbar.Brand
+            as={Link}
+            to="/"
+            className="d-flex align-items-center gap-2"
+          >
+            <span>Challenges Manager</span>
+
+            <span className="small text-body-secondary ms-2">
+              {versionLabel}
+            </span>
           </Navbar.Brand>
 
           <div className="d-flex align-items-center gap-2 ms-auto">
@@ -186,6 +203,15 @@ function App() {
       />
 
       <Routes>
+        <Route
+          path="/challenges/:id"
+          element={
+            <ProtectedRoute>
+              <ChallengeDetailsPage />
+            </ProtectedRoute>
+          }
+        />
+
         <Route
           path="/"
           element={

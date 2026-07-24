@@ -6,6 +6,14 @@ import Card from 'react-bootstrap/Card';
 import Form from 'react-bootstrap/Form';
 import Image from 'react-bootstrap/Image';
 
+import {
+    getDownloadURL,
+    ref,
+    uploadBytes,
+} from 'firebase/storage';
+
+import { storage } from '../firebase';
+
 function ChallengeForm({
     initialValues,
     onSubmit,
@@ -18,6 +26,9 @@ function ChallengeForm({
         image: initialValues.image || '',
     });
 
+    const [isUploading, setIsUploading] =
+        useState(false);
+
     function handleChange(event) {
         const { name, value } = event.target;
 
@@ -27,7 +38,7 @@ function ChallengeForm({
         }));
     }
 
-    function handleImageChange(event) {
+    async function handleImageChange(event) {
         const file = event.target.files[0];
 
         if (!file) {
@@ -35,25 +46,52 @@ function ChallengeForm({
         }
 
         if (!file.type.startsWith('image/')) {
-            window.alert(t('validation.invalidImage'));
+            window.alert(
+                t('validation.invalidImage')
+            );
             event.target.value = '';
             return;
         }
 
-        const reader = new FileReader();
+        try {
+            setIsUploading(true);
 
-        reader.onloadend = () => {
+            const safeFileName = file.name.replace(
+                /[^a-zA-Z0-9._-]/g,
+                '-'
+            );
+
+            const imageReference = ref(
+                storage,
+                `challenge-images/${Date.now()}-${safeFileName}`
+            );
+
+            const uploadResult = await uploadBytes(
+                imageReference,
+                file
+            );
+
+            const imageUrl = await getDownloadURL(
+                uploadResult.ref
+            );
+
             setFormData((currentFormData) => ({
                 ...currentFormData,
-                image: reader.result,
+                image: imageUrl,
             }));
-        };
+        } catch (error) {
+            console.error(
+                'Failed to upload image:',
+                error
+            );
 
-        reader.onerror = () => {
-            window.alert(t('validation.imageReadFailed'));
-        };
-
-        reader.readAsDataURL(file);
+            window.alert(
+                t('validation.imageUploadFailed')
+            );
+        } finally {
+            setIsUploading(false);
+            event.target.value = '';
+        }
     }
 
     function handleRemoveImage() {
@@ -73,8 +111,14 @@ function ChallengeForm({
     function handleSubmit(event) {
         event.preventDefault();
 
+        if (isUploading) {
+            return;
+        }
+
         if (!formData.title.trim()) {
-            window.alert(t('validation.titleRequired'));
+            window.alert(
+                t('validation.titleRequired')
+            );
             return;
         }
 
@@ -124,7 +168,9 @@ function ChallengeForm({
                         <Form.Control
                             as="textarea"
                             name="description"
-                            value={formData.description}
+                            value={
+                                formData.description
+                            }
                             onChange={handleChange}
                         />
                     </Form.Group>
@@ -140,7 +186,9 @@ function ChallengeForm({
                         <Form.Control
                             type="number"
                             name="targetSteps"
-                            value={formData.targetSteps}
+                            value={
+                                formData.targetSteps
+                            }
                             onChange={handleChange}
                         />
                     </Form.Group>
@@ -156,7 +204,9 @@ function ChallengeForm({
                         <Form.Control
                             type="date"
                             name="startDate"
-                            value={formData.startDate}
+                            value={
+                                formData.startDate
+                            }
                             onChange={handleChange}
                         />
                     </Form.Group>
@@ -188,8 +238,19 @@ function ChallengeForm({
                         <Form.Control
                             type="file"
                             accept="image/*"
-                            onChange={handleImageChange}
+                            onChange={
+                                handleImageChange
+                            }
+                            disabled={isUploading}
                         />
+
+                        {isUploading && (
+                            <Form.Text>
+                                {t(
+                                    'form.uploadingImage'
+                                )}
+                            </Form.Text>
+                        )}
                     </Form.Group>
 
                     {formData.image && (
@@ -215,8 +276,11 @@ function ChallengeForm({
                                 onClick={
                                     handleRemoveImage
                                 }
+                                disabled={isUploading}
                             >
-                                {t('form.removeImage')}
+                                {t(
+                                    'form.removeImage'
+                                )}
                             </Button>
                         </div>
                     )}
@@ -224,8 +288,13 @@ function ChallengeForm({
                     <Button
                         type="submit"
                         variant="primary"
+                        disabled={isUploading}
                     >
-                        {submitLabel}
+                        {isUploading
+                            ? t(
+                                'form.uploadingImage'
+                            )
+                            : submitLabel}
                     </Button>
                 </Form>
             </Card.Body>

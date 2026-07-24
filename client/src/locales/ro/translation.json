@@ -10,13 +10,15 @@
         "endDate": "Data de sfârșit",
         "image": "Imaginea provocării",
         "imagePreview": "Previzualizarea provocării",
-        "removeImage": "Șterge imaginea"
+        "removeImage": "Șterge imaginea",
+        "uploadingImage": "Se încarcă imaginea..."
     },
     "validation": {
         "titleRequired": "Titlul este obligatoriu.",
         "targetStepsPositive": "Numărul țintă de pași trebuie să fie mai mare decât zero.",
         "invalidImage": "Selectează o imagine validă.",
-        "imageReadFailed": "Imaginea nu a putut fi citită."
+        "imageReadFailed": "Imaginea nu a putut fi citită.",
+        "imageUploadFailed": "Imaginea nu a putut fi încărcată."
     },
     "createChallenge": {
         "title": "Creează provocare",
@@ -42,7 +44,8 @@
         "deleteSuccess": "Provocarea a fost ștearsă cu succes!",
         "deleteFailed": "Ștergerea provocării a eșuat.",
         "delete": "Șterge",
-        "steps": "{{steps}} pași"
+        "steps": "{{steps}} pași",
+        "details": "Detalii"
     },
     "register": {
         "title": "Înregistrare",
@@ -97,5 +100,10 @@
         "message": "Sigur vrei să te deconectezi?",
         "cancel": "Anulează",
         "confirm": "Deconectare"
+    },
+    "challengeDetails": {
+        "targetSteps": "Pași țintă",
+        "back": "Înapoi la provocări",
+        "failedToLoad": "Provocarea nu a putut fi încărcată."
     }
 }

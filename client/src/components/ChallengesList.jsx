@@ -15,6 +15,7 @@ import Container from 'react-bootstrap/Container';
 import Dropdown from 'react-bootstrap/Dropdown';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashCan } from '@fortawesome/free-solid-svg-icons';
+import ChallengeImage from './ChallengeImage';
 
 import {
     deleteChallenge,
@@ -407,21 +408,9 @@ function ChallengesList({ showSuccessToast }) {
                                                 'hidden',
                                         }}
                                     >
-                                        <Card.Img
-                                            variant="top"
-                                            src={
-                                                challenge.image ||
-                                                'https://placehold.co/800x400?text=Challenge'
-                                            }
-                                            alt={
-                                                challenge.title
-                                            }
-                                            style={{
-                                                width: '100%',
-                                                height: '220px',
-                                                objectFit:
-                                                    'cover',
-                                            }}
+                                        <ChallengeImage
+                                            src={challenge.image}
+                                            alt={challenge.title}
                                         />                                        <Card.Body className="d-flex flex-column">
                                             <div>
                                                 <Card.Title
@@ -465,6 +454,18 @@ function ChallengesList({ showSuccessToast }) {
                                                 </Badge>
 
                                                 <div className="d-flex gap-2 ms-auto">
+                                                    <Button
+                                                        type="button"
+                                                        variant="outline-primary"
+                                                        onClick={() =>
+                                                            navigate(
+                                                                `/challenges/${challenge._id}`
+                                                            )
+                                                        }
+                                                    >
+                                                        {t('challenges.details')}
+                                                    </Button>
+
                                                     <Button
                                                         type="button"
                                                         variant="warning"

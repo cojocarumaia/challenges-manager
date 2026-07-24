@@ -10,13 +10,15 @@
         "endDate": "End Date",
         "image": "Challenge image",
         "imagePreview": "Challenge preview",
-        "removeImage": "Remove image"
+        "removeImage": "Remove image",
+        "uploadingImage": "Uploading image..."
     },
     "validation": {
         "titleRequired": "Title is required.",
         "targetStepsPositive": "Target steps must be greater than zero.",
         "invalidImage": "Please select a valid image.",
-        "imageReadFailed": "The image could not be read."
+        "imageReadFailed": "The image could not be read.",
+        "imageUploadFailed": "The image could not be uploaded."
     },
     "createChallenge": {
         "title": "Create Challenge",
@@ -42,7 +44,8 @@
         "deleteSuccess": "Challenge deleted successfully!",
         "deleteFailed": "Failed to delete challenge.",
         "delete": "Delete",
-        "steps": "{{steps}} steps"
+        "steps": "{{steps}} steps",
+        "details": "Details"
     },
     "register": {
         "title": "Register",
@@ -97,5 +100,10 @@
         "message": "Are you sure you want to log out?",
         "cancel": "Cancel",
         "confirm": "Log out"
+    },
+    "challengeDetails": {
+        "targetSteps": "Target steps",
+        "back": "Back to challenges",
+        "failedToLoad": "Challenge could not be loaded."
     }
 }
