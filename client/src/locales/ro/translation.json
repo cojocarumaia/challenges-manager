@@ -56,7 +56,8 @@
         "stepsPlaceholder": "Pași",
         "stepsSent": "Pașii au fost trimiși.",
         "stepsSendFailed": "Pașii nu au putut fi trimiși.",
-        "stepsMustBePositive": "Numărul de pași trebuie să fie pozitiv."
+        "stepsMustBePositive": "Numărul de pași trebuie să fie pozitiv.",
+        "currentSteps": "Totalul tău: {{steps}}"
     },
     "register": {
         "title": "Înregistrare",

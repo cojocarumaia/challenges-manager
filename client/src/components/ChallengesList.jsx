@@ -114,6 +114,8 @@ function ChallengesList({ showSuccessToast }) {
     const [challenges, setChallenges] = useState([]);
     const [joinedChallengeIds, setJoinedChallengeIds] =
         useState([]);
+    const [totalStepsByChallenge, setTotalStepsByChallenge] =
+        useState({});
     const [joiningChallengeId, setJoiningChallengeId] =
         useState(null);
     const [stepsByChallenge, setStepsByChallenge] =
@@ -182,6 +184,8 @@ function ChallengesList({ showSuccessToast }) {
         async function loadParticipations() {
             if (!currentUser) {
                 setJoinedChallengeIds([]);
+                setTotalStepsByChallenge({});
+
                 return;
             }
 
@@ -193,6 +197,16 @@ function ChallengesList({ showSuccessToast }) {
                     participations.map(
                         (participation) =>
                             participation.challenge
+                    )
+                );
+                setTotalStepsByChallenge(
+                    participations.reduce(
+                        (totals, participation) => ({
+                            ...totals,
+                            [participation.challenge]:
+                                participation.totalSteps,
+                        }),
+                        {}
                     )
                 );
             } catch (err) {
@@ -303,8 +317,16 @@ function ChallengesList({ showSuccessToast }) {
                 challengeId
             );
 
-            await sendSteps(challengeId, steps);
+            const updatedParticipation =
+                await sendSteps(challengeId, steps);
 
+            setTotalStepsByChallenge(
+                (currentTotals) => ({
+                    ...currentTotals,
+                    [challengeId]:
+                        updatedParticipation.totalSteps,
+                })
+            );
             setStepsByChallenge(
                 (currentValues) => ({
                     ...currentValues,
@@ -604,6 +626,14 @@ function ChallengesList({ showSuccessToast }) {
                                                         challenge._id
                                                     ) && (
                                                             <div className="d-flex gap-2">
+                                                                <span className="d-flex align-items-center fw-semibold">
+                                                                    {t('challenges.currentSteps', {
+                                                                        steps:
+                                                                            totalStepsByChallenge[
+                                                                            challenge._id
+                                                                            ] || 0,
+                                                                    })}
+                                                                </span>
                                                                 <input
                                                                     type="number"
                                                                     min="1"

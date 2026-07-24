@@ -56,7 +56,8 @@
         "stepsPlaceholder": "Steps",
         "stepsSent": "Steps sent successfully.",
         "stepsSendFailed": "Failed to send steps.",
-        "stepsMustBePositive": "Steps must be a positive number."
+        "stepsMustBePositive": "Steps must be a positive number.",
+        "currentSteps": "Your total: {{steps}}"
     },
     "register": {
         "title": "Register",
