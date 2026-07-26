@@ -45,7 +45,19 @@
         "deleteFailed": "Failed to delete challenge.",
         "delete": "Delete",
         "steps": "{{steps}} steps",
-        "details": "Details"
+        "details": "Details",
+        "join": "Join",
+        "joined": "Joined",
+        "joining": "Joining...",
+        "joinSuccess": "You joined the challenge.",
+        "joinFailed": "Failed to join the challenge.",
+        "sendSteps": "Send Steps",
+        "sendingSteps": "Sending...",
+        "stepsPlaceholder": "Steps",
+        "stepsSent": "Steps sent successfully.",
+        "stepsSendFailed": "Failed to send steps.",
+        "stepsMustBePositive": "Steps must be a positive number.",
+        "currentSteps": "Your total: {{steps}}"
     },
     "register": {
         "title": "Register",

@@ -20,6 +20,9 @@ import ChallengeImage from './ChallengeImage';
 import {
     deleteChallenge,
     fetchChallenges,
+    fetchMyParticipations,
+    joinChallenge,
+    sendSteps,
 } from '../api';
 import i18n from '../i18n';
 
@@ -106,9 +109,20 @@ function formatChallengeDate(date) {
 function ChallengesList({ showSuccessToast }) {
     const { t } = useTranslation();
     const navigate = useNavigate();
-    const { role } = useAuth();
+    const { role, currentUser } = useAuth();
 
     const [challenges, setChallenges] = useState([]);
+    const [joinedChallengeIds, setJoinedChallengeIds] =
+        useState([]);
+    const [totalStepsByChallenge, setTotalStepsByChallenge] =
+        useState({});
+    const [joiningChallengeId, setJoiningChallengeId] =
+        useState(null);
+    const [stepsByChallenge, setStepsByChallenge] =
+        useState({});
+
+    const [sendingStepsChallengeId, setSendingStepsChallengeId] =
+        useState(null);
     const [page, setPage] = useState(1);
     const [hasMore, setHasMore] = useState(true);
     const [loading, setLoading] = useState(true);
@@ -166,6 +180,42 @@ function ChallengesList({ showSuccessToast }) {
     useEffect(() => {
         loadChallenges(1, true);
     }, [loadChallenges]);
+    useEffect(() => {
+        async function loadParticipations() {
+            if (!currentUser) {
+                setJoinedChallengeIds([]);
+                setTotalStepsByChallenge({});
+
+                return;
+            }
+
+            try {
+                const participations =
+                    await fetchMyParticipations();
+
+                setJoinedChallengeIds(
+                    participations.map(
+                        (participation) =>
+                            participation.challenge
+                    )
+                );
+                setTotalStepsByChallenge(
+                    participations.reduce(
+                        (totals, participation) => ({
+                            ...totals,
+                            [participation.challenge]:
+                                participation.totalSteps,
+                        }),
+                        {}
+                    )
+                );
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        loadParticipations();
+    }, [currentUser]);
 
     useEffect(() => {
         if (page === 1) {
@@ -210,6 +260,93 @@ function ChallengesList({ showSuccessToast }) {
         },
         [loading, loadingMore, hasMore]
     );
+    async function handleJoin(challengeId) {
+        try {
+            setJoiningChallengeId(challengeId);
+
+            await joinChallenge(challengeId);
+
+            setJoinedChallengeIds(
+                (currentIds) => [
+                    ...currentIds,
+                    challengeId,
+                ]
+            );
+
+            showSuccessToast(
+                t('challenges.joinSuccess')
+            );
+        } catch (err) {
+            console.error(err);
+
+            if (err.message === 'Already joined') {
+                setJoinedChallengeIds(
+                    (currentIds) =>
+                        currentIds.includes(challengeId)
+                            ? currentIds
+                            : [
+                                ...currentIds,
+                                challengeId,
+                            ]
+                );
+
+                return;
+            }
+
+            window.alert(
+                t('challenges.joinFailed')
+            );
+        } finally {
+            setJoiningChallengeId(null);
+        }
+    }
+    async function handleSendSteps(challengeId) {
+        const steps = Number(
+            stepsByChallenge[challengeId]
+        );
+
+        if (!steps || steps <= 0) {
+            window.alert(
+                t('challenges.stepsMustBePositive')
+            );
+            return;
+        }
+
+        try {
+            setSendingStepsChallengeId(
+                challengeId
+            );
+
+            const updatedParticipation =
+                await sendSteps(challengeId, steps);
+
+            setTotalStepsByChallenge(
+                (currentTotals) => ({
+                    ...currentTotals,
+                    [challengeId]:
+                        updatedParticipation.totalSteps,
+                })
+            );
+            setStepsByChallenge(
+                (currentValues) => ({
+                    ...currentValues,
+                    [challengeId]: '',
+                })
+            );
+
+            showSuccessToast(
+                t('challenges.stepsSent')
+            );
+        } catch (err) {
+            console.error(err);
+
+            window.alert(
+                t('challenges.stepsSendFailed')
+            );
+        } finally {
+            setSendingStepsChallengeId(null);
+        }
+    }
     async function handleDelete(id) {
         const confirmed = window.confirm(
             t(
@@ -454,6 +591,97 @@ function ChallengesList({ showSuccessToast }) {
                                                 </Badge>
 
                                                 <div className="d-flex gap-2 ms-auto">
+                                                    {currentUser && (
+                                                        <Button
+                                                            type="button"
+                                                            variant={
+                                                                joinedChallengeIds.includes(
+                                                                    challenge._id
+                                                                )
+                                                                    ? 'success'
+                                                                    : 'outline-success'
+                                                            }
+                                                            disabled={
+                                                                joinedChallengeIds.includes(
+                                                                    challenge._id
+                                                                ) ||
+                                                                joiningChallengeId ===
+                                                                challenge._id
+                                                            }
+                                                            onClick={() =>
+                                                                handleJoin(challenge._id)
+                                                            }
+                                                        >
+                                                            {joiningChallengeId ===
+                                                                challenge._id
+                                                                ? t('challenges.joining')
+                                                                : joinedChallengeIds.includes(
+                                                                    challenge._id
+                                                                )
+                                                                    ? t('challenges.joined')
+                                                                    : t('challenges.join')}
+                                                        </Button>
+                                                    )}
+                                                    {joinedChallengeIds.includes(
+                                                        challenge._id
+                                                    ) && (
+                                                            <div className="d-flex gap-2">
+                                                                <span className="d-flex align-items-center fw-semibold">
+                                                                    {t('challenges.currentSteps', {
+                                                                        steps:
+                                                                            totalStepsByChallenge[
+                                                                            challenge._id
+                                                                            ] || 0,
+                                                                    })}
+                                                                </span>
+                                                                <input
+                                                                    type="number"
+                                                                    min="1"
+                                                                    className="form-control"
+                                                                    style={{ width: '120px' }}
+                                                                    placeholder={t(
+                                                                        'challenges.stepsPlaceholder'
+                                                                    )}
+                                                                    value={
+                                                                        stepsByChallenge[
+                                                                        challenge._id
+                                                                        ] || ''
+                                                                    }
+                                                                    onChange={(event) =>
+                                                                        setStepsByChallenge(
+                                                                            (currentValues) => ({
+                                                                                ...currentValues,
+                                                                                [challenge._id]:
+                                                                                    event.target.value,
+                                                                            })
+                                                                        )
+                                                                    }
+                                                                />
+
+                                                                <Button
+                                                                    type="button"
+                                                                    variant="primary"
+                                                                    disabled={
+                                                                        sendingStepsChallengeId ===
+                                                                        challenge._id
+                                                                    }
+                                                                    onClick={() =>
+                                                                        handleSendSteps(
+                                                                            challenge._id
+                                                                        )
+                                                                    }
+                                                                >
+                                                                    {sendingStepsChallengeId ===
+                                                                        challenge._id
+                                                                        ? t(
+                                                                            'challenges.sendingSteps'
+                                                                        )
+                                                                        : t(
+                                                                            'challenges.sendSteps'
+                                                                        )}
+                                                                </Button>
+                                                            </div>
+                                                        )}
                                                     <Button
                                                         type="button"
                                                         variant="outline-primary"
@@ -475,9 +703,7 @@ function ChallengesList({ showSuccessToast }) {
                                                             )
                                                         }
                                                     >
-                                                        {t(
-                                                            'challenges.edit'
-                                                        )}
+                                                        {t('challenges.edit')}
                                                     </Button>
 
                                                     {role === 'admin' && (
@@ -487,8 +713,12 @@ function ChallengesList({ showSuccessToast }) {
                                                             onClick={() =>
                                                                 handleDelete(challenge._id)
                                                             }
-                                                            aria-label={t('challenges.delete')}
-                                                            title={t('challenges.delete')}
+                                                            aria-label={t(
+                                                                'challenges.delete'
+                                                            )}
+                                                            title={t(
+                                                                'challenges.delete'
+                                                            )}
                                                         >
                                                             <FontAwesomeIcon
                                                                 icon={faTrashCan}
