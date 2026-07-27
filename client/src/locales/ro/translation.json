@@ -57,7 +57,13 @@
         "stepsSent": "Pașii au fost trimiși.",
         "stepsSendFailed": "Pașii nu au putut fi trimiși.",
         "stepsMustBePositive": "Numărul de pași trebuie să fie pozitiv.",
-        "currentSteps": "Totalul tău: {{steps}}"
+        "currentSteps": "Totalul tău: {{steps}}",
+        "states": {
+            "upcoming": "Urmează",
+            "in-progress": "În desfășurare",
+            "finished": "Finalizat",
+            "failed": "Eșuat"
+        }
     },
     "register": {
         "title": "Înregistrare",

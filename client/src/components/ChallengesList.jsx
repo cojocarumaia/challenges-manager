@@ -16,6 +16,7 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import ChallengeImage from './ChallengeImage';
+import getChallengeState from '../utils/getChallengeState';
 
 import {
     deleteChallenge,
@@ -104,6 +105,25 @@ function formatChallengeDate(date) {
         day: '2-digit',
         month: 'short',
     }).format(parsedDate);
+}
+
+function getChallengeStateVariant(state) {
+    switch (state) {
+        case 'upcoming':
+            return 'warning';
+
+        case 'in-progress':
+            return 'primary';
+
+        case 'finished':
+            return 'success';
+
+        case 'failed':
+            return 'danger';
+
+        default:
+            return 'secondary';
+    }
 }
 
 function ChallengesList({ showSuccessToast }) {
@@ -524,7 +544,15 @@ function ChallengesList({ showSuccessToast }) {
                                 const hasDateRange =
                                     startDate &&
                                     endDate;
+                                const currentSteps =
+                                    totalStepsByChallenge[challenge._id] || 0;
 
+                                const challengeState = getChallengeState({
+                                    startDate: challenge.startDate,
+                                    endDate: challenge.endDate,
+                                    targetSteps: challenge.targetSteps,
+                                    currentSteps,
+                                });
                                 return (
                                     <Card
                                         key={
@@ -588,6 +616,14 @@ function ChallengesList({ showSuccessToast }) {
                                                                 challenge.targetSteps,
                                                         }
                                                     )}
+                                                </Badge>
+
+                                                <Badge
+                                                    pill
+                                                    bg={getChallengeStateVariant(challengeState)}
+                                                    className="px-3 py-2 fs-6"
+                                                >
+                                                    {t(`challenges.states.${challengeState}`)}
                                                 </Badge>
 
                                                 <div className="d-flex gap-2 ms-auto">

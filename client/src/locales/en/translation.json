@@ -57,7 +57,13 @@
         "stepsSent": "Steps sent successfully.",
         "stepsSendFailed": "Failed to send steps.",
         "stepsMustBePositive": "Steps must be a positive number.",
-        "currentSteps": "Your total: {{steps}}"
+        "currentSteps": "Your total: {{steps}}",
+        "states": {
+            "upcoming": "Upcoming",
+            "in-progress": "In progress",
+            "finished": "Finished",
+            "failed": "Failed"
+        }
     },
     "register": {
         "title": "Register",

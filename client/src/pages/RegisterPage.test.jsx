@@ -15,6 +15,7 @@ import {
 
 import RegisterPage from './RegisterPage';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { createUserProfile } from '../api';
 
 const mockNavigate = vi.fn();
 
@@ -43,6 +44,10 @@ vi.mock('../firebase', () => ({
     auth: {},
 }));
 
+vi.mock('../api', () => ({
+    createUserProfile: vi.fn(),
+}));
+
 vi.mock('../components/RegisterForm', () => ({
     default: ({ onSubmit }) => (
         <button
@@ -59,14 +64,12 @@ vi.mock('../components/RegisterForm', () => ({
     ),
 }));
 
-vi.stubGlobal('fetch', vi.fn());
-
 describe('RegisterPage', () => {
     beforeEach(() => {
         vi.clearAllMocks();
     });
 
-    test('registers the user and navigates to the home page', async () => {
+    test('registers the user, creates the profile and navigates to the home page', async () => {
         const user = userEvent.setup();
 
         createUserWithEmailAndPassword.mockResolvedValue({
@@ -76,13 +79,10 @@ describe('RegisterPage', () => {
             },
         });
 
-        fetch.mockResolvedValue({
-            ok: true,
-            json: vi.fn().mockResolvedValue({
-                firebaseUid: 'firebase-user-id',
-                email: 'test@example.com',
-                role: 'user',
-            }),
+        createUserProfile.mockResolvedValue({
+            firebaseUid: 'firebase-user-id',
+            email: 'test@example.com',
+            role: 'user',
         });
 
         render(
@@ -105,7 +105,12 @@ describe('RegisterPage', () => {
             '123456'
         );
 
-        expect(fetch).toHaveBeenCalled();
+        expect(
+            createUserProfile
+        ).toHaveBeenCalledWith({
+            firebaseUid: 'firebase-user-id',
+            email: 'test@example.com',
+        });
 
         await waitFor(() => {
             expect(
@@ -139,7 +144,9 @@ describe('RegisterPage', () => {
             )
         ).toBeInTheDocument();
 
-        expect(fetch).not.toHaveBeenCalled();
+        expect(
+            createUserProfile
+        ).not.toHaveBeenCalled();
 
         expect(
             mockNavigate
