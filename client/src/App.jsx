@@ -12,6 +12,8 @@ import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
 import Modal from 'react-bootstrap/Modal';
 import Navbar from 'react-bootstrap/Navbar';
+import Dropdown from 'react-bootstrap/Dropdown';
+import i18n from './i18n';
 
 import ChallengesPage from './pages/ChallengesPage';
 import CreateChallenge from './pages/CreateChallenge';
@@ -98,6 +100,10 @@ function App() {
       console.error('Logout failed:', error);
     }
   }
+  function changeLanguage(language) {
+    i18n.changeLanguage(language);
+    localStorage.setItem('language', language);
+  }
 
   return (
     <>
@@ -121,6 +127,41 @@ function App() {
           </Navbar.Brand>
 
           <div className="d-flex align-items-center gap-2 ms-auto">
+            <Dropdown>
+              <Dropdown.Toggle
+                variant="outline-primary"
+                size="sm"
+                className="text-nowrap"
+              >
+                {i18n.language === 'ro' ? (
+                  <>
+                    <span className="fi fi-ro me-2" />
+                    {t('romanian')}
+                  </>
+                ) : (
+                  <>
+                    <span className="fi fi-gb me-2" />
+                    {t('english')}
+                  </>
+                )}
+              </Dropdown.Toggle>
+
+              <Dropdown.Menu align="end">
+                <Dropdown.Item
+                  onClick={() => changeLanguage('en')}
+                >
+                  <span className="fi fi-gb me-2" />
+                  {t('english')}
+                </Dropdown.Item>
+
+                <Dropdown.Item
+                  onClick={() => changeLanguage('ro')}
+                >
+                  <span className="fi fi-ro me-2" />
+                  {t('romanian')}
+                </Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
             <Button
               type="button"
               variant={

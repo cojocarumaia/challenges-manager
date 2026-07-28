@@ -12,7 +12,6 @@ import Badge from 'react-bootstrap/Badge';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import Container from 'react-bootstrap/Container';
-import Dropdown from 'react-bootstrap/Dropdown';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import ChallengeImage from './ChallengeImage';
@@ -25,7 +24,6 @@ import {
     joinChallenge,
     sendSteps,
 } from '../api';
-import i18n from '../i18n';
 
 function ChallengeSkeleton() {
     return (
@@ -402,14 +400,7 @@ function ChallengesList({ showSuccessToast }) {
         }
     }
 
-    function changeLanguage(language) {
-        i18n.changeLanguage(language);
 
-        localStorage.setItem(
-            'language',
-            language
-        );
-    }
 
     if (loading) {
         return (
@@ -472,46 +463,7 @@ function ChallengesList({ showSuccessToast }) {
                 }}
             >
                 <Card.Body className="p-4">
-                    <div className="d-flex justify-content-end mb-3">
-                        <Dropdown>
-                            <Dropdown.Toggle
-                                variant="outline-primary"
-                                size="sm"
-                            >
-                                {i18n.language === 'ro' ? (
-                                    <>
-                                        <span className="fi fi-ro me-2" />
-                                        {t('romanian')}
-                                    </>
-                                ) : (
-                                    <>
-                                        <span className="fi fi-gb me-2" />
-                                        {t('english')}
-                                    </>
-                                )}
-                            </Dropdown.Toggle>
 
-                            <Dropdown.Menu align="end">
-                                <Dropdown.Item
-                                    onClick={() =>
-                                        changeLanguage('en')
-                                    }
-                                >
-                                    <span className="fi fi-gb me-2" />
-                                    {t('english')}
-                                </Dropdown.Item>
-
-                                <Dropdown.Item
-                                    onClick={() =>
-                                        changeLanguage('ro')
-                                    }
-                                >
-                                    <span className="fi fi-ro me-2" />
-                                    {t('romanian')}
-                                </Dropdown.Item>
-                            </Dropdown.Menu>
-                        </Dropdown>
-                    </div>
 
                     {role === 'admin' && (
                         <div className="d-flex justify-content-center mb-4">
