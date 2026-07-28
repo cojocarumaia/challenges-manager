@@ -579,37 +579,38 @@ function ChallengesList({ showSuccessToast }) {
                                                 </Badge>
 
                                                 <div className="d-flex gap-2 ms-auto">
-                                                    {currentUser && (
-                                                        <Button
-                                                            type="button"
-                                                            variant={
-                                                                joinedChallengeIds.includes(
+                                                    {currentUser &&
+                                                        challengeState !== 'failed' && (
+                                                            <Button
+                                                                type="button"
+                                                                variant={
+                                                                    joinedChallengeIds.includes(
+                                                                        challenge._id
+                                                                    )
+                                                                        ? 'success'
+                                                                        : 'outline-success'
+                                                                }
+                                                                disabled={
+                                                                    joinedChallengeIds.includes(
+                                                                        challenge._id
+                                                                    ) ||
+                                                                    joiningChallengeId ===
                                                                     challenge._id
-                                                                )
-                                                                    ? 'success'
-                                                                    : 'outline-success'
-                                                            }
-                                                            disabled={
-                                                                joinedChallengeIds.includes(
+                                                                }
+                                                                onClick={() =>
+                                                                    handleJoin(challenge._id)
+                                                                }
+                                                            >
+                                                                {joiningChallengeId ===
                                                                     challenge._id
-                                                                ) ||
-                                                                joiningChallengeId ===
-                                                                challenge._id
-                                                            }
-                                                            onClick={() =>
-                                                                handleJoin(challenge._id)
-                                                            }
-                                                        >
-                                                            {joiningChallengeId ===
-                                                                challenge._id
-                                                                ? t('challenges.joining')
-                                                                : joinedChallengeIds.includes(
-                                                                    challenge._id
-                                                                )
-                                                                    ? t('challenges.joined')
-                                                                    : t('challenges.join')}
-                                                        </Button>
-                                                    )}
+                                                                    ? t('challenges.joining')
+                                                                    : joinedChallengeIds.includes(
+                                                                        challenge._id
+                                                                    )
+                                                                        ? t('challenges.joined')
+                                                                        : t('challenges.join')}
+                                                            </Button>
+                                                        )}
                                                     {joinedChallengeIds.includes(
                                                         challenge._id
                                                     ) && (
