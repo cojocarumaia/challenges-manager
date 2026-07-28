@@ -682,38 +682,40 @@ function ChallengesList({ showSuccessToast }) {
                                                     >
                                                         {t('challenges.details')}
                                                     </Button>
-
-                                                    <Button
-                                                        type="button"
-                                                        variant="warning"
-                                                        onClick={() =>
-                                                            navigate(
-                                                                `/edit/${challenge._id}`
-                                                            )
-                                                        }
-                                                    >
-                                                        {t('challenges.edit')}
-                                                    </Button>
-
                                                     {role === 'admin' && (
-                                                        <Button
-                                                            type="button"
-                                                            variant="danger"
-                                                            onClick={() =>
-                                                                handleDelete(challenge._id)
-                                                            }
-                                                            aria-label={t(
-                                                                'challenges.delete'
-                                                            )}
-                                                            title={t(
-                                                                'challenges.delete'
-                                                            )}
-                                                        >
-                                                            <FontAwesomeIcon
-                                                                icon={faTrashCan}
-                                                            />
-                                                        </Button>
+                                                        <>
+                                                            <Button
+                                                                type="button"
+                                                                variant="warning"
+                                                                onClick={() =>
+                                                                    navigate(
+                                                                        `/edit/${challenge._id}`
+                                                                    )
+                                                                }
+                                                            >
+                                                                {t('challenges.edit')}
+                                                            </Button>
+
+                                                            <Button
+                                                                type="button"
+                                                                variant="danger"
+                                                                onClick={() =>
+                                                                    handleDelete(challenge._id)
+                                                                }
+                                                                aria-label={t(
+                                                                    'challenges.delete'
+                                                                )}
+                                                                title={t(
+                                                                    'challenges.delete'
+                                                                )}
+                                                            >
+                                                                <FontAwesomeIcon
+                                                                    icon={faTrashCan}
+                                                                />
+                                                            </Button>
+                                                        </>
                                                     )}
+
                                                 </div>
                                             </div>
                                         </Card.Body>
