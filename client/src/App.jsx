@@ -113,7 +113,7 @@ function App() {
             to="/"
             className="d-flex align-items-center gap-2"
           >
-            <span>Challenges Manager</span>
+            <span>STEPathON Challenges</span>
 
             <span className="small text-body-secondary ms-2">
               {versionLabel}
